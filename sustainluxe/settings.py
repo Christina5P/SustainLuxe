@@ -25,8 +25,22 @@ AUTHENTICATION_BACKENDS = [
      'allauth.account.auth_backends.AuthenticationBackend',
  ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-christina5p-sustainelux-59k1zewwt1m.ws.codeinstitute-ide.net',
+]
+
 SITE_ID = 1
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
