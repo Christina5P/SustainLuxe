@@ -26,7 +26,7 @@
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           rel="stylesheet"
         />
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% endblock %}
 
     {% block extra_css %}
@@ -61,17 +61,15 @@
     <title>SustainLuxe {% block extra_title %}{% endblock %}</title>
   </head>
   <body>   
-       <header class="container-fluid fixed-top"></header>
+     
+ <header class="container-fluid fixed-top">
 
-    {% if messages %}
-        <div class="message-container"></div>
-    {% endif %}
-
-    {% block page_header %}
     <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
   <!-- Container wrapper -->
-  <div class="container-fluid">
+  <div class="container header-container">
+    <div class="row">
+    
     <!-- Toggle button -->
     <button
       data-mdb-collapse-init
@@ -88,23 +86,23 @@
     <!-- Collapsible wrapper -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <!-- Navbar brand -->
-      <a class="navbar-brand mt-2 mt-lg-0" href="#">
-        <img src="images/SustainLuxelogo.png"
-          height="15"
+      <a class="navbar-brand my-0" href="#">
+        <img src="{% static 'images/logo.png' %}"
+          height="70"
           alt="SustainLuxe"
           loading="lazy"
         />
       </a>
       <!-- Left links -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav justify-content-center mb-6 mb-lg-0 ">
         <li class="nav-item">
-          <a class="nav-link" href="#">Dashboard</a>
+          <a class="nav-link" href="#">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Team</a>
+          <a class="nav-link" href="#">Sell with us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Projects</a>
+          <a class="nav-link" href="#">Shop</a>
         </li>
       </ul>
       <!-- Left links -->
@@ -114,21 +112,39 @@
     <!-- Right elements -->
 
 <!-- search bar-->
-     <div class="d-flex align-items-center">
+  <div class="d-flex align-items-center">
+    <form class="d-none d-md-flex input-group w-auto my-auto">
+            <input id="mdb-5-search-input" autocomplete="off" type="search" class="form-control rounded" placeholder="Search">
+            <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
+          </form>
+         
       <!-- Icon -->
-      <a class="text-reset me-3" href="#">
-        <i class="fa fa-search" aria-hidden="true"></i>
-      </a>
+    <div class="container-fluid">
+    <ul class="navbar-nav">
 
+      <div class="d-flex align-items-center ">
 
-    <div class="d-flex align-items-center">
-      <!-- Icon -->
-      <a class="text-reset me-3" href="#">
-      <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-      </a>
+      <!-- Badge -->
+      <li class="nav-item me-2">
+         <a class="{% if grand_total %}
+         text-info font-weight-bold<span "badge badge-pill bg-danger border-left">1</span>
+         {% else %}
+          text-black{% endif %} nav-link" href="#">
+          
+          <span><i class="fa fa-shopping-bag" aria-hidden="true"></i></span>
+            <p class="my-0">
+                {% if grand_total %}
+                SEK{{ grand_total|floatformat:2 }}
+                {% else %}
+                SEK 0.00
+                {% endif %}
+                </p>
+        </a>
+      </li>
+    </ul>
+  </div>
 
-      
-      <!-- Avatar -->
+            <!-- Avatar -->
       <div class="dropdown">
         <a
           data-mdb-dropdown-init
@@ -138,35 +154,49 @@
           role="button"
           aria-expanded="false"
         >
-          <img
-            src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-            class="rounded-circle"
-            height="25"
-            alt="Black and White Portrait of a Man"
-            loading="lazy"
-          />
-        </a>
+          <i class="fa fa-user"aria-hidden="true"></i>
+          </a>
         <ul
           class="dropdown-menu dropdown-menu-end"
           aria-labelledby="navbarDropdownMenuAvatar"
         >
+           {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser %}
+                <a href="#" class="dropdown-item">Product Management</a>
+                {% endif %}
+                 <li>
+            <a class="dropdown-item" href="{% url 'account_signup' %}">Register</a>
+          </li>
+                <li>
+            <a class="dropdown-item" href="{% url 'account_login' %}">Login</a>
+          </li>
           <li>
-            <a class="dropdown-item" href="#">My profile</a>
+            <a class="dropdown-item" href="{% url 'profile' %}">My profile</a>
           </li>
           <li>
             <a class="dropdown-item" href="#">Settings</a>
           </li>
           <li>
-            <a class="dropdown-item" href="#">Logout</a>
+            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
           </li>
         </ul>
+           {% endif %}
       </div>
     </div>
     <!-- Right elements -->
   </div>
+  {% include 'includes/mobile-top-header.html' %}
+  % include 'includes/main-nav' %}
   <!-- Container wrapper -->
-</nav>
+</nav></header>
 <!-- Navbar -->
+ 
+    {% if messages %}
+        <div class="message-container"></div>
+    {% endif %}
+
+    {% block page_header %}
+ 
     {% endblock %}
 
 -------------------------------------------------------------------------------------------------

@@ -146,6 +146,8 @@ SustaineLuxe is host on GitHub and deployed on Heroku
 * https://app.logomaster.ai/ - help making a logotype
 * https://climatepartnerimpact.com/get-involved/ - derivation to a project for donation
 * http://lucid.app - Creating a concept Plan
+* https://fontawesome.com/ -font awesome icons
+
 * 
 ### [Acknowledgements](#acknowledgements)
 
