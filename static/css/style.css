@@ -18,3 +18,20 @@
 .main-logo-link {
     width: fit-content;
 }
+
+
+body {
+    background: url('../media/background.png') no-repeat center center fixed;
+    background-size: cover;
+    height: calc(100vh - 164px);
+    color: #555;
+    font-family: 'Lato';
+}
+
+.carousel-caption {
+    margin-bottom: 50px; /* Öka avståndet om det behövs */
+}
+
+.navbar {
+    margin-top: 20px; /* Justera avståndet efter behov */
+}
