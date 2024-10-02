@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-=(_6w*3esglgzg*@2^^b)@@)^3=fp@0%&xs0ff76cjcox=z1qs
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '8000-christina5p-sustainelux-59k1zewwt1m.ws.codeinstitute-ide.net'
+    '8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -20,7 +20,7 @@ AUTHENTICATION_BACKENDS = [
  ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-christina5p-sustainelux-59k1zewwt1m.ws.codeinstitute-ide.net',
+    'https://8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
 ]
 
 SITE_ID = 1
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'products',
     'checkout',
     'django_countries',
+    'profiles',
 ]
 
 MIDDLEWARE = [
@@ -70,10 +71,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'templates', 'allauth'),
         ],
         'APP_DIRS': True,
+        
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
