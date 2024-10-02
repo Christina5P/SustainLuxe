@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from profiles.models import UserProfile
+# from profiles.models import UserProfile
 from django_countries.fields import CountryField  
 
 # Create your models here.
@@ -18,7 +18,7 @@ class Product(models.Model):
     brand = models.ForeignKey(
         'Brand', null=True, blank=True, on_delete=models.SET_NULL
     )  # Anta att du har en Brand-modell
-    sustainable = models.TextField(max_length=254)
+    sustainable = models.TextField(max_length=25, null=True, blank=True)
     condition = models.ForeignKey(
         'Condition', on_delete=models.CASCADE
     )  # Anta att du har en Condition-modell
@@ -29,9 +29,9 @@ class Product(models.Model):
         on_delete=models.SET_NULL,
     )
     description = models.TextField(null=True, blank=True)
-    user_profile = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='products'
-    )
+    # user_profile = models.ForeignKey(
+    #   UserProfile, on_delete=models.CASCADE, related_name='products'
+    # )
     created_at = models.DateTimeField(auto_now_add=True) 
     updated_at = models.DateTimeField(auto_now=True) 
     return_unsold = models.BooleanField(default=False)
@@ -64,6 +64,7 @@ class Size(models.Model):
 
 class Condition(models.Model):
     name = models.CharField(max_length=50)
+    description = models.TextField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -73,6 +74,7 @@ class Category(models.Model):
     Model for Categories with fields for category name, description,
     created, updated
     """
+
 
     name = models.CharField(max_length=60)
     description = models.TextField(blank=True, null=True)
@@ -88,7 +90,7 @@ class Category(models.Model):
 
 class Brand(models.Model):
     name = models.CharField(max_length=100, unique=True)  
-    description = models.TextField(null=True, blank=True) 
+    description = models.TextField(max_length=254, null=True, blank=True) 
     logo = models.ImageField(upload_to='brands/logos/', null=True, blank=True) 
 
     def __str__(self):
