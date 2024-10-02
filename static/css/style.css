@@ -24,8 +24,19 @@ body {
     background: url('../media/background.png') no-repeat center center fixed;
     background-size: cover;
     height: calc(100vh - 164px);
-    color: #555;
+    color: #a8a3a3;
     font-family: 'Lato';
+}
+
+footer,
+.text-muted {
+    background-color:#c0cdd4;   
+    color: #565656 !important;
+}
+
+.navbar {
+     background-color:#c0cdd4;  
+
 }
 
 .carousel-caption {
@@ -35,3 +46,21 @@ body {
 .navbar {
     margin-top: 20px; /* Justera avståndet efter behov */
 }
+
+.section-spacing {
+    margin-bottom: 1rem; /* Justera efter behov */
+}
+
+.custom-img {
+    max-width: 100%; /* Säkerställer att bilden inte blir större än behållaren */
+    height: auto; /* Bevarar bildens proportioner */
+    padding: 1rem;
+}
+
+.custom-btn {
+    display: block; /* Gör den block-formad för att kunna centrera */
+    max-width: 200px; /* Max bredd på knappen */
+    margin: 0 auto; /* Centrerar den horisontellt */
+}
+
+    
