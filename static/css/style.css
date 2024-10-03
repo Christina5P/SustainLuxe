@@ -63,4 +63,6 @@ footer,
     margin: 0 auto; /* Centrerar den horisontellt */
 }
 
-    
+.nav-link {
+    text-decoration: none; /* Ta bort understrykning */
+}

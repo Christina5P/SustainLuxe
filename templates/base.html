@@ -42,13 +42,12 @@
   </head>
   <body>   
      
- <header class="container-fluid">
+
 
     <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
   <!-- Container wrapper -->
-  <div class="container header-container">
-    <div class="row">
+ <header class="container-fluid">
     
     <!-- Toggle button -->
     <button
@@ -66,15 +65,16 @@
     <!-- Collapsible wrapper -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <!-- Navbar brand -->
-      <a class="navbar-brand my-0" href="#">
+      <a class="navbar-brand mt-2 mt-lg-0" href="#">
         <img src="{% static 'media/logo.png' %}"
           height="70"
           alt="SustainLuxe"
           loading="lazy"
         />
       </a>
+
       <!-- Left links -->
-      <ul class="navbar-nav justify-content-center mb-6 mb-lg-0 ">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="{% url 'home' %}">Home</a>
         </li>
@@ -89,65 +89,64 @@
     </div>
     <!-- Collapsible wrapper -->
 
-    <!-- Right elements -->
+    
 
 <!-- search bar-->
-  <div class="d-flex align-items-center">
-    <form class="d-none d-md-flex input-group w-auto my-auto">
+  <div class="d-flex justify align-items-center" style="width: 50%;">
+    <form class="d-none d-md-flex input-group w-75 my-auto">
             <input id="mdb-5-search-input" autocomplete="off" type="search" class="form-control rounded" placeholder="Search">
             <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
           </form>
-         
-      <!-- Icon -->
-    <div class="container-fluid">
-    <ul class="navbar-nav">
+    
 
-      <div class="d-flex align-items-center ">
-
-      <!-- Badge -->
-      <li class="nav-item me-2">
-         <a class="{% if grand_total %}
-         text-info font-weight-bold<span "badge badge-pill bg-danger border-left">1</span>
-         {% else %}
-          text-black{% endif %} nav-link" href="#">
-          
-          <span><i class="fa fa-shopping-bag" aria-hidden="true"></i></span>
-            <p class="my-0">
+   <!-- Right elements -->
+       <div class="d-flex align-items-center">
+        <li class="list-inline-item">
+        <a class="{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %} nav-link" href="#">
+           <span><i class="fa fa-shopping-bag" aria-hidden="true"></i></span>
+            <span class="ms-2 my-0"> 
                 {% if grand_total %}
                 SEK{{ grand_total|floatformat:2 }}
                 {% else %}
                 SEK 0.00
                 {% endif %}
-                </p>
+            </span>
         </a>
-      </li>
-    </ul>
-  </div>
+    </li>
 
-  <!-- Avatar -->
-<div class="container">
-    <div class="d-flex align-items-center justify-content-end">
-        <div class="dropdown">
-            <a class="dropdown-toggle" id="navbarDropdownMenuAvatar" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-                {% if request.user.is_authenticated %}
-                    <li>
-                        <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a class="dropdown-item" href="{% url 'register' %}">Log In</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+    <!-- Avatar -->
+
+    <div class="dropdown">
+         <a
+          data-mdb-dropdown-init
+           <a class="dropdown-toggle" id="navbarDropdownMenuAvatar" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+          href="#"
+          id="navbarDropdownMenuAvatar"
+          role="button"
+          aria-expanded="false">
+        <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+            {% if request.user.is_authenticated %}
+              <li>
+                    <a class="dropdown-item" href="{% url 'account_signup' %}">Log In</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                </li>
+            {% else %}
+            <li>
+                    <a class="dropdown-item" href="{% url 'account_login' %}">Log In</a>
+                </li>
+              
+            {% endif %}
+        </ul>
     </div>
 </div>
+
 
 
     <!-- Right elements -->
@@ -179,6 +178,8 @@
     <!-- Left -->
     <div class="d-flex justify-content-center align-items-center mb-3">
       <span>Sign up for a newsletter</span>
+       <form class="d-none d-md-flex input-group w-75 my-auto">
+            <input id="mdb-5-search-input" autocomplete="off" type="search" class="form-control rounded" placeholder="Search">
     </div>
     <!-- Left -->
 
