@@ -28,41 +28,14 @@
 />
 <!-- MDB -->
 <link
-  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.min.css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.css"
   rel="stylesheet"
 />
        
     {% endblock %}
 
     {% block extra_css %}
-          <!-- MDB -->
-      <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.min.css"
-        rel="stylesheet"
-      />
-    {% endblock %}
-
-    {% block corejs %}
-            <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        rel="stylesheet"
-      />
-      <script src="https://kit.fontawesome.com/e9c73d7092.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        
-       
-       <!-- MDB -->
-<script
-  type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.umd.min.js"
-></script>
-             
-        <!-- Stripe -->
-        <script src="https://js.stripe.com/v3/"></script>
-    {% endblock %}
-
-    {% block extra_js %}
+      
     {% endblock %}
 
     <title>SustainLuxe {% block extra_title %}{% endblock %}</title>
@@ -103,13 +76,13 @@
       <!-- Left links -->
       <ul class="navbar-nav justify-content-center mb-6 mb-lg-0 ">
         <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Sell with us</a>
+          <a class="nav-link" href="{% url 'sell' %}">Sell with us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Shop</a>
+          <a class="nav-link" href="{% url 'products' %}">Shop</a>
         </li>
       </ul>
       <!-- Left links -->
@@ -151,45 +124,32 @@
     </ul>
   </div>
 
-            <!-- Avatar -->
-      <div class="dropdown">
-        <a
-          data-mdb-dropdown-init
-          class="dropdown-toggle d-flex align-items-center hidden-arrow"
-          href="#"
-          id="navbarDropdownMenuAvatar"
-          role="button"
-          aria-expanded="false"
-        >
-          <i class="fa fa-user"aria-hidden="true"></i>
-          </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuAvatar"
-        >
-           {% if request.user.is_authenticated %}
-              {% if request.user.is_superuser %}
-                <a href="#" class="dropdown-item">Product Management</a>
+  <!-- Avatar -->
+<div class="container">
+    <div class="d-flex align-items-center justify-content-end">
+        <div class="dropdown">
+            <a class="dropdown-toggle" id="navbarDropdownMenuAvatar" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                {% if request.user.is_authenticated %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'register' %}">Log In</a>
+                    </li>
                 {% endif %}
-                 <li>
-            <a class="dropdown-item" href="{% url 'account_signup' %}">Register</a>
-          </li>
-                <li>
-            <a class="dropdown-item" href="{% url 'account_login' %}">Login</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="{% url 'profile' %}">My profile</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Settings</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
-          </li>
-        </ul>
-           {% endif %}
-      </div>
+            </ul>
+        </div>
     </div>
+</div>
+
+
     <!-- Right elements -->
   </div>
   {% include 'includes/mobile-top-header.html' %}
@@ -302,6 +262,26 @@
   <!-- Copyright -->
 </footer>
 <!--Footer-->
+
+
+    {% block corejs %}
+       
+           <script src="https://kit.fontawesome.com/e9c73d7092.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+             <!-- Stripe -->
+        <script src="https://js.stripe.com/v3/"></script>
+    {% endblock %}
+
+    {% block extra_js %}
+     <!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.umd.min.js"
+></script>
+    {% endblock %}
+
 
 
     {% block postloadjs %}

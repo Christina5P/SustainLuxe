@@ -10,4 +10,8 @@ def index(request):
 
 
 def sell_view(request):
-    return render(request, 'sell.html')
+    return render(request, 'home/sell.html')
+
+
+def register(request):
+    return render(request, 'register.html')
