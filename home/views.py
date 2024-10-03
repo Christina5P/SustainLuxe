@@ -14,4 +14,4 @@ def sell_view(request):
 
 
 def register(request):
-    return render(request, 'register.html')
+    return render(request, 'home/register.html')
