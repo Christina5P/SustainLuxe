@@ -2,11 +2,26 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
+from .forms import SignupForm
+
 # from .forms import UserProfileForm
 
 from checkout.models import Order
 
 # Create your views here.
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+        
+            pass
+    else:
+        form = SignupForm()
+
+    return render(request, 'signup.html', {'form': form})
+
 
 
 @login_required

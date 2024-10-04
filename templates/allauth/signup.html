@@ -1,48 +1,42 @@
 {% extends "account/base.html" %}
 {% load static %}
 
-
-{% load allauth i18n %}
-{% block head_title %}
-    {% trans "Signup" %}
-{% endblock head_title %}
 {% block content %}
-    {% element h1 %}
-        {% trans "Sign Up" %}
-    {% endelement %}
-    {% setvar link %}
-        <a href="{{ login_url }}">
-        {% endsetvar %}
-        {% setvar end_link %}
-        </a>
-    {% endsetvar %}
-    {% element p %}
-        {% blocktranslate %}Already have an account? Then please {{ link }}sign in{{ end_link }}.{% endblocktranslate %}
-    {% endelement %}
-    {% if not SOCIALACCOUNT_ONLY %}
-        {% url 'account_signup' as action_url %}
-        {% element form form=form method="post" action=action_url tags="entrance,signup" %}
-            {% slot body %}
-                {% csrf_token %}
-                {% element fields form=form unlabeled=True %}
-                {% endelement %}
-                {{ redirect_field }}
-            {% endslot %}
-            {% slot actions %}
-                {% element button tags="prominent,signup" type="submit" %}
-                    {% trans "Sign Up" %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
-    {% endif %}
-    {% if PASSKEY_SIGNUP_ENABLED %}
-        {% element hr %}
-        {% endelement %}
-        {% element button href=signup_by_passkey_url tags="prominent,signup,outline,primary" %}
-            {% trans "Sign up using a passkey" %}
-        {% endelement %}
-    {% endif %}
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
-{% endblock content %}
+
+        <div class="col-xxl-5 col-lg-6 col-md-8">
+            <div class="card shadow-0 mb-5">
+                <div class="card-body p-4">
+                    <ul class="nav nav-pills nav-justified mb-3">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active show" data-mdb-toggle="pill" href="{% url 'account_login' %}" role="tab" aria-selected="true">Login</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-mdb-toggle="pill" href="{% url 'account_signup' %}" role="tab" aria-selected="false">Register</a>
+                        </li>
+             
+
+                    <div class="tab-content">
+                        <!-- Login Form -->
+                    
+
+
+            {% if request.user.is_authenticated %}
+              <li>
+                    <a class="dropdown-item" href="{% url 'account_signup' %}">Log In</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                </li>
+            {% else %}
+            <li>
+                    <a class="dropdown-item" href="{% url 'account_login' %}">Log In</a>
+                </li>
+              
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

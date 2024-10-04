@@ -1,124 +1,28 @@
-{% extends "base.html" %}
+{% extends "account/base.html" %}
 {% load static %}
 
+
 {% block content %}
-    <div class="modal-content">
-        <div class="modal-body">
-            <!-- Nav tabs for login and register -->
-            <ul class="nav nav-pills nav-justified mb-3" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link {% if not user.is_authenticated %}active{% endif %}" href="{% url 'account_login' %}">
-                        Login
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link {% if user.is_authenticated %}active{% endif %}" href="{% url 'account_signup' %}">
-                        Register
-                    </a>
-                </li>
-            </ul>
+   
+ <div class="d-flex flex-column min-vh-100">
+    <!-- Content Wrapper to hold the card -->
+    <div class="d-flex justify-content-center align-items-center flex-grow-1">
+        <div class="col-xxl-5 col-lg-6 col-md-8">
+        <div class="card shadow-0 mb-5">
+            <div class="card-body p-4">
+                <ul class="nav nav-pills nav-justified mb-3">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active show" data-mdb-toggle="pill" href="{% url 'account_login' %}" role="tab" aria-selected="true">Login</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-mdb-toggle="pill" href="{% url 'account_signup' %}" role="tab" aria-selected="false">Register</a>
+                    </li>
+                </ul>
 
-            <div class="tab-content">
-                <!-- Login Panel -->
-                <div class="tab-pane fade in show {% if not user.is_authenticated %}active{% endif %}" id="login-tab" role="tabpanel">
-                    <!-- Default form login -->
-                    <form id="login" class="text-center" method="post" action="{% url 'account_login' %}">
-                        {% csrf_token %}
-                        <!-- Error messages (you can customize this block to display error messages) -->
-                        {% if form.non_field_errors %}
-                            <p class="text-danger">{{ form.non_field_errors }}</p>
-                        {% endif %}
-
-                        <!-- Social login buttons -->
-                        <div class="text-center mb-3">
-                            <div>Connect with:</div>
-                            <div class="social-login-buttons">
-                                <a href="{% provider_login_url 'facebook' %}" class="btn btn-primary btn-floating mx-1">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="{% provider_login_url 'google' %}" class="btn btn-danger btn-floating mx-1">
-                                    <i class="fab fa-google"></i>
-                                </a>
-                            </div>
+                    <div class="tab-content">
                         </div>
-
-                        <p class="text-center">or:</p>
-
-                        <!-- Email/Username input -->
-                        <div class="form-outline mb-4">
-                            {{ form.login }}
-                            <label class="form-label" for="login">Email or Username</label>
                         </div>
-
-                        <!-- Password input -->
-                        <div class="form-outline mb-4">
-                            {{ form.password }}
-                            <label class="form-label" for="password">Password</label>
                         </div>
-
-                        <!-- Submit button -->
-                        <button class="btn btn-primary btn-block mb-4" type="submit">
-                            Sign in
-                        </button>
-
-                        <!-- Register option -->
-                        <div class="text-center">
-                            <p>Not a member? <a href="{% url 'account_signup' %}">Register</a></p>
                         </div>
-                    </form>
-                </div>
-
-                <!-- Register Panel -->
-                <div class="tab-pane fade {% if user.is_authenticated %}show active{% endif %}" id="register-tab" role="tabpanel">
-                    <!-- Default form register -->
-                    <form id="register" class="text-center" method="post" action="{% url 'account_signup' %}">
-                        {% csrf_token %}
-                        <!-- Social login buttons -->
-                        <div class="text-center mb-3">
-                            <div>Connect with:</div>
-                            <div class="social-login-buttons">
-                                <a href="{% provider_login_url 'facebook' %}" class="btn btn-primary btn-floating mx-1">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="{% provider_login_url 'google' %}" class="btn btn-danger btn-floating mx-1">
-                                    <i class="fab fa-google"></i>
-                                </a>
-                            </div>
                         </div>
-
-                        <p class="text-center">or:</p>
-
-                        <!-- Name input -->
-                        <div class="form-outline mb-4">
-                            {{ form.username }}
-                            <label for="username" class="form-label">Your username</label>
-                        </div>
-
-                        <!-- Email input -->
-                        <div class="form-outline mb-4">
-                            {{ form.email }}
-                            <label for="email" class="form-label">Your email</label>
-                        </div>
-
-                        <!-- Password input -->
-                        <div class="form-outline mb-4">
-                            {{ form.password1 }}
-                            <label for="password1" class="form-label">Your password</label>
-                        </div>
-
-                        <!-- Confirm Password input -->
-                        <div class="form-outline mb-4">
-                            {{ form.password2 }}
-                            <label for="password2" class="form-label">Repeat password</label>
-                        </div>
-
-                        <!-- Submit button -->
-                        <button class="btn btn-primary btn-block mb-3" type="submit">
-                            Sign up
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
+                        {% endblock %}

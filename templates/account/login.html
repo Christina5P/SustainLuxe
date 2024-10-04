@@ -1,51 +1,91 @@
 {% extends "account/base.html" %}
+{% load static %}
 
-{% load i18n %}
-{% load account socialaccount %}
+{% block content %}
+ <div class="d-flex flex-column min-vh-100">
+    <!-- Content Wrapper to hold the card -->
+    <div class="d-flex justify-content-center align-items-center flex-grow-1">
+        <div class="col-xxl-5 col-lg-6 col-md-8">
+            <div class="card shadow-0 mb-5">
+                <div class="card-body p-4">
+                    <ul class="nav nav-pills nav-justified mb-3">
+                        
+                        </li>
+                       <li class="nav-item" role="presentation">
+                 
+                        <a class="nav-link active show" data-mdb-toggle="pill" href="{% url 'account_login' %}" role="tab" aria-selected="true">Login</a>
+                    </li>
+                    </ul>
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+                  
 
-{% block inner_content %}
 
-<hr>
-<h2 class="logo-font mb-4">{% trans "Sign In" %}</h2>
-<hr>
-
-{% get_providers as socialaccount_providers %}
-
-{% if socialaccount_providers %}
-<p>{% blocktrans with site.name as site_name %}Please sign in with one
-of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
-
-<div class="socialaccount_ballot">
-
-  <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-  </ul>
-
-  <div class="login-or">{% trans 'or' %}</div>
-
+<div class="text-center mb-3">
+<p>Sign in with:</p>
+<a rel="nofollow" href="#" title="Connect with Google" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
+<i class="fab fa-google"></i>
+</a>
+<a rel="nofollow" href="#" title="Connect with Facebook" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
+<i class="fab fa-facebook"></i>
+</a>
+</div>
+          {% csrf_token %}      
+<form id="register" class="text-center needs-validation" action="register" method="post" name="register-form">
+<p class="status"></p>
+<div class="text-center mb-3">
+</div>
+<p class="text-center">or:</p>
+<div class="form-outline form-auth-mdb mb-4">
+<input type="text" id="signonname" class="form-control" name="signonname" required="" minlength="3">
+<label for="signonname" class="form-label" style="margin-left: 0px;">Name</label>
+<div class="invalid-feedback">Please provide a valid name.</div>
+<div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 42.4px;"></div><div class="form-notch-trailing"></div></div></div>
+<div class="form-outline form-auth-mdb mb-4">
+<input type="text" id="signonusername" class="form-control" name="signonusername" required="" minlength="3">
+<label for="signonusername" class="form-label" style="margin-left: 0px;">Username</label>
+<div class="invalid-feedback">Please provide a valid username.</div>
+<div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 66.4px;"></div><div class="form-notch-trailing"></div></div></div>
+<div class="form-outline form-auth-mdb mb-4">
+<input type="email" id="signonemail" class="form-control" name="email" required="">
+<label for="signonemail" class="form-label" style="margin-left: 0px;">Email</label>
+<div class="invalid-feedback">Please provide a valid email.</div>
+<div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 40px;"></div><div class="form-notch-trailing"></div></div></div>
+<div class="form-outline form-auth-mdb mb-4">
+<input type="password" id="signonpassword" class="form-control" name="signonpassword" autocomplete="off" required="" minlength="5">
+<label for="signonpassword" class="form-label" style="margin-left: 0px;">Password</label>
+<div class="invalid-feedback">Please provide a valid password.</div>
+<div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64.8px;"></div><div class="form-notch-trailing"></div></div></div>
+<div class="form-outline form-auth-mdb mb-4">
+<input type="password" id="password2" class="form-control" name="password2" autocomplete="off" required="" minlength="5">
+<label for="password2" class="form-label" style="margin-left: 0px;">Repeat password</label>
+<div id="repeat-password-feedback" class="invalid-feedback">Please repeat the password.</div>
+<div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 106.4px;"></div><div class="form-notch-trailing"></div></div></div>
+<div class="form-check d-flex justify-content-center">
+<input type="checkbox" class="form-check-input me-1" id="newsletter" name="newsletter" value="subscribe">
+<label class="form-check-label" for="newsletter">I agree to sign up for SustainLuxe newsletter</label>
 </div>
 
-{% include "socialaccount/snippets/login_extra.html" %}
-
-{% else %}
-<p>{% blocktrans %}If you have not created an account yet, then please
-<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-{% endif %}
-
-<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <a class="btn btn-outline-black rounded-0" href="{% url 'home' %}">Home</a>
-  <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
-  <p class="mt-2">
-    <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-  </p>
+<button class="btn btn-primary btn-block mb-3" id="AJAXAuthRegisterBtn" type="submit" value="SIGNUP">
+Sign up
+</button>
 </form>
+</div>
+</div>
+</div>
+           
+
+  <div class="tab-content">
+                        <!-- Your tab content here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer stays at the bottom -->
+    <footer class="mt-auto">
+        <!-- Your footer content here -->
+    </footer>
+</div>
 
 {% endblock %}

@@ -1,48 +1,54 @@
 {% extends "account/base.html" %}
-{% load static %}
+{% load crispy_forms_tags %}
+{% load i18n %}
 
-
-{% load allauth i18n %}
 {% block head_title %}
-    {% trans "Signup" %}
-{% endblock head_title %}
-{% block content %}
-    {% element h1 %}
-        {% trans "Sign Up" %}
-    {% endelement %}
-    {% setvar link %}
-        <a href="{{ login_url }}">
-        {% endsetvar %}
-        {% setvar end_link %}
-        </a>
-    {% endsetvar %}
-    {% element p %}
-        {% blocktranslate %}Already have an account? Then please {{ link }}sign in{{ end_link }}.{% endblocktranslate %}
-    {% endelement %}
-    {% if not SOCIALACCOUNT_ONLY %}
-        {% url 'account_signup' as action_url %}
-        {% element form form=form method="post" action=action_url tags="entrance,signup" %}
-            {% slot body %}
-                {% csrf_token %}
-                {% element fields form=form unlabeled=True %}
-                {% endelement %}
-                {{ redirect_field }}
-            {% endslot %}
-            {% slot actions %}
-                {% element button tags="prominent,signup" type="submit" %}
-                    {% trans "Sign Up" %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
-    {% endif %}
-    {% if PASSKEY_SIGNUP_ENABLED %}
-        {% element hr %}
-        {% endelement %}
-        {% element button href=signup_by_passkey_url tags="prominent,signup,outline,primary" %}
-            {% trans "Sign up using a passkey" %}
-        {% endelement %}
-    {% endif %}
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
-{% endblock content %}
+    Register
+{% endblock %}
+
+{% block inner_content %}
+<div class="d-flex flex-column" style="min-height: 80vh;">
+    <!-- Content Wrapper to hold the card -->
+    <div class="d-flex justify-content-center align-items-center flex-grow-1 mt-5">
+        <div class="col-xxl-5 col-lg-6 col-md-8">
+            <div class="card shadow-0 mb-5">
+                <div class="card-body p-4">
+
+                         <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+
+                    <ul class="nav nav-pills nav-justified mb-3">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-mdb-toggle="pill" href="{% url 'account_signup' %}" role="tab" aria-selected="false">Register</a>
+                        </li>
+                    </ul>
+
+                    <div class="text-center mb-3">
+                        <p>Sign in with:</p>
+                        <a rel="nofollow" href="#" title="Connect with Google" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
+                            <i class="fab fa-google"></i>
+                        </a>
+                        <a rel="nofollow" href="#" title="Connect with Facebook" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                           <p class="text-center">or:</p>
+
+                       </div>      
+
+  {% csrf_token %}
+  {{ form|crispy }}
+ 
+                 <div class="form-outline form-auth-mdb mb-4">
+                    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                        {% csrf_token %}
+                        
+                        {{ form.non_field_errors }}
+
+                                            <!-- Submit Button -->
+                        <button class="btn btn-primary btn-block mb-3" id="AJAXAuthRegisterBtn" type="submit" value="SIGNUP">Sign up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
