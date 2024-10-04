@@ -7,10 +7,10 @@
 {% endblock %}
 
 {% block inner_content %}
- <div class="d-flex flex-column min-vh-100">
+<div class="d-flex flex-column" style="min-height: 80vh;">
     <!-- Content Wrapper to hold the card -->
-    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-        <div class="col-xxl-5 col-lg-6 col-md-8">
+    <div class="d-flex justify-content-center align-items-center flex-grow-1 mt-5">
+        <div class="col-xxl-12 col-lg-6 col-md-8">
             <div class="card shadow-0 mb-5">
                 <div class="card-body p-4">
                     <ul class="nav nav-pills nav-justified mb-3">
@@ -20,10 +20,6 @@
                         <a class="nav-link active show" data-mdb-toggle="pill" href="{% url 'account_login' %}" role="tab" aria-selected="true">Login</a>
                     </li>
                     </ul>
-
-                  
-
-
 <div class="text-center mb-3">
 <p>Log in with:</p>
 <a rel="nofollow" href="#" title="Connect with Google" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
@@ -34,19 +30,22 @@
 </a>
        <p class="text-center">or:</p>
 </div>
-           
-            {{ form|crispy }}  
-  <div class="form-outline form-auth-mdb mb-4">
-<form id="register" class="text-center needs-validation" action="{% url 'account_login' %}"method="post" name="login-form">
+{% csrf_token %}  
+  {{ form|crispy }}
+ {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
 
-{% csrf_token %}   
-<button class="btn btn-primary btn-block mb-3" id="AJAXAuthRegisterBtn" type="submit" value="SIGNUP">
-Sign up
-</button>
+
+  <button class="btn btn-primary" type="submit">{% trans "Log In" %}</button>
+    <a class="btn btn-primary me-2" href="{% url 'home' %}">Home</a>
+</div>
+
+
 </form>
 </div>
 </div>
-</div>
+
            
 
   <div class="tab-content">

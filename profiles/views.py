@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 from .models import UserProfile
 from .forms import SignupForm
 
@@ -11,20 +12,6 @@ from checkout.models import Order
 # Create your views here.
 
 
-def register_view(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-        
-            pass
-    else:
-        form = SignupForm()
-
-    return render(request, 'signup.html', {'form': form})
-
-
-
-@login_required
 def profile(request):
     """Display the user's profile."""
     profile = get_object_or_404(UserProfile, user=request.user)

@@ -35,14 +35,16 @@
                        </div>      
 
 
-                  {{ form|crispy }}
+          
  
-                 <div class="form-outline form-auth-mdb mb-4">
                     <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
                  {% csrf_token %}
                         
+                         {{ form|crispy }}
+
                         <!-- Submit Button -->
-                        <button class="btn btn-primary btn-block mb-3" id="AJAXAuthRegisterBtn" type="submit" value="SIGNUP">Sign up</button>
+                           <div class="form-outline form-auth-mdb mb-4 mt-4">
+                        <button class="btn btn-primary btn-block mb-3  " type="submit" value="SIGNUP">Sign up</button>
                     </form>
                 </div>
             </div>
