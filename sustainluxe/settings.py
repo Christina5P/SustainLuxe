@@ -5,7 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=(_6w*3esglgzg*@2^^b)@@)^3=fp@0%&xs0ff76cjcox=z1qs'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -103,13 +103,16 @@ WSGI_APPLICATION = 'sustainluxe.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+#DATABASES = {
+#    'default': {
+ #       'ENGINE': 'django.db.backends.sqlite3',
+  #      'NAME': BASE_DIR / 'db.sqlite3',
+   # }
+#}
 
+DATABASES = {
+    'default': dj_database_url.parse('postgres://u2sgdioodl0:4g0rBitWsuih@ep-gentle-mountain-a23bxz6h-pooler.eu-central-1.aws.neon.tech/cable_snowy_mummy_751580')
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
