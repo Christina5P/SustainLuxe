@@ -10,7 +10,7 @@
 <div class="d-flex flex-column" style="min-height: 80vh;">
     <!-- Content Wrapper to hold the card -->
     <div class="d-flex justify-content-center align-items-center flex-grow-1 mt-5">
-        <div class="col-xxl-5 col-lg-6 col-md-8">
+        <div class="col-xxl-12 col-lg-6 col-md-8">
             <div class="card shadow-0 mb-5">
                 <div class="card-body p-4">
 
@@ -34,21 +34,25 @@
 
                        </div>      
 
-  {% csrf_token %}
-  {{ form|crispy }}
+
+                  {{ form|crispy }}
  
                  <div class="form-outline form-auth-mdb mb-4">
                     <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-                        {% csrf_token %}
+                 {% csrf_token %}
                         
-                        {{ form.non_field_errors }}
-
-                                            <!-- Submit Button -->
+                        <!-- Submit Button -->
                         <button class="btn btn-primary btn-block mb-3" id="AJAXAuthRegisterBtn" type="submit" value="SIGNUP">Sign up</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+    <!-- Footer stays at the bottom -->
+    <footer class="mt-auto">
+        <!-- Your footer content here -->
+    </footer>
 </div>
 {% endblock %}
