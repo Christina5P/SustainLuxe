@@ -1,0 +1,1 @@
+web: gunicorn sustainluxe.wsgi:application
