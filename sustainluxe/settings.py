@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = 'DEVELOPMENT' in os.environ
+# DEBUG = 'DEVELOPMENT' in os.environ
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -121,9 +121,9 @@ DATABASES = {
  }
  }
 
-#DATABASES = {
- #   'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-#}
+# DATABASES = {
+#   'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -182,7 +182,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'media')
 
 if 'USE_AWS' in os.environ:
     # cache control
