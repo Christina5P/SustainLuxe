@@ -149,6 +149,7 @@ SustaineLuxe is host on GitHub and deployed on Heroku
 * http://lucid.app - Creating a concept Plan
 * https://fontawesome.com/ -font awesome icons
 * https://www.istockphoto.com/ -pictures
+* https://pypi.org/project/psycopg2/ -tutoring psycopg2
 
 * 
 ### [Acknowledgements](#acknowledgements)
