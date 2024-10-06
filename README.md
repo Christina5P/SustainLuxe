@@ -15,6 +15,12 @@ It should still feel luxurious and stylish to buy from this shop.
 * https://www.sellpy.se/
 * https://us.vestiairecollective.com/
 
+### [Media](#media)
+* https://stocksnap.io/
+* https://www.istockphoto.com/
+
+
+
 
 ### [Agile method](#agile-method) 
 
@@ -63,7 +69,7 @@ Responsive for different devices.
 
 ### [Features](#features) 
 
-####[Existing Features](#existing_featuers)
+#### [Existing Features](#existing_featuers)
 
 -Navbar
 -Registration/Log in Page
