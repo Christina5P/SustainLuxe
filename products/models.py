@@ -8,7 +8,7 @@ from django_countries.fields import CountryField
 
 class Product(models.Model):
     name = models.CharField(max_length=254)
-    sku = models.CharField(max_length=100, null=True, blank=True)
+    sku = models.CharField(max_length=100, unique=True,)
     size = models.ForeignKey(
         'Size', on_delete=models.CASCADE
     )  
