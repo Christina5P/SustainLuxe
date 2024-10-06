@@ -1,11 +1,34 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
 
 
 <!--Main layout-->
 <main>
+   
+  <!-- Products -->
+  <section>
+    <div class="text-center">
+        <div class="row">
+            <div class="col text-center mt-3">
+                <h2 class="logo-font">Products</h2>
+                {% for c in current_categories %}
+                    <a class="category-badge text-decoration-none" href="{% url 'products' %}?category={{ c.name }}">
+                        <span class="p-2 mt-2 badge badge-white text-black rounded-0 border border-dark">{{ c.friendly_name }}</span>
+                    </a>
+                {% endfor %}
+                <hr class="mb-1">
+            </div>
+        </div>
 <div class="container">
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B">
@@ -36,151 +59,84 @@
             <a class="nav-link text-white" href="#">Outwears</a>
           </li>
         </ul>
-
-        <form class="w-auto py-1" style="max-width: 12rem">
-          <input type="search" class="form-control rounded-0" placeholder="Search" aria-label="Search">
-        </form>
+ <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
+                        <div class="sort-select-wrapper w-50">
+                            <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border">
+                                <option value="reset">Sort by...</option>
+                                <option value="price_asc">Price (low to high)</option>
+                                <option value="price_desc">Price (high to low)</option>
+                                <option value="name_asc">Name (A-Z)</option>
+                                <option value="name_desc">Name (Z-A)</option>
+                                 <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
+                                <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
+                            </select>
+                        </div>
+                    </div>
+      
       </div>
     </div>
   </nav>
   <!-- Navbar -->
-  
-  <!-- Products -->
-  <section>
-    <div class="text-center">
-      <div class="row">
-        <!-- Ditt produktkort här -->
-      </div>
-    </div>
-  </section>
-</main>
-  
-
-  
-<!-- Products -->
-  <section>
-  <div class="text-center">
-    <div class="row">
-      
-      <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card">
-          <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
-            data-mdb-ripple-color="light">
-            <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg"
-              class="w-100" />
-            <a href="#!">
-              <div class="mask">
-                <div class="d-flex justify-content-start align-items-end h-100">
-                  <h5><span class="badge bg-dark ms-2">NEW</span></h5>
+         
+        <div class="row">
+            <div class="product-container col-10 offset-1">
+                <div class="row mt-1 mb-2">
+                   
+                    <div class="col-12 col-md-6 order-md-first">
+                        <p class="text-muted mt-3 text-center text-md-left">
+                            {{ products|length }} Products
+                        </p>
+                    </div>
                 </div>
-              </div>
-              <div class="hover-overlay">
-                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-              </div>
-            </a>
-          </div>
-          <div class="card-body">
-            <a href="" class="text-reset">
-              <h5 class="card-title mb-2">Denim shirt</h5>
-            </a>
-            <a href="" class="text-reset ">
-              <p>Shirt</p>
-            </a>
-            <h6 class="mb-3 price">120$</h6>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card">
-          <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
-            data-mdb-ripple-color="light">
-            <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg"
-              class="w-100" />
-            <a href="#!">  
-              <div class="mask">
-                <div class="d-flex justify-content-start align-items-end h-100">
-                  <h5><span class="badge bg-primary ms-2">bestseller</span></h5>
+<!-- Product cards-->
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                            <div class="card h-100 border-0">
+                                {% if product.image %}
+                                    <a href="{% url 'product_detail' product.id %}">
+                                        <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'product_detail' product.id %}">
+                                        <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                    </a>
+                                {% endif %}
+                                <div class="card-body pb-0">
+                                    <p class="mb-0">{{ product.name }}</p>
+                                </div>
+                                <div class="card-footer bg-white pt-0 border-0 text-left">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
+                                            {% if product.category %}
+                                                <p class="small mt-1 mb-0">
+                                                    <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
+                                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                                    </a>
+                                                </p>
+                                            {% endif %}
+                                          
+                                            {% if request.user.is_superuser %}
+                                                <small class="ml-3">
+                                                    <a href="{% url 'edit_product' product.id %}">Edit</a>
+                                                    <a class="text-danger" href="{% url 'delete_product' product.id %}">Delete</a>
+                                                </small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-              </div>
-              <div class="hover-overlay">
-                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-              </div>
-            </a>
-          </div>
-          <div class="card-body">
-            <a href="" class="text-reset">
-              <h5 class="card-title mb-2">Sweatshirt</h5>
-            </a>
-            <a href="" class="text-reset ">
-              <p>Sport wear</p>
-            </a>
-            <h6 class="mb-3 price">139$</h6>
-          </div>
+            </div>
         </div>
-      </div>
-      
-      <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card">
-          <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
-            data-mdb-ripple-color="light">
-            <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/14.jpg"
-              class="w-100" />
-            <a href="#!">              
-              <div class="hover-overlay">
-                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-              </div>
-            </a>
-          </div>
-          <div class="card-body">
-            <a href="" class="text-reset">
-              <h5 class="card-title mb-2">Grey blouse</h5>
-            </a>
-            <a href="" class="text-reset ">
-              <p>Sport wear</p>
-            </a>
-            <h6 class="mb-3 price">99$</h6>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card">
-          <div class="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
-            <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/15.jpg"
-              class="w-100" />
-            <a href="#!">
-              <div class="mask">
-                <div class="d-flex justify-content-start align-items-end h-100">
-                  <h5><span class="badge sale-badge ms-2">-10%</span></h5>
-                </div>
-              </div>
-              <div class="hover-overlay">
-                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-              </div>
-            </a>
-          </div>
-          <div class="card-body">
-            <a href="" class="text-reset">
-              <h5 class="card-title mb-2">Black jacket</h5>
-            </a>
-            <a href="" class="text-reset ">
-              <p>Outwear</p>
-            </a>
-            <h6 class="mb-3 price">
-              <s>199$</s><strong class="ms-2 sale">179$</strong>
-            </h6>
-          </div>
-        </div>
-      </div>
     </div>
-
-    <div class="row">
-      
-        </div>
-      </div>
+    <div class="btt-button shadow-sm rounded-0 border border-black">
+        <a class="btt-link d-flex h-100">
+            <i class="fas fa-arrow-up text-black mx-auto my-auto"></i>
+        </a>	
     </div>
-  </div>
-</section>
-  
 {% endblock %}
+  
