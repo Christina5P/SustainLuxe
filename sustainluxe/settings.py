@@ -2,12 +2,11 @@ import os
 import dj_database_url
 from pathlib import Path
 
+if os.path.exists('env.py'):
+    import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# SECURITY WARNING: keep the secret key used in production secret!
-import os
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '1234secretkey')
 
@@ -113,7 +112,8 @@ WSGI_APPLICATION = 'sustainluxe.wsgi.application'
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
-    }
+        }
+    print("In postgres")
 else:
     DATABASES = {
         'default': {
@@ -121,6 +121,8 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
+print("In SQL")
+    
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
