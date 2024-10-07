@@ -39,8 +39,8 @@
  
                     <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
                  {% csrf_token %}
-                        
-                         {{ form|crispy }}
+                   {{ form|crispy }}
+    <a class="btn btn-outline-black rounded-0" href="{% url 'account_login' %}">Back to Login</a>
 
                         <!-- Submit Button -->
                            <div class="form-outline form-auth-mdb mb-4 mt-4">

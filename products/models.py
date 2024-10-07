@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from profiles.models import UserProfile
-from django_countries.fields import CountryField  
+from django_countries.fields import CountryField
 
 # Create your models here.
 
@@ -70,19 +70,22 @@ class Condition(models.Model):
         return self.name
 
 
-
 class Category(models.Model):
     """
     Model for Categories with fields for category name, description,
     created, updated
     """
     name = models.CharField(max_length=60)
+    friendly_name = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = "categories"
+
+    def get_friendly_name(self):
+        return self.friendly_name
 
     def __str__(self):
         return self.name

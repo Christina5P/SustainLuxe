@@ -16,5 +16,4 @@ class SignupForm(forms.ModelForm):
             'email',
             'password',
             'password2',
-        ]  # Exempel på fält
-
+        ]
