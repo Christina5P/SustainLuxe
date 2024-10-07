@@ -70,6 +70,7 @@ class Condition(models.Model):
         return self.name
 
 
+
 class Category(models.Model):
     """
     Model for Categories with fields for category name, description,
