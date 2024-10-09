@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profile.css' %}">
+{% endblock %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+
+
+<h1>{{ account.user.username }}'s Account</h1>
+<h2>Products for Sale</h2>
+<ul>
+ {% for product in products %}
+        <li>
+            <strong>{{ product.name }}</strong> (SKU: {{ product.sku }})
+            <p>Published on: {{ product.publication_date|date:"Y-m-d" }}</p>
+            <p>Days left: {{ product.days_left }}</p>
+        </li>
+    {% empty %}
+        <p>No products available for sale.</p>
+    {% endfor %}
+</ul>
+        
+{% endblock %}

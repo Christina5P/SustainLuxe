@@ -15,16 +15,36 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
-    phone_number = models.CharField(max_length=25, null=False, blank=False)
-    street_address = models.CharField(max_length=80, null=False, blank=False)
-    postcode = models.CharField(max_length=20, null=False, blank=False)
-    town_or_city = models.CharField(max_length=40, null=False, blank=False)
-    country = CountryField(blank_label='Country', null=False, blank=False)
+    default_phone_number = models.CharField(max_length=25, null=False, blank=False)
+    default_street_address1 = models.CharField(
+        max_length=80, null=False, blank=False
+    )
+    default_postcode = models.CharField(max_length=20, null=False, blank=False)
+    default_town_or_city = models.CharField(
+        max_length=40, null=False, blank=False
+    )
+    default_country = CountryField(
+        blank_label='Country', null=False, blank=False
+    )
+
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    """
+    Create or update the user profile
+    """
+    if created:
+        UserProfile.objects.create(user=instance)
+    else:
+        instance.userprofile.save()
+
+
+class Account(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     total_revenue = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00
     )
     withdrawal_history = models.JSONField(default=list, blank=True)
-    temporary_field = models.BooleanField(default=False)
 
     def withdraw(self, amount):
         if amount <= self.total_revenue:
@@ -38,14 +58,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-
-
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    """
-    Create or update the user profile
-    """
-    if created:
-        UserProfile.objects.create(user=instance)
-    else:
-        instance.userprofile.save()
