@@ -8,11 +8,10 @@ from django.shortcuts import (
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
-
-# from .forms import OrderForm
+from .forms import OrderForm
 from .models import Order, OrderLineItem
 from products.models import Product
-# from bag.contexts import bag_contents
+from bag.contexts import bag_contents
 
 import stripe
 import json
@@ -52,12 +51,10 @@ def checkout(request):
             'full_name': request.POST['full_name'],
             'email': request.POST['email'],
             'phone_number': request.POST['phone_number'],
-            'country': request.POST['country'],
+            'street_address': request.POST['street_address'],
             'postcode': request.POST['postcode'],
             'town_or_city': request.POST['town_or_city'],
-            'street_address1': request.POST['street_address1'],
-            'street_address2': request.POST['street_address2'],
-            'county': request.POST['county'],
+            'country': request.POST['country'],
         }
         order_form = OrderForm(form_data)
         if order_form.is_valid():

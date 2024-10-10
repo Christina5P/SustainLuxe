@@ -162,7 +162,9 @@ SustaineLuxe is host on GitHub and deployed on Heroku
 
 - Tutoring, Q&A and criteria videos in slack channel project-potfolio-5-e-commerce
 - Inapiration from others PP5 projects
-- wlak through Boutique Ado
+- walk through Boutique Ado
+- https://www.youtube.com/watch?v=hZYWtK2k1P8 -tutoring stripe payment
+
 
 
 
