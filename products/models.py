@@ -22,6 +22,12 @@ class Product(models.Model):
     condition = models.ForeignKey(
         'Condition', on_delete=models.CASCADE
     )  
+    fabric = models.ForeignKey('Fabric',
+        max_length=254, null=True, blank=True, on_delete=models.SET_NULL
+    )
+    color = models.ForeignKey('Color',
+        max_length=254, null=True, blank=True, on_delete=models.SET_NULL
+    )
     category = models.ForeignKey(
         'Category',  
         null=True,
@@ -56,6 +62,20 @@ def mark_as_sold(self):
 
 
 class Size(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class Fabric(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class Color(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):

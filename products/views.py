@@ -70,6 +70,11 @@ def product_detail(request, product_id):
 
     context = {
         'product': product,
+        'size': product.size,
+        'brand': product.brand,
+        'condition': product.condition,
+        'fabric': product.fabric,
+        'color': product.color,
     }
 
     return render(request, 'products/product_detail.html', context)

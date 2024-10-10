@@ -84,6 +84,7 @@
                 <!-- Search bar -->
                 <form class="d-none d-md-flex input-group w-75 my-auto me-3">
                     <input id="search-input" autocomplete="off" type="search" class="form-control rounded" placeholder="Search">
+                           <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
                     {% if search_term or current_categories or current_sorting != 'None_None' %}
                           {% endif %}
                     {{ products|length }} Products{% if search_term %} found for <strong>"{{ search_term }}"</strong>{% endif %}
