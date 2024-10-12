@@ -99,7 +99,6 @@ LOGGING = {
 
 ROOT_URLCONF = 'sustainluxe.urls'
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 TEMPLATES = [
@@ -152,6 +151,7 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -234,7 +234,7 @@ STANDARD_DELIVERY_PERCENTAGE = 10
 # Stripe
 FREE_DELIVERY_THRESHOLD = 50
 STANDARD_DELIVERY_PERCENTAGE = 10
-STRIPE_CURRENCY = 'euro'
+STRIPE_CURRENCY = 'eur'
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
