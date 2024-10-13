@@ -16,82 +16,72 @@
     {% endblock %}
 
     {% block corecss %}
-      
-       <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <!-- Font Awesome -->
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-  rel="stylesheet"
-/>
-<!-- Google Fonts -->
-<link
-  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-  rel="stylesheet"
-/>
-<!-- MDB -->
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.css"
-  rel="stylesheet"
-/>
-       
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% endblock %}
 
-    {% block extra_css %}
-      
+    {% block extra_css %}      
     {% endblock %}
+
+      {% block corejs %}
+        <script src="https://kit.fontawesome.com/e9c73d7092.js" crossorigin="anonymous"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.umd.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"  integrity="sha512-nnzkI2u2Dy6HMnzMIkh7CPd1KX445z38XIu4jG1jGw7x5tSL3VBjE44dY4ihMU1ijAQV930SPM12cCFrB18sVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    {% endblock %}
+
 
     <title>SustainLuxe {% block extra_title %}{% endblock %}</title>
   </head>
   <body>   
      
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
-    <!-- Container wrapper -->
-    <header class="container-fluid">
-        <div class="row w-100 align-items-center">
+    <header class="container"> 
+        <div class="row align-items-center">
             <!-- Left part of navbar (brand and links) -->
-            <div class="col-md-6 d-flex align-items-center">
+            <div class="col-md-6 d-flex align-items-center"> 
                 <!-- Toggle button -->
                 <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fas fa-bars"></i>
                 </button>
 
                 <!-- Navbar brand -->
-                <a class="navbar-brand mt-2 mt-lg-0" href="#">
+                <a class="navbar-brand" href="#">
                     <img src="{% static 'media/logo.png' %}" height="70" alt="SustainLuxe" loading="lazy" />
                 </a>
 
                 <!-- Collapsible wrapper (links) -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left links -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
+                    <ul class="navbar-nav me-auto mb-2"> 
+                        <li class="nav-item mx-2">
                             <a class="nav-link" href="{% url 'home' %}">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item mx-2">
                             <a class="nav-link" href="{% url 'sell' %}">Sell with us</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item mx-2">
                             <a class="nav-link" href="{% url 'products' %}">Shop</a>
                         </li>
                     </ul>
                 </div>
             </div>
-
+ </div>
             <!-- Right part of navbar (search and user icons) -->
-            <div class="col-md-6 d-flex justify-content-end align-items-center">
+            <div class="col-md-6 d-flex justify-content-end align-items-center"> <!-- Adjusted to col-md-6 -->
                 <!-- Search bar -->
-                <form class="d-none d-md-flex input-group w-75 my-auto me-3">
+                <form class="d-none d-md-flex input-group w-75 my-auto me-4">
                     <input id="search-input" autocomplete="off" type="search" class="form-control rounded" placeholder="Search">
-                           <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
-                    {% if search_term or current_categories or current_sorting != 'None_None' %}
-                          {% endif %}
-                    {{ products|length }} Products{% if search_term %} found for <strong>"{{ search_term }}"</strong>{% endif %}
+                    <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
                 </form>
 
                 <!-- Cart -->
-                <a class="nav-link {% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href={% url "view_bag" %}>
+                <a class="nav-link d-flex justify-content-center{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href={% url "view_bag" %}>
                     <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                     <span class="ms-2">
                         {% if grand_total %}
@@ -100,7 +90,7 @@
                             EUR 0.00
                         {% endif %}
                     </span>
-                  </a>
+                             </a>
   <!-- User dropdown -->
                     <div class="dropdown ms-3">
                             <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
@@ -118,10 +108,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+      
         </header>
     </nav>
-
  
     {% if messages %}
         <div class="message-container"></div>
@@ -249,37 +238,14 @@
             {% endfor %}
         </div>
     {% endif %}
+   
 
-    {% block corejs %}
-       
-           <script src="https://kit.fontawesome.com/e9c73d7092.js" crossorigin="anonymous"></script>
-
-             <!-- Stripe -->
-        <script src="https://js.stripe.com/v3/"></script>
-    {% endblock %}
-
-    {% block extra_js %}
-    
-     <!-- MDB -->
-<script
-  type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.umd.min.js"
-></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Initiera MDB-komponenter om nödvändigt
-        mdb.Dropdown.getInstance(document.getElementById('navbarDropdownMenuAvatar'));
-    });
-</script>
-    {% endblock %}
-
-    {% block js %}
-     <script type="text/javascript">
+    {% block postloadjs %}
+    <script type="text/javascript">
         $('.toast').toast('show');
     </script>
-       <link rel="javascript" href="{% static 'js/product.js' %}">
     {% endblock %}
 
+    
   </body>
 </html>

@@ -2,6 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# teminal answer from request
 
 class LogImageRequestsMiddleware:
     def __init__(self, get_response):
@@ -10,12 +11,11 @@ class LogImageRequestsMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
 
-        # Kontrollera om förfrågan är för en bild
         if request.path.startswith('/media/') or request.path.endswith(
             ('.png', '.jpg', '.jpeg', '.gif')
         ):
             logger.info(
-                f"Bildförfrågan: {request.path} - Status: {response.status_code}"
+                f"img request: {request.path} - Status: {response.status_code}"
             )
 
         return response

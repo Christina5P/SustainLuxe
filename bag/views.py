@@ -21,11 +21,12 @@ def add_to_bag(request, item_id):
 
     product = get_object_or_404(Product, pk=item_id)
     redirect_url = request.POST.get('redirect_url')
-    size = request.POST.get('item_size') 
+    size = request.POST.get('item_size') or 'N/A'
+    quantity = int(request.POST.get('quantity', 1))
     bag = request.session.get('bag', {})
 
     if item_id not in bag:
-        bag[item_id] = {'size': size}
+        bag[item_id] = {'size': size, 'quantity': quantity}
         messages.success(request, f'Added {product.name} to your bag')
     else:
         messages.info(request, f'{product.name} is already in your bag')
