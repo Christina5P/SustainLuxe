@@ -12,7 +12,6 @@ from .forms import OrderForm
 from .models import Order, OrderLineItem
 from products.models import Product
 from bag.contexts import bag_contents
-
 import stripe
 import json
 
@@ -78,7 +77,7 @@ def checkout(request):
                             quantity=item_data,
                         )
                         order_line_item.save()
-                  
+
                 except Product.DoesNotExist:
                     messages.error(
                         request,

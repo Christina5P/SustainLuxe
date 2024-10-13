@@ -55,7 +55,7 @@ class StripeWH_Handler:
         # Clean data in the shipping details
         for field, value in shipping_details.address.items():
             if value == "":
-                shipping_details.address[field] = None
+                shipping_details.address.line1[field] = None
 
         # Update profile information if save_info was checked
         profile = None

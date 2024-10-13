@@ -31,7 +31,8 @@
 
 <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.umd.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"  integrity="sha512-nnzkI2u2Dy6HMnzMIkh7CPd1KX445z38XIu4jG1jGw7x5tSL3VBjE44dY4ihMU1ijAQV930SPM12cCFrB18sVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+  <!-- Stripe -->
+        <script src="https://js.stripe.com/v3/"></script>
     {% endblock %}
 
 
@@ -221,24 +222,28 @@
 
 
     {% if messages %}
-    <h1>Messages</h1>
         <div class="message-container">
             {% for message in messages %}
                 {% with message.level as level %}
                     {% if level == 40 %}
-                        {% include 'toast_notification/toast_error.html' %}
+                        {% include 'includes/toasts/toast_error.html' %}
                     {% elif level == 30 %}
-                        {% include 'toast_notification/toast_warning.html' %}
+                        {% include 'includes/toasts/toast_warning.html' %}
                     {% elif level == 25 %}
-                        {% include 'toast_notification/toast_success.html' %}
+                        {% include 'includes/toasts/toast_success.html' %}
                     {% else %}
-                        {% include 'toast_notification/toast_info.html' %}
+                        {% include 'includes/toasts/toast_info.html' %}
                     {% endif %}
                 {% endwith %}
             {% endfor %}
         </div>
     {% endif %}
    
+
+        {% block content %}
+  
+        {% endblock %}
+    </div>
 
     {% block postloadjs %}
     <script type="text/javascript">

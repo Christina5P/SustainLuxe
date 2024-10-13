@@ -36,35 +36,32 @@ footer,
 
 .navbar {
      background-color:#c0cdd4;  
+     margin-top: 20px;
 
 }
 
 .carousel-caption {
-    margin-bottom: 50px; /* Öka avståndet om det behövs */
-}
-
-.navbar {
-    margin-top: 20px; /* Justera avståndet efter behov */
+    margin-bottom: 50px; 
 }
 
 .section-spacing {
-    margin-bottom: 1rem; /* Justera efter behov */
+    margin-bottom: 1rem; 
 }
 
 .custom-img {
-    max-width: 100%; /* Säkerställer att bilden inte blir större än behållaren */
-    height: auto; /* Bevarar bildens proportioner */
+    max-width: 100%; 
+    height: auto;
     padding: 1rem;
 }
 
 .custom-btn {
-    display: block; /* Gör den block-formad för att kunna centrera */
-    max-width: 200px; /* Max bredd på knappen */
-    margin: 0 auto; /* Centrerar den horisontellt */
+    display: block; 
+    max-width: 200px; 
+    margin: 0 auto; 
 }
 
 .nav-link {
-    text-decoration: none; /* Ta bort understrykning */
+    text-decoration: none; 
 }
 
 /*  toasts */
@@ -85,8 +82,11 @@ footer,
 }
 
 .toast .close {
+    border: none;
     margin-left: auto;
     margin-right: 10px; 
     padding: 0; 
     font-size: 1.5rem; 
+    background-color: transparent;
+
 }
