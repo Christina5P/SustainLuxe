@@ -29,15 +29,15 @@ class OrderAdmin(admin.ModelAdmin):
         'country',
         'postcode',
         'town_or_city',
-        'street_address',
-        'delivery_cost',
+        'street_address1',
         'order_total',
+        'delivery_cost',
         'grand_total',
     )
 
     list_display = (
-        'user_profile',
         'order_number',
+        'user_profile',
         'date',
         'full_name',
         'order_total',

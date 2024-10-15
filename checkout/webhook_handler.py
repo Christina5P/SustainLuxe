@@ -6,7 +6,7 @@ from django.conf import settings
 from .models import Order, OrderLineItem
 from products.models import Product
 from profiles.models import UserProfile
-
+import stripe
 import json
 import time
 
@@ -28,9 +28,7 @@ class StripeWH_Handler:
             'checkout/confirmation_emails/confirmation_email_body.txt',
             {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL},
         )
-
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email])
-
+        
     def handle_event(self, event):
         """
         Handle a generic/unknown/unexpected webhook event
@@ -43,19 +41,23 @@ class StripeWH_Handler:
         """
         Handle the payment_intent.succeeded webhook from Stripe
         """
+
         intent = event.data.object
+        print(intent)
         pid = intent.id
         bag = intent.metadata.bag
         save_info = intent.metadata.save_info
 
-        billing_details = intent.charges.data[0].billing_details
+        stripe_charge = stripe.Charge.retrieve(intent.latest_charge)
+
+        billing_details = stripe_charge.billing_details
         shipping_details = intent.shipping
-        grand_total = round(intent.charges.data[0].amount / 100, 2)
+        grand_total = round(stripe_charge.amount / 100, 2)
 
         # Clean data in the shipping details
         for field, value in shipping_details.address.items():
             if value == "":
-                shipping_details.address.line1[field] = None
+                shipping_details.address[field] = None
 
         # Update profile information if save_info was checked
         profile = None
@@ -67,7 +69,7 @@ class StripeWH_Handler:
                 profile.default_country = shipping_details.address.country
                 profile.default_postcode = shipping_details.address.postal_code
                 profile.default_town_or_city = shipping_details.address.city
-                profile.default_street_address = (
+                profile.default_street_address1 = (
                     shipping_details.address.line1
                 )
                 profile.save()
@@ -83,7 +85,7 @@ class StripeWH_Handler:
                     country__iexact=shipping_details.address.country,
                     postcode__iexact=shipping_details.address.postal_code,
                     town_or_city__iexact=shipping_details.address.city,
-                    street_address__iexact=shipping_details.address.line1,
+                    street_address1__iexact=shipping_details.address.line1,
                     grand_total=grand_total,
                     original_bag=bag,
                     stripe_pid=pid,
@@ -110,30 +112,22 @@ class StripeWH_Handler:
                     country=shipping_details.address.country,
                     postcode=shipping_details.address.postal_code,
                     town_or_city=shipping_details.address.city,
-                    street_address=shipping_details.address.line1,
+                    street_address1=shipping_details.address.line1,
                     original_bag=bag,
                     stripe_pid=pid,
                 )
                 for item_id, item_data in json.loads(bag).items():
                     product = Product.objects.get(id=item_id)
-                    if isinstance(item_data, int):
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            product=product,
-                            quantity=item_data,
-                        )
-                        order_line_item.save()
-                    else:
-                        for size, quantity in item_data[
-                            'items_by_size'
-                        ].items():
-                            order_line_item = OrderLineItem(
-                                order=order,
-                                product=product,
-                                quantity=quantity,
-                                product_size=size,
-                            )
-                            order_line_item.save()
+
+                if 'size' in item_data and 'quantity' in item_data:
+                    order_line_item = OrderLineItem(
+                        order=order,
+                        product=product,
+                        quantity=item_data['quantity'],
+                        product_size=item_data['size'],
+                                    )
+                    order_line_item.save()
+
             except Exception as e:
                 if order:
                     order.delete()

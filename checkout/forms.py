@@ -9,7 +9,7 @@ class OrderForm(forms.ModelForm):
             'full_name',
             'email',
             'phone_number',
-            'street_address',
+            'street_address1',
             'postcode',
             'town_or_city',
             'country',
@@ -26,7 +26,7 @@ class OrderForm(forms.ModelForm):
             'email': 'Email Address',
             'phone_number': 'Phone Number',
             'postcode': 'Postal Code',
-            'street_address': 'Street Address',
+            'street_address1': 'Street Address1',
             'town_or_city': 'Town or City',
         }
 

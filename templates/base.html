@@ -25,7 +25,7 @@
     {% endblock %}
 
       {% block corejs %}
-        <script src="https://kit.fontawesome.com/e9c73d7092.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/3090a0f319.js" crossorigin="anonymous"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
@@ -121,7 +121,7 @@
  
     {% endblock %}
 
-
+    
     {% block content %}
     {% endblock %}
 
@@ -222,17 +222,18 @@
 
 
     {% if messages %}
+    <h1>Messages</h1>
         <div class="message-container">
             {% for message in messages %}
                 {% with message.level as level %}
                     {% if level == 40 %}
-                        {% include 'includes/toasts/toast_error.html' %}
+                        {% include 'includes/toast_notification/toast_error.html' %}
                     {% elif level == 30 %}
-                        {% include 'includes/toasts/toast_warning.html' %}
+                        {% include 'includes/toast_notification/toast_warning.html' %}
                     {% elif level == 25 %}
-                        {% include 'includes/toasts/toast_success.html' %}
+                        {% include 'includes/toast_notification/toast_success.html' %}
                     {% else %}
-                        {% include 'includes/toasts/toast_info.html' %}
+                        {% include 'includes/toast_notification/toast_info.html' %}
                     {% endif %}
                 {% endwith %}
             {% endfor %}
@@ -240,10 +241,6 @@
     {% endif %}
    
 
-        {% block content %}
-  
-        {% endblock %}
-    </div>
 
     {% block postloadjs %}
     <script type="text/javascript">

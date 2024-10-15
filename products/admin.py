@@ -4,14 +4,22 @@ from .models import Product, Category, Size, Brand, Condition, Fabric, Size, Col
 
 # Register your models here.
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'brand', 'size', 'fabric', 'condition')
-    search_fields = ('name', 'brand__name', 'fabric__name')
-    list_filter = ('brand', 'fabric', 'size', 'condition')
+    list_display = (
+        'name',
+        'sku',
+        'brand',
+        'size',
+        'fabric',
+        'price',
+        'condition',
+    )
+    list_filter = ('brand', 'fabric', 'size', 'condition', 'sku')
+
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category)
-admin.site.register(Size)
-admin.site.register(Brand)
-admin.site.register(Condition)
-admin.site.register(Fabric)
-admin.site.register(Color)
+# admin.site.register(Size)
+# admin.site.register(Brand)
+# admin.site.register(Condition)
+# admin.site.register(Fabric)
+# admin.site.register(Color)

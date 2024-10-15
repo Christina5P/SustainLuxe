@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stripe.css' %}">
 {% endblock %}
 
 {% block page_header %}
@@ -66,11 +66,12 @@
                             </p>
                         </div>
                         <div class="col-12 col-md-8 text-md-right">
-                            <p class="small mb-0">{{ item.quantity }} @ EUR {{ item.product.price }} each</p>
+                            <p class="small mb-0">{{ item.quantity }} @ ${{ item.product.price }} each</p>
                         </div>
                     </div>
                     {% endfor %}
 
+                    
                     <div class="row">
                         <div class="col">
                             <small class="text-muted">Delivering To:</small>
@@ -79,7 +80,7 @@
 
                     <div class="row">
                         <div class="col-12 col-md-4">
-                            <p class="mb-0 text-black font-weight-bold">Full Name</p>
+                            <p class="mb-0 text-black font-weight-bold">Name</p>
                         </div>
                         <div class="col-12 col-md-8 text-md-right">
                             <p class="mb-0">{{ order.full_name }}</p>
@@ -91,7 +92,7 @@
                             <p class="mb-0 text-black font-weight-bold">Address</p>
                         </div>
                         <div class="col-12 col-md-8 text-md-right">
-                            <p class="mb-0">{{ order.street_address }}</p>
+                            <p class="mb-0">{{ order.street_address1 }}</p>
                         </div>
                     </div>
 
@@ -178,10 +179,15 @@
 					</span>
 					<span class="text-uppercase">Back to profile</span>
 				</a>
-
-              
-			</div>
-		</div>
-    </div>
-    {% endif %}
-{% endblock %}
+                   {% else %}
+                    <a href="{% url 'products' %}" class="btn btn-black rounded-0 my-2">
+                        <span class="icon mr-2">
+                            <i class="fas fa-gifts"></i>
+                        </span>
+                        <span class="text-uppercase">Continue Shopping</span>
+                    </a>
+                     </div>
+                </div>
+            </div>
+            {% endif %}
+        {% endblock %}

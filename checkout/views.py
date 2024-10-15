@@ -25,8 +25,12 @@ def cache_checkout_data(request):
             pid,
             metadata={
                 'bag': json.dumps(request.session.get('bag', {})),
-                'save_info': request.POST.get('save_info'),
-                'username': request.user,
+                'save_info': request.POST.get('save_info', False),
+                'username': (
+                    request.user.username
+                    if request.user.is_authenticated
+                    else 'AnonymousUser'
+                ),
             },
         )
         return HttpResponse(status=200)
@@ -50,7 +54,7 @@ def checkout(request):
             'full_name': request.POST['full_name'],
             'email': request.POST['email'],
             'phone_number': request.POST['phone_number'],
-            'street_address': request.POST['street_address'],
+            'street_address1': request.POST['street_address1'],
             'postcode': request.POST['postcode'],
             'town_or_city': request.POST['town_or_city'],
             'country': request.POST['country'],
@@ -67,6 +71,9 @@ def checkout(request):
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             order.save()
+
+            print(f"Order information: {order_form.cleaned_data}")
+
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
@@ -77,6 +84,7 @@ def checkout(request):
                             quantity=item_data,
                         )
                         order_line_item.save()
+                        print(f"Saved order line item: {order_line_item}")
 
                 except Product.DoesNotExist:
                     messages.error(
