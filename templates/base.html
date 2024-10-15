@@ -81,23 +81,25 @@
                     <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
                 </form>
           
-                <!-- Cart -->
-                <a class="nav-link d-flex justify-content-center{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href={% url "view_bag" %}>
-                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-                    <span class="ms-2">
-                        {% if grand_total %}
-                            EUR{{ grand_total|floatformat:2 }}
-                        {% else %}
-                            EUR 0.00
-                        {% endif %}
-                    </span>
-                             </a>
+            
+                <div class="col-md-6 d-flex justify-content-end align-items-center">
+                   <span class="navbar-text ml-auto logged-in">
+                {% if user.is_authenticated %}
+                Welcome {{ user }} <br>You are logged in
+                {% else %}
+                You are not logged in
+                {% endif %}
+            </span>
+            </div>
+
   <!-- User dropdown -->
                     <div class="dropdown ms-3">
-                            <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
-                    <a class="dropdown-toggle" id="navbarDropdownMenuAvatar" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="{% url 'register' %}">
+                            
+                    <a id="navbarDropdownMenuAvatar" role="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" href="{% url 'register' %}">
+                       <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
                         <!-- Dropdown for user actions -->
                         </a>
+                       
                             {% if request.user.is_authenticated %}
                                 {% if request.user.is_superuser %}
                                     <a href="{% url 'add_product'%}" class="dropdown-item">Product Management</a>
@@ -110,6 +112,18 @@
                     </div>
                 </div>
       
+
+                <!-- Cart -->
+                <a class="nav-link d-flex justify-content-center{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href={% url "view_bag" %}>
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    <span class="ms-2">
+                        {% if grand_total %}
+                            EUR{{ grand_total|floatformat:2 }}
+                        {% else %}
+                            EUR 0.00
+                        {% endif %}
+                    </span>
+                             </a>
         </header>
     </nav>
  

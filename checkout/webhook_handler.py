@@ -28,7 +28,7 @@ class StripeWH_Handler:
             'checkout/confirmation_emails/confirmation_email_body.txt',
             {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL},
         )
-        
+
     def handle_event(self, event):
         """
         Handle a generic/unknown/unexpected webhook event
@@ -58,6 +58,8 @@ class StripeWH_Handler:
         for field, value in shipping_details.address.items():
             if value == "":
                 shipping_details.address[field] = None
+
+        Order.update_total()
 
         # Update profile information if save_info was checked
         profile = None
@@ -119,14 +121,14 @@ class StripeWH_Handler:
                 for item_id, item_data in json.loads(bag).items():
                     product = Product.objects.get(id=item_id)
 
-                if 'size' in item_data and 'quantity' in item_data:
-                    order_line_item = OrderLineItem(
-                        order=order,
-                        product=product,
-                        quantity=item_data['quantity'],
-                        product_size=item_data['size'],
-                                    )
-                    order_line_item.save()
+                    if 'size' in item_data and 'quantity' in item_data:
+                        order_line_item = OrderLineItem(
+                            order=order,
+                            product=product,
+                            quantity=item_data['quantity'],
+                            product_size=item_data['size'],
+                        )
+                        order_line_item.save()
 
             except Exception as e:
                 if order:
