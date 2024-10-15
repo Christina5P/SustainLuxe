@@ -21,11 +21,7 @@
         <div class="row">
             <div class="col text-center mt-3">
                 <h2 class="logo-font">Products</h2>
-                {% for c in current_categories %}
-                    <a class="category-badge text-decoration-none" href="{% url 'products' %}?category={{ c.name }}">
-                        <span class="p-2 mt-2 badge badge-white text-black rounded-0 border border-dark">{{ c.friendly_name }}</span>
-                    </a>
-                {% endfor %}
+              
                 <hr class="mb-1">
             </div>
         </div>
@@ -47,17 +43,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent2">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item active">
-            <a class="nav-link text-white" href="#">All</a>
+        <a class="nav-link text-white" href="{% url 'products' %}">All</a>
           </li>
+          {% for category in all_categories %}
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">Shirts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#">Sport wears</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#">Outwears</a>
-          </li>
+            <a class="nav-link text-white" href="{% url 'products' %}?category={{ category.name }}">{{ category.get_friendly_name }}</a>
+            </li>
+             {% endfor %}
         </ul>
  <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
                         <div class="sort-select-wrapper w-50">
@@ -88,7 +80,70 @@
                         </p>
                     </div>
                 </div>
-                <!-- Product cards-->
+
+                <!-- Filter form-->
+           
+
+    <h4 class="col-md-3">Product Filter</h4>
+<div class="row">
+  <div class="col-md-3"> 
+   <form id="filterForm" method="GET" action="{% url 'all_products' %}">
+  <div class="form-group">
+    <label for="category">Category:</label>
+    <select name="category" id="category" class="form-control">
+      <option value="">--Please select--</option>
+      {% for category in categories %}
+        <option value="{{ category.id }}" {% if request.GET.category == category.id %}selected{% endif %}>
+          {{ category.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="brand">Brand:</label>
+    <select name="brand" id="brand" class="form-control">
+      <option value="">-- Please select --</option>
+      {% for brand in brand %}
+        <option value="{{ brand.id }}" {% if request.GET.brand == brand.id %}selected{% endif %}>
+          {{ brand.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="condition">Condition:</label>
+    <select name="condition" id="condition" class="form-control">
+      <option value="">-- Please select --</option>
+      {% for condition in conditions %}
+        <option value="{{ condition.id }}" {% if request.GET.condition == condition.id %}selected{% endif %}>
+          {{ condition.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="size">Size:</label>
+    <select name="size" id="size" class="form-control">
+      <option value="">-- Please select --</option>
+      {% for size in sizes %}
+        <option value="{{ size.id }}" {% if request.GET.size == size.id %}selected{% endif %}>
+          {{ size.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+    <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Filter</button>
+  <button type="reset" class="btn btn-secondary" id="clearButton">Clear Filters</button>
+</form>
+
+  </div>
+</div>
+
+                      <!-- Product cards-->
                 <div class="row">
                     {% for product in products %}
                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
@@ -142,38 +197,52 @@
   
 
 {% block postloadjs %}
- 
-// Scroll to top
-{{ block.super }}
  <script type="text/javascript">
-  		$ ('.btt-link').click(function(e) {
-			window.scrollTo(0,0)
-		})
-        	</script>
 
+  // Scroll to top
+  $(document).ready(function () {
+    $('.btt-link').click(function(e) {
+      e.preventDefault();  
+      window.scrollTo(0, 0);
+    });
 
-// Sort by function
+    // Sort by function
+    $('#sort-selector').change(function () {
+      var selector = $(this);
+      var currentUrl = new URL(window.location.href);  
 
-    <script type="text/javascript">
- $('#sort-selector').change(function () {
-            var selector = $(this);
-            var currentUrl = new URL(window.location);
+      var selectedVal = selector.val();
+      if (selectedVal != "reset") {
+        var sort = selectedVal.split("_")[0];
+        var direction = selectedVal.split("_")[1];
 
-            var selectedVal = selector.val();
-            if(selectedVal != "reset"){
-                var sort = selectedVal.split("_")[0];
-                var direction = selectedVal.split("_")[1];
+        currentUrl.searchParams.set("sort", sort);
+        currentUrl.searchParams.set("direction", direction);
 
-                currentUrl.searchParams.set("sort", sort);
-                currentUrl.searchParams.set("direction", direction);
+        window.location.replace(currentUrl);
+      } else {
+        currentUrl.searchParams.delete("sort");
+        currentUrl.searchParams.delete("direction");
 
-                window.location.replace(currentUrl);
-            } else {
-                currentUrl.searchParams.delete("sort");
-                currentUrl.searchParams.delete("direction");
+        window.location.replace(currentUrl);
+      }
+    });
 
-                window.location.replace(currentUrl);
-            }
-        })
-        	</script>
-        {% endblock %}
+    // Clear Filters button
+    $('#clearButton').click(function (e) {
+      e.preventDefault(); 
+
+      var currentUrl = new URL(window.location.href);
+      
+    
+      currentUrl.searchParams.delete("category");
+      currentUrl.searchParams.delete("brand");
+      currentUrl.searchParams.delete("condition");
+      currentUrl.searchParams.delete("size");
+
+      window.location.replace(currentUrl);
+    });
+  });
+</script>
+
+{% endblock %}

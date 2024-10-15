@@ -166,5 +166,10 @@ SustaineLuxe is host on GitHub and deployed on Heroku
 - https://www.youtube.com/watch?v=hZYWtK2k1P8 -tutoring stripe payment
 
 
+- https://www.bigcommerce.com/articles/ecommerce/fashion-ecommerce/
+- https://python.plainenglish.io/creating-a-django-e-commerce-product-filter-prototype-a8e7409453fc -creating filter tutoring
+- https://stackoverflow.com/ - -creating filter tutoring
+
+
 
 

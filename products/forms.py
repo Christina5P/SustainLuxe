@@ -21,3 +21,11 @@ class ProductForm(forms.ModelForm):
         self.fields['category'].choices = friendly_names
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'border-black rounded-0'
+
+
+class ProductFilterForm(forms.Form):
+    category = forms.CharField(required=False)
+    condition = forms.CharField(required=False)
+    brand = forms.CharField(required=False)
+    size = forms.CharField(required=False)
+
