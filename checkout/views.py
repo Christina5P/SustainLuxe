@@ -10,6 +10,8 @@ from django.contrib import messages
 from django.conf import settings
 from .forms import OrderForm
 from .models import Order, OrderLineItem
+from profiles.models import UserProfile
+from profiles.forms import UserProfileForm
 from products.models import Product
 from bag.contexts import bag_contents
 import stripe
@@ -82,6 +84,7 @@ def checkout(request):
                             order=order,
                             product=product,
                             quantity=item_data,
+                            size=item_data,
                         )
                         order_line_item.save()
                         print(f"Saved order line item: {order_line_item}")
@@ -90,7 +93,7 @@ def checkout(request):
                     messages.error(
                         request,
                         (
-                            "One of the products in your bag wasn't found in our database. "
+                            "One of the products in your bag wasn't found in our database."
                             "Please call us for assistance!"
                         ),
                     )
@@ -149,6 +152,26 @@ def checkout_success(request, order_number):
     """
     save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
+
+    if request.user.is_authenticated:
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+        # Attach the user's profile to the order
+        order.user_profile = profile
+        order.save()
+
+        # Save the user's info
+        if save_info:
+            profile_data = {
+                'default_phone_number': order.phone_number,
+                'default_country': order.country,
+                'default_postcode': order.postcode,
+                'default_town_or_city': order.town_or_city,
+                'default_street_address1': order.street_address1,
+            }
+            user_profile_form = UserProfileForm(profile_data, instance=profile)
+            if user_profile_form.is_valid():
+                user_profile_form.save()
+
     messages.success(
         request,
         f'Order successfully processed! \

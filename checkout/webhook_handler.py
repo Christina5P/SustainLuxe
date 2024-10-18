@@ -29,6 +29,8 @@ class StripeWH_Handler:
             {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL},
         )
 
+        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [cust_email])
+
     def handle_event(self, event):
         """
         Handle a generic/unknown/unexpected webhook event
@@ -41,19 +43,15 @@ class StripeWH_Handler:
         """
         Handle the payment_intent.succeeded webhook from Stripe
         """
-            
+
         intent = event.data.object
         pid = intent.id
         bag = intent.metadata.bag
         save_info = intent.metadata.save_info
 
         print("bag", bag)
-
         # Get the Charge object
-        stripe_charge = stripe.Charge.retrieve(
-            intent.latest_charge
-        )   
-     
+        stripe_charge = stripe.Charge.retrieve(intent.latest_charge)
         billing_details = stripe_charge.billing_details  # updated
         shipping_details = intent.shipping
         grand_total = round(stripe_charge.amount / 100, 2)
@@ -77,10 +75,6 @@ class StripeWH_Handler:
                 profile.default_street_address1 = (
                     shipping_details.address.line1
                 )
-                profile.default_street_address2 = (
-                    shipping_details.address.line2
-                )
-                profile.default_county = shipping_details.address.state
                 profile.save()
         order_exists = False
         attempt = 1
@@ -106,7 +100,7 @@ class StripeWH_Handler:
         if order_exists:
             self._send_confirmation_email(order)
             return HttpResponse(
-                content=f'Webhook received: {event["type"]} | SUCCESS: Verified order already in database',
+                content=f'Webhook received: {event["type"]} | SUCCESS:Verified order already in database',
                 status=200,
             )
         else:
@@ -131,19 +125,10 @@ class StripeWH_Handler:
                             order=order,
                             product=product,
                             quantity=item_data,
+                            size=item_data,
                         )
                         order_line_item.save()
-                    else:
-                        for size, quantity in item_data[
-                            "items_by_size"
-                        ].items():
-                            order_line_item = OrderLineItem(
-                                order=order,
-                                product=product,
-                                quantity=quantity,
-                                product_size=size,
-                            )
-                            order_line_item.save()
+
             except Exception as e:
                 if order:
                     order.delete()

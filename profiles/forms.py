@@ -1,6 +1,7 @@
 from django import forms
-from .models import UserProfile, Account
-from products.models import UserProfile, Product, Size, Condition
+from .models import UserProfile
+from products.models import Product, Size, Condition
+from profiles.models import UserProfile
 
 class UserProfileForm(forms.ModelForm):
     class Meta:

@@ -47,8 +47,6 @@ def create_sale(request):
         form = SellerForm()
     return render(request, 'profiles/sale_product.html', {'form': form})
 
-    
-
 @login_required
 def account_detail(request, user_id):
     account = get_object_or_404(Account, user_id=user_id)
