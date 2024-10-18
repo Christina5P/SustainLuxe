@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<body>
+    <div class="container mt-5 mb-5">
+        <h2 class="text-center">Selling Form</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+         
+            <div class="card">
+            <div class="card-body ">
+                     {{ form|crispy }}
+           
+                <fieldset class="form-group">
+                      
+                <label class="form-check-label" for="{{ choice.id_for_label }}">
+                        {{ choice }}                                    
+                </label>
+             </div>
+
+              </div>
+                </fieldset>
+                
+                    <button type="submit" class="btn btn-primary btn-block">Create an Order</button>
+                    <div class="card-footer ">
+                </div>
+            </div>
+        </div>
+        </form>
+ </div>
+    {% if messages %}
+    <div id="toast-container">
+        {% for message in messages %}
+            {% include 'includes/toast_notification/toast_saleconfirmation.html' %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}
+ </body>
+</html>

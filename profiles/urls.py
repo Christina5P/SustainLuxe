@@ -1,10 +1,16 @@
 from django.urls import path
 from . import views
-from .views import create_account, account_detail, order_history_list
+from .views import (
+    create_account,
+    account_detail,
+    order_history_list,
+    withdraw_view,
+)
 
 
 urlpatterns = [
     path('', views.profile, name='profile'),
+    path('sale_product/', views.create_sale, name='sale_product'), 
     path(
         'profile/order_history/',
         views.order_history_list,

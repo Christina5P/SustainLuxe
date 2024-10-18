@@ -41,30 +41,33 @@ class StripeWH_Handler:
         """
         Handle the payment_intent.succeeded webhook from Stripe
         """
-
+            
         intent = event.data.object
-        print(intent)
         pid = intent.id
         bag = intent.metadata.bag
         save_info = intent.metadata.save_info
 
-        stripe_charge = stripe.Charge.retrieve(intent.latest_charge)
+        print("bag", bag)
 
-        billing_details = stripe_charge.billing_details
+        # Get the Charge object
+        stripe_charge = stripe.Charge.retrieve(
+            intent.latest_charge
+        )   
+     
+        billing_details = stripe_charge.billing_details  # updated
         shipping_details = intent.shipping
         grand_total = round(stripe_charge.amount / 100, 2)
 
+        print("order total")
         # Clean data in the shipping details
         for field, value in shipping_details.address.items():
             if value == "":
                 shipping_details.address[field] = None
 
-        Order.update_total()
-
         # Update profile information if save_info was checked
         profile = None
         username = intent.metadata.username
-        if username != 'AnonymousUser':
+        if username != "AnonymousUser":
             profile = UserProfile.objects.get(user__username=username)
             if save_info:
                 profile.default_phone_number = shipping_details.phone
@@ -74,8 +77,11 @@ class StripeWH_Handler:
                 profile.default_street_address1 = (
                     shipping_details.address.line1
                 )
+                profile.default_street_address2 = (
+                    shipping_details.address.line2
+                )
+                profile.default_county = shipping_details.address.state
                 profile.save()
-
         order_exists = False
         attempt = 1
         while attempt <= 5:
@@ -120,16 +126,24 @@ class StripeWH_Handler:
                 )
                 for item_id, item_data in json.loads(bag).items():
                     product = Product.objects.get(id=item_id)
-
-                    if 'size' in item_data and 'quantity' in item_data:
+                    if isinstance(item_data, int):
                         order_line_item = OrderLineItem(
                             order=order,
                             product=product,
-                            quantity=item_data['quantity'],
-                            product_size=item_data['size'],
+                            quantity=item_data,
                         )
                         order_line_item.save()
-
+                    else:
+                        for size, quantity in item_data[
+                            "items_by_size"
+                        ].items():
+                            order_line_item = OrderLineItem(
+                                order=order,
+                                product=product,
+                                quantity=quantity,
+                                product_size=size,
+                            )
+                            order_line_item.save()
             except Exception as e:
                 if order:
                     order.delete()

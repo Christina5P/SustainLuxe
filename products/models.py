@@ -35,9 +35,7 @@ class Product(models.Model):
         on_delete=models.SET_NULL,
     )
     description = models.TextField(null=True, blank=True)
-    user_profile = models.ForeignKey(
-      UserProfile, on_delete=models.CASCADE, related_name='products'
-    )
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True) 
     updated_at = models.DateTimeField(auto_now=True) 
     return_unsold = models.BooleanField(default=False)

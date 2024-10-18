@@ -26,6 +26,12 @@ class UserProfile(models.Model):
     default_country = CountryField(
         blank_label='Country', null=False, blank=False
     )
+    seller_balance = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
+
+    def __str__(self):
+        return f'{self.full_name} - Balance: {self.seller_balance}'
 
 
 @receiver(post_save, sender=User)

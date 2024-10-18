@@ -1,19 +1,6 @@
 from django import forms
-from .models import User, UserProfile, Account
-
-
-def create_account(request):
-    if request.method == 'POST':
-        form = CreateAccountForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Account created successfully!')
-            return redirect('some_view_name')
-    else:
-        form = CreateAccountForm()
-
-    return render(request, 'profiles/create_account.html', {'form': form})
-
+from .models import UserProfile, Account
+from products.models import UserProfile, Product, Size, Condition
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -40,22 +27,145 @@ class UserProfileForm(forms.ModelForm):
                 if self.fields[field].required:
                     placeholder += ' *'
                 self.fields[field].widget.attrs['placeholder'] = placeholder
+                self.fields[field].widget.attrs[
+                    'class'
+                ] = 'border-black rounded-0 profile-form-input'
 
-            
-            self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
 
+class SellerForm(forms.ModelForm):
 
-class AccountForm(forms.ModelForm):
-    amount = forms.DecimalField(
-        max_digits=10, decimal_places=2, required=True
-    ) 
-    sku = forms.CharField(
-        max_length=100, required=False
-    ) 
+    PAY_FOR_RETURN_SHIPPING = 'pay_for_return'
+    DONATE_UNSOLD = 'donate_unsold'
+
+    RETURN_OPTIONS = [
+        (PAY_FOR_RETURN_SHIPPING, 'Pay for a return shipping label'),
+        (DONATE_UNSOLD, 'Donate unsold items'),
+    ]
+
+    full_name = forms.CharField(
+        max_length=255,
+        required=True,
+        label="Full Name",
+        widget=forms.TextInput(attrs={'placeholder': 'Enter your name'}),
+    )
+
+    email = forms.EmailField( 
+        max_length=255,
+        required=True,
+        label="Email",
+        widget=forms.TextInput(attrs={'placeholder': 'Enter your email'}),
+    )
+
+    phone_number = forms.CharField(
+        max_length=20,
+        required=True,
+        label="Phone Number",
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Enter your phone number'}
+        ),
+    )
+
+    street_address = forms.CharField(
+        max_length=255,
+        required=True,
+        label="Street Address",
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Enter your street address'}
+        ),
+    )
+
+    postcode = forms.CharField(
+        max_length=10,
+        required=True,
+        label="Postal Code",
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Enter your postal code'}
+        ),
+    )
+
+    town_or_city = forms.CharField(
+        max_length=100,
+        required=True,
+        label="Town or City",
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Enter your town or city'}
+        ),
+    )
+
+    name = forms.CharField(
+        max_length=255,
+        required=True,
+        label="Product Name",
+        widget=forms.TextInput(attrs={'placeholder': 'Enter product name'}),
+    )
+
+    SIZE = [
+        ('XS', 'XS'),
+        ('S', 'S'),
+        ('M', 'M'),
+        ('L', 'L'),
+        ('XL', 'XL'),
+      
+    ]
+
+    size = forms.ModelChoiceField(
+        queryset=Size.objects.all(),
+        required=True,
+        label="Size",
+        widget=forms.Select(attrs={'placeholder': 'Enter size'}),
+    )
+
+    price = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        required=True,
+        label="Price",
+        widget=forms.NumberInput(attrs={'placeholder': 'Enter price'}),
+    )
+
+    CONDITION_CHOICES = [
+        ('New with tags', 'New with tags'),
+        ('Like new', 'Like new'),
+        ('Excellent Condition', 'Excellent Condition'),
+        ('Good Condition', 'Good Condition'),
+        ('Acceptable', 'Acceptable'),
+    ]
+
+    condition = forms.ModelChoiceField(
+        queryset=Condition.objects.all(),
+        required=True,
+        label="Condition",
+        widget=forms.Select,
+    )
+
+    return_option = forms.ChoiceField(
+        choices=RETURN_OPTIONS,
+        widget=forms.RadioSelect,
+        label="Return for unsold product?",
+    )
 
     class Meta:
-        model = Account
+        model = Product
         fields = [
-            'user',
-            'withdrawal_history',
-        ]  
+            'full_name',
+            'email',
+            'phone_number',
+            'street_address',
+            'postcode',
+            'town_or_city',
+            'name',
+            'price',
+            'size',
+            'condition',
+            'return_option',
+        ]
+
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price <= 0:
+            raise forms.ValidationError("Price must be greater than zero.")
+        return price
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        return email

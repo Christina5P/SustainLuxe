@@ -1,12 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from .models import UserProfile  
-from .forms import UserProfileForm  
+from .forms import UserProfileForm, SellerForm
 from checkout.models import Order
-from .models import Account  
-
+from .models import Account 
+import uuid
 
 @login_required
 def profile(request):
@@ -22,21 +22,41 @@ def profile(request):
             messages.error(request, 'Update failed')
     else:
         form = UserProfileForm(instance=profile)
-        
-        orders = profile.orders.all()
+
+    orders = profile.orders.all()  # Flytta denna rad utanför else-blocket
 
     template = 'profiles/profile.html'
     context = {'form': form, 'orders': orders, 'on_profile_page': True}
 
     return render(request, template, context)
 
+
+def create_sale(request):
+    if request.method == 'POST':
+        form = SellerForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.sku = str(uuid.uuid4())
+            product.user_profile = request.user.userprofile 
+            product.save()
+
+            Order.objects.create(user_profile=request.user.userprofile, product=product)
+
+            return redirect('profile') 
+    else:
+        form = SellerForm()
+    return render(request, 'profiles/sale_product.html', {'form': form})
+
+    
+
 @login_required
 def account_detail(request, user_id):
     account = get_object_or_404(Account, user_id=user_id)
+    orders = Order.objects.filter(user_profile=user_profile)
     template = 'profiles/details.html'
     context = {
         'products': account.products.all() if hasattr(account, 'products') else [],
-        'account' : account,
+        'account': account,
     }
 
     return render(request, template, context)
@@ -84,3 +104,13 @@ def create_account(request):
         form = CreateAccountForm()
 
     return render(request, 'profiles/create_account.html', {'form': form})
+
+
+def sale_product_view(request):
+    if request.method == 'POST':
+        print(request.POST)  # Logga POST-data
+        form = MyForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            print(form.errors)  # Logga eventuella valideringsfel

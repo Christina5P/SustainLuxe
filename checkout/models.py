@@ -100,13 +100,16 @@ class OrderLineItem(models.Model):
         """
         Override the original save method to set the lineitem total
         and update the order total.
+        Also updates seller balance with 60%
+        of the product's sale value.
         """
         self.lineitem_total = self.product.price * self.quantity
         super().save(*args, **kwargs)
         self.order.update_total()
-        print(
-            f"Line item saved: {self.product.name}, Quantity: {self.quantity}, Line item total: {self.lineitem_total}"
-        )
+        seller = (self.product.user_profile) 
+        seller_income = self.lineitem_total * 0.70 
+        seller.seller_balance += seller_income
+        seller.save()
 
     def __str__(self):
         return f'SKU {self.product.sku} on order {self.order.order_number}'
