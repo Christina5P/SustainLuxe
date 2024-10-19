@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from profiles.models import UserProfile
 from django_countries.fields import CountryField
+from django.core.validators import MinValueValidator, MaxValueValidator
+from decimal import Decimal
 
 # Create your models here.
 
@@ -14,7 +16,11 @@ class Product(models.Model):
     )  
     image_url = models.URLField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.01'))],
+    )
     brand = models.ForeignKey(
         'Brand', null=True, blank=True, on_delete=models.SET_NULL
     )  

@@ -16,6 +16,7 @@ from products.models import Product
 from bag.contexts import bag_contents
 import stripe
 import json
+from decimal import Decimal
 
 
 @require_POST
@@ -64,12 +65,7 @@ def checkout(request):
         order_form = OrderForm(form_data)
         if order_form.is_valid():
             order = order_form.save(commit=False)
-            client_secret = request.POST.get('client_secret')
-            if client_secret:
-                pid = client_secret.split('_secret')[0]
-            else:
-                messages.error(request, 'Client secret is missing.')
-                return redirect(reverse('view_bag'))
+            pid = request.POST.get('client_secret').split('_secret')[0]
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             order.save()
@@ -84,10 +80,17 @@ def checkout(request):
                             order=order,
                             product=product,
                             quantity=item_data,
-                            size=item_data,
                         )
                         order_line_item.save()
-                        print(f"Saved order line item: {order_line_item}")
+                    else:
+                        order_line_item = OrderLineItem(
+                            order=order,
+                            product=product,
+                            product_size=item_data['size'],
+                            quantity=item_data['quantity'],
+                        )
+                    order_line_item.save()
+                    print(f"Saved order line item: {order_line_item}")
 
                 except Product.DoesNotExist:
                     messages.error(
@@ -120,7 +123,7 @@ def checkout(request):
 
         current_bag = bag_contents(request)
         total = current_bag['grand_total']
-        stripe_total = round(total * 100)
+        stripe_total = round(Decimal(total) * Decimal('100'))
         stripe.api_key = stripe_secret_key
         intent = stripe.PaymentIntent.create(
             amount=stripe_total,

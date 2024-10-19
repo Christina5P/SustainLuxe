@@ -1,5 +1,5 @@
 import uuid  # generate ordernumber
-
+from decimal import Decimal
 from django.db import models
 from django.db.models import Sum
 from django.conf import settings
@@ -49,18 +49,9 @@ class Order(models.Model):
         Update grand total each time a line item is added,
         accounting for delivery costs.
         """
-        self.order_total = (
-            self.lineitems.aggregate(Sum('lineitem_total'))[
-                'lineitem_total__sum'
-            ]
-            or 0
-        )
-        if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-            self.delivery_cost = (
-                self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
-            )
-        else:
-            self.delivery_cost = 0
+        self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))[
+            'lineitem_total__sum'
+        ] or Decimal('0')
         self.grand_total = self.order_total + self.delivery_cost
         self.save()
 
@@ -72,7 +63,7 @@ class Order(models.Model):
         if not self.order_number:
             self.order_number = self._generate_order_number()
         super().save(*args, **kwargs)
-
+       
         print(f"Order saved: {self.order_number}") 
 
     def __str__(self):
@@ -80,36 +71,23 @@ class Order(models.Model):
 
 
 class OrderLineItem(models.Model):
-    order = models.ForeignKey(
-        Order,
-        null=False,
-        blank=False,
-        on_delete=models.CASCADE,
-        related_name='lineitems',
-    )
-    product = models.ForeignKey(
-        Product, null=False, blank=False, on_delete=models.CASCADE
-    )
-    product_size = models.CharField(max_length=10, null=True, blank=True) 
-    quantity = models.IntegerField(null=False, blank=False, default=0)
-    lineitem_total = models.DecimalField(
-        max_digits=6, decimal_places=2, null=False, blank=False, editable=False
-    )
+    order = models.ForeignKey(Order, null=False, blank=False, on_delete=models.CASCADE, related_name='lineitems')
+    product = models.ForeignKey(Product, null=False, blank=False, on_delete=models.CASCADE)
+    product_size = models.CharField(max_length=2, null=True, blank=True)
+    quantity = models.IntegerField(null=False, blank=False, default=1)
+    lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
 
     def save(self, *args, **kwargs):
         """
         Override the original save method to set the lineitem total
         and update the order total.
-        Also updates seller balance with 60%
-        of the product's sale value.
         """
         self.lineitem_total = self.product.price * self.quantity
         super().save(*args, **kwargs)
-        self.order.update_total()
-        seller = (self.product.user_profile) 
-        seller_income = self.lineitem_total * 0.70 
-        seller.seller_balance += seller_income
-        seller.save()
+
+    def update_order_total(sender, instance, **kwargs):
+        instance.lineitem_total = instance.product.price * instance.quantity
+        instance.order.update_total()
 
     def __str__(self):
         return f'SKU {self.product.sku} on order {self.order.order_number}'
