@@ -110,12 +110,16 @@ def create_account(request):
 
 def sale_product_view(request):
     if request.method == 'POST':
-        print(request.POST)  
         form = SellerForm(request.POST)
         if form.is_valid():
+            product = form.save(commit=False)
+            product.user = request.user
+            product.save()
+            messages.success(
+                request, 'Your product has been listed successfully!'
+            )
             form.save()
-        else:
-            print(form.errors)  
+        return render(request, 'sale_product.html', {'form': form})
 
 
 @login_required

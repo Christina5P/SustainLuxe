@@ -24,10 +24,15 @@
         <li>
             <strong>{{ product.name }}</strong> (SKU: {{ product.sku }})
             <p>Published on: {{ product.publication_date|date:"Y-m-d" }}</p>
-            <p>Days left: {{ product.days_left }}</p>
+
+            {% if time_left %}
+           <p>Days left: {{ time_left.days }} days</p>
+            {% else product.sold_at %}
+                <p>This product has been sold</p>
+                 {% endif %} 
         </li>
     {% empty %}
-        <p>No products available for sale.</p>
+        <p>No products are on sale.</p>
     {% endfor %}
 </ul>
         

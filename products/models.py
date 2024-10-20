@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -47,10 +48,20 @@ class Product(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True) 
     updated_at = models.DateTimeField(auto_now=True) 
-    return_unsold = models.BooleanField(default=False)
-    charge_for_unsold = models.BooleanField(default=False)
-    sold = models.BooleanField(default=False) 
+    return_option = models.BooleanField(
+        default=False,
+        verbose_name="Return unsold product?",
+        help_text="Check this if you want to pay for return shipping. If unchecked, unsold items will be donated.")
     sold_at = models.DateTimeField(null=True, blank=True)  
+
+    def time_until_expiration(self):
+        if self.sold_at:
+            return None 
+        expiration_date = self.listed_at + timedelta(days=90)
+        remaining_time = expiration_date - timezone.now()
+        if remaining_time.total_seconds() <= 0:
+            return None 
+        return remaining_time
 
     def __str__(self):
         return self.name

@@ -35,14 +35,6 @@ class UserProfileForm(forms.ModelForm):
 
 class SellerForm(forms.ModelForm):
 
-    PAY_FOR_RETURN_SHIPPING = 'pay_for_return'
-    DONATE_UNSOLD = 'donate_unsold'
-
-    RETURN_OPTIONS = [
-        (PAY_FOR_RETURN_SHIPPING, 'Pay for a return shipping label'),
-        (DONATE_UNSOLD, 'Donate unsold items'),
-    ]
-
     full_name = forms.CharField(
         max_length=255,
         required=True,
@@ -99,13 +91,7 @@ class SellerForm(forms.ModelForm):
         label="Product Name",
         widget=forms.TextInput(attrs={'placeholder': 'Enter product name'}),
     )
-    """
-    user = forms.ModelChoiceField(
-        queryset=User.objects.all(),
-        widget=forms.HiddenInput(),
-        required=False,
-    )
-    """
+    
     SIZE = [
         ('XS', 'XS'),
         ('S', 'S'),
@@ -145,12 +131,6 @@ class SellerForm(forms.ModelForm):
         widget=forms.Select,
     )
 
-    return_option = forms.ChoiceField(
-        choices=RETURN_OPTIONS,
-        widget=forms.RadioSelect,
-        label="Return for unsold product?",
-    )
-
     class Meta:
         model = Product
         fields = [
@@ -168,18 +148,27 @@ class SellerForm(forms.ModelForm):
             'return_option',
         ]
 
-        def __init__(self, *args, **kwargs):
-            user_profile = kwargs.pop('user_profile', None)
-            super().__init__(*args, **kwargs)
-            if user_profile:
-                self.fields['seller'].initial = user_profile.id
 
-    def clean_price(self):
-        price = self.cleaned_data.get('price')
-        if price <= 0:
-            raise forms.ValidationError("Price must be greater than zero.")
-        return price
+def __init__(self, *args, **kwargs):
+    user_profile = kwargs.pop('user_profile', None)
+    super().__init__(*args, **kwargs)
+    if user_profile:
+        self.fields['seller'].initial = user_profile.id
+    
+    self.fields['return_option'].widget = forms.RadioSelect(choices=[
+        (True, 'Pay for a return shipping label'),
+        (False, 'Donate unsold items')
+    ])
+    self.fields['return_option'].label = "Return for unsold product?"
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        return email
+
+def clean_price(self):
+    price = self.cleaned_data.get('price')
+    if price <= 0:
+        raise forms.ValidationError("Price must be greater than zero.")
+    return price
+
+
+def clean_email(self):
+    email = self.cleaned_data.get('email')
+    return email
