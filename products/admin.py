@@ -20,7 +20,9 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'user__user__username')
 
     def get_user(self, obj):
-        return obj.user.username
+        if obj.user:
+            return obj.user.username
+        return "No user"
     get_user.short_description = 'User'
 
 

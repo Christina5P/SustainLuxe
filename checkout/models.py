@@ -37,6 +37,7 @@ class Order(models.Model):
     stripe_pid = models.CharField(
         max_length=254, null=False, blank=False, default=''
     )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def _generate_order_number(self):
         """
@@ -72,7 +73,7 @@ class Order(models.Model):
         if not self.order_number:
             self.order_number = self._generate_order_number()
         super().save(*args, **kwargs)
-       
+
         print(f"Order saved: {self.order_number}") 
 
     def __str__(self):
