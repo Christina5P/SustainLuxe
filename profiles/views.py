@@ -8,6 +8,7 @@ from checkout.models import Order
 from .models import Account 
 import uuid
 
+
 @login_required
 def profile(request):
     """Display the user's profile."""
@@ -37,20 +38,23 @@ def create_sale(request):
         if form.is_valid():
             product = form.save(commit=False)
             product.sku = str(uuid.uuid4())
-            product.user_profile = request.user.userprofile 
+            product.user = request.user
             product.save()
 
-            Order.objects.create(user_profile=request.user.userprofile, product=product)
+            Order.objects.create(
+                user_profile=request.user.userprofile, product=product
+            )
 
             return redirect('profile') 
     else:
         form = SellerForm()
     return render(request, 'profiles/sale_product.html', {'form': form})
 
+
 @login_required
 def account_detail(request, user_id):
     account = get_object_or_404(Account, user_id=user_id)
-    orders = Order.objects.filter(user_profile=user_profile)
+    orders = Order.objects.filter(user_profile=user)
     template = 'profiles/details.html'
     context = {
         'products': account.products.all() if hasattr(account, 'products') else [],
@@ -106,9 +110,15 @@ def create_account(request):
 
 def sale_product_view(request):
     if request.method == 'POST':
-        print(request.POST)  # Logga POST-data
-        form = MyForm(request.POST)
+        print(request.POST)  
+        form = SellerForm(request.POST)
         if form.is_valid():
             form.save()
         else:
-            print(form.errors)  # Logga eventuella valideringsfel
+            print(form.errors)  
+
+
+@login_required
+def user_products(request):
+    products = Product.objects.filter(user=request.user)
+    return render(request, {'products': products})

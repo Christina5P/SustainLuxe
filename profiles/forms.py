@@ -1,7 +1,7 @@
 from django import forms
 from .models import UserProfile
 from products.models import Product, Size, Condition
-from profiles.models import UserProfile
+
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -99,7 +99,13 @@ class SellerForm(forms.ModelForm):
         label="Product Name",
         widget=forms.TextInput(attrs={'placeholder': 'Enter product name'}),
     )
-
+    """
+    user = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.HiddenInput(),
+        required=False,
+    )
+    """
     SIZE = [
         ('XS', 'XS'),
         ('S', 'S'),
@@ -148,6 +154,7 @@ class SellerForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
+            'user',
             'full_name',
             'email',
             'phone_number',
@@ -160,6 +167,12 @@ class SellerForm(forms.ModelForm):
             'condition',
             'return_option',
         ]
+
+        def __init__(self, *args, **kwargs):
+            user_profile = kwargs.pop('user_profile', None)
+            super().__init__(*args, **kwargs)
+            if user_profile:
+                self.fields['seller'].initial = user_profile.id
 
     def clean_price(self):
         price = self.cleaned_data.get('price')

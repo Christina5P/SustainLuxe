@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, OrderLineItem, UserProfile
+from .models import Order, OrderLineItem
 
 
 # OrderLineItem inline-admin (för att visa orderrader på ordersidan)
@@ -22,6 +22,7 @@ class OrderAdmin(admin.ModelAdmin):
         'original_bag',
         'stripe_pid',
     )
+
     fields = (
         'order_number',
         'user_profile',
@@ -39,14 +40,36 @@ class OrderAdmin(admin.ModelAdmin):
         'original_bag',
         'stripe_pid',
     )
-    list_display = ('order_number', 'full_name', 'date', 'grand_total')
+
+    list_display = (
+        'order_number',
+        'full_name',
+        'date',
+        'grand_total',
+        'get_user_profile',
+    )
     search_fields = ('order_number', 'full_name', 'email')
     list_filter = ('date',)
+
+    def get_user_profile(self, obj):
+        return obj.user_profile
+
+    get_user_profile.short_description = 'User Profile'
 
 
 # Registrera OrderLineItem-modellen separat
 @admin.register(OrderLineItem)
 class OrderLineItemAdmin(admin.ModelAdmin):
-    list_display = ('order', 'product', 'quantity', 'lineitem_total')
+    list_display = (
+        'order',
+        'product',
+        'quantity',
+        'lineitem_total',
+        'get_user_profile',
+    )
     search_fields = ('order__order_number', 'product__name')
 
+    def get_user_profile(self, obj):
+        return obj.order.user_profile
+
+    get_user_profile.short_description = 'User Profile'

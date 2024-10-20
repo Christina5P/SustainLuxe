@@ -98,5 +98,8 @@ class OrderLineItem(models.Model):
         instance.lineitem_total = instance.product.price * instance.quantity
         instance.order.update_total()
 
+    def get_user_profile(self):
+        return self.order.user_profile
+
     def __str__(self):
         return f'SKU {self.product.sku} on order {self.order.order_number}'

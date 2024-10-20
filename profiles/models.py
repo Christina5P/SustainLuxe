@@ -6,13 +6,22 @@ from django_countries.fields import CountryField
 from django.utils import timezone
 
 
+
 class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     """
     A user profile model for maintaining default
     delivery information and order history, account and status
     """
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+class Product(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='profile_products',
+    )
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
     default_phone_number = models.CharField(max_length=25, null=False, blank=False)

@@ -1,9 +1,10 @@
 from django.db import models
 from django.utils import timezone
-from profiles.models import UserProfile
+from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
+from django.conf import settings
 
 # Create your models here.
 
@@ -41,7 +42,9 @@ class Product(models.Model):
         on_delete=models.SET_NULL,
     )
     description = models.TextField(null=True, blank=True)
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True) 
     updated_at = models.DateTimeField(auto_now=True) 
     return_unsold = models.BooleanField(default=False)
