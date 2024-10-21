@@ -39,7 +39,9 @@ class Order(models.Model):
     stripe_pid = models.CharField(
         max_length=254, null=False, blank=False, default=''
     )
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     def _generate_order_number(self):
         """
@@ -110,8 +112,7 @@ class OrderLineItem(models.Model):
     @receiver(post_save, sender=Order)
     def update_product_sold_at(sender, instance, created, **kwargs):
         if created:  
-            product = (
-                instance.product
-            ) 
-            product.sold = True
-            product.save()
+            for line_item in instance.lineitems.all():
+                product = line_item.product
+                product.sold = True
+                product.save()

@@ -146,6 +146,7 @@
                       <!-- Product cards-->
                 <div class="row">
                     {% for product in products %}
+                       {% if not product.sold %} 
                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                             <div class="card h-100 border-0">
                                 {% if product.image %}
@@ -183,6 +184,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

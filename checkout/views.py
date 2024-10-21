@@ -92,6 +92,10 @@ def checkout(request):
                     order_line_item.save()
                     print(f"Saved order line item: {order_line_item}")
 
+                    if not order.product:
+                        order.product = product
+                        order.save()
+
                 except Product.DoesNotExist:
                     messages.error(
                         request,

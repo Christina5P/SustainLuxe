@@ -78,12 +78,12 @@ class Product(models.Model):
             self.listed_at = timezone.now()
             self.save()        
 
-
-def mark_as_sold(self):
-    self.sold = True
-    self.sold_at = timezone.now()
-    self.save()
-    self.user.userprofile.update_balance(self.price)
+    def mark_as_sold(self):
+        self.sold = True
+        self.sold_at = timezone.now()
+        self.is_listed = False
+        self.save()
+        self.user.userprofile.update_balance(self.price)
 
 
 class Size(models.Model):
