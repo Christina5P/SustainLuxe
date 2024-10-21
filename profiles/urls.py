@@ -4,12 +4,13 @@ from .views import (
     account_details,
     order_history_list,
     withdraw_view,
+    sale_product,
 )
 
 
 urlpatterns = [
     path('', views.profile, name='profile'),
-    path('sale_product/', views.create_sale, name='sale_product'), 
+    path('sale_product/', views.sale_product, name='sale_product'), 
     path(
         'profile/order_history/',
         views.order_history_list,

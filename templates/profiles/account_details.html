@@ -23,19 +23,28 @@
 {% if products %}
 <ul>
  {% for product in products %}
-        <li>
-            <strong>{{ product.name }}</strong> EUR {{ product.price }}
-            <p>Published on: {{ product.publication_date|date:"Y-m-d" }}</p>
-
-           {% if product.sold %}
+    <li>
+        <strong>{{ product.name }}</strong> EUR {{ product.price }}
+        
+        {% if product.sold %}
             <p>Sold on: {{ product.sold_at|date:"F d, Y" }}</p>
+        {% elif product.is_listed %}
+            <p>Published on: {{ product.listed_at|date:"F d, Y" }}</p>
+            {% with time_left=product.time_until_expiration %}
+                {% if time_left %}
+                    <p>Time left: <span>{{ time_left.days }} days</span></p>
+                {% else %}
+                    <p>Listing has expired</p>
+                {% endif %}
+            {% endwith %}
         {% else %}
-            <p>Days left: {{ product.days_left }}</p>
+            <p>Created on: {{ product.created_at|date:"F d, Y" }}</p>
+            <p>Waiting for approval</p>
         {% endif %}
-        </li>
-    {% empty %}
-        <p>No products are on sale.</p>
-    {% endfor %}
+    </li>
+{% empty %}
+    <p>No products are on sale.</p>
+{% endfor %}
 </ul>
  {% else %}
                     <p>No products are available.</p>

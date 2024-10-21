@@ -52,6 +52,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) 
     listed_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
+    is_listed = models.BooleanField(default=False)
     return_option = models.BooleanField(
         default=False,
         verbose_name="Return unsold product?",
@@ -70,6 +71,13 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def list_product(self):
+        if not self.is_listed:
+            self.is_listed = True
+            self.listed_at = timezone.now()
+            self.save()        
+
 
 def mark_as_sold(self):
     self.sold = True

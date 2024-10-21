@@ -15,10 +15,30 @@ class ProductAdmin(admin.ModelAdmin):
         'condition',
         'get_user'
     )
-    list_filter = ('brand', 'fabric', 'size', 'condition', 'sku')
+    list_filter = (
+        'brand',
+        'fabric',
+        'size',
+        'condition',
+        'sku',
+        'created_at',
+        )
+     
+
+    list_filter = ('is_listed', 'sold')
+    actions = ['list_products']
 
     search_fields = ('name', 'user__user__username')
 
+    def list_products(self, request, queryset):
+        for product in queryset:
+            if not product.listed_at:
+                product.list_product()
+        self.message_user(
+            request, f"{queryset.count()} product(s) have been listed."
+        )
+
+    list_products.short_description = "List selected products"
     def get_user(self, obj):
         if obj.user:
             return obj.user.username

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -33,9 +34,11 @@ def profile(request):
     return render(request, template, context)
 
 
-def create_sale(request):
+def sale_product(request):
     """Form for selling product
     """
+    template = 'profiles/sale_product.html'
+
     if request.method == 'POST':
         form = SellerForm(request.POST)
         if form.is_valid():
@@ -44,14 +47,15 @@ def create_sale(request):
             product.user = request.user
             product.save()
 
-            Order.objects.create(
-                user_profile=request.user.userprofile, product=product
+            
+            messages.success(
+                request, 'Your product has been listed successfully!'
             )
-            print(f"Produkt skapad: {product.name} för användare {request.user.username}")
-            return redirect('profile', user_id=request.user.id) 
+            return redirect(reverse(sale_product))
     else:
         form = SellerForm()
-    return render(request, 'profiles/sale_product.html', {'form': form})
+
+    return render(request, template, {'form': form})
 
 
 @login_required
@@ -103,7 +107,7 @@ def withdraw_view(request):
             return redirect('account_details', user_id=request.user.id)
 
         template = 'withdraw.html'
-    return render( request, template )
+    return render(request, template)
 
 
 @login_required
@@ -131,16 +135,3 @@ def order_history_list(request):
 
         return render(request, 'profiles/create_account.html', {'form': form})
     """
-
-def sale_product_view(request):
-    if request.method == 'POST':
-        form = SellerForm(request.POST)
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.user = request.user
-            product.save()
-            messages.success(
-                request, 'Your product has been listed successfully!'
-            )
-            form.save()
-        return render(request, 'sale_product.html', {'form': form})
