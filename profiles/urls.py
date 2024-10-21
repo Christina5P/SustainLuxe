@@ -1,8 +1,7 @@
 from django.urls import path
 from . import views
 from .views import (
-    create_account,
-    account_detail,
+    account_details,
     order_history_list,
     withdraw_view,
 )
@@ -18,7 +17,6 @@ urlpatterns = [
     ),
     path('withdraw/', views.withdraw_view, name='withdraw'),
     path(
-        'account/<int:user_id>/', views.account_detail, name='account_detail'
+        'account/<int:user_id>/', views.account_details, name='account_details'
     ),
-    path('create_account/', views.create_account, name='create_account'),
 ]

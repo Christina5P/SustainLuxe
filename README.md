@@ -169,6 +169,11 @@ SustaineLuxe is host on GitHub and deployed on Heroku
 - https://www.bigcommerce.com/articles/ecommerce/fashion-ecommerce/
 - https://python.plainenglish.io/creating-a-django-e-commerce-product-filter-prototype-a8e7409453fc -creating filter tutoring
 - https://stackoverflow.com/ - -creating filter tutoring
+- https://dev.to/earthcomfy/django-user-profile-3hik -profile tutoring
+- https://www.paleblueapps.com/rockandnull/django-user-profile/
+- https://docs.djangoproject.com/en/5.1/howto/custom-management-commands/ - tutoring create accounts
+- https://simpleisbetterthancomplex.com/tutorial/2018/08/27/how-to-create-custom-django-management-commands.html 
+
 
 
 

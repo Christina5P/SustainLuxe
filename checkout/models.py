@@ -107,7 +107,6 @@ class OrderLineItem(models.Model):
     def __str__(self):
         return f'SKU {self.product.sku} on order {self.order.order_number}'
 
-
     @receiver(post_save, sender=Order)
     def update_product_sold_at(sender, instance, created, **kwargs):
         if created:  

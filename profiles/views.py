@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from .models import UserProfile  
+from .models import UserProfile, User
 from .forms import UserProfileForm, SellerForm
 from checkout.models import Order
 from .models import Account 
@@ -11,7 +11,7 @@ import uuid
 
 @login_required
 def profile(request):
-    """Display the user's profile."""
+    """Display and update the user's profile."""
     profile = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == 'POST':
@@ -24,7 +24,7 @@ def profile(request):
     else:
         form = UserProfileForm(instance=profile)
 
-    orders = profile.orders.all()  # Flytta denna rad utanför else-blocket
+    orders = profile.orders.all()  
 
     template = 'profiles/profile.html'
     context = {'form': form, 'orders': orders, 'on_profile_page': True}
@@ -33,6 +33,8 @@ def profile(request):
 
 
 def create_sale(request):
+    """Form for selling product
+    """
     if request.method == 'POST':
         form = SellerForm(request.POST)
         if form.is_valid():
@@ -52,13 +54,20 @@ def create_sale(request):
 
 
 @login_required
-def account_detail(request, user_id):
-    account = get_object_or_404(Account, user_id=user_id)
+def account_details(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    profile = user.userprofile
+    account, created = Account.objects.get_or_create(user_id=user_id)
     orders = Order.objects.filter(user_profile=user)
-    template = 'profiles/details.html'
+    template = 'profiles/account_details.html'
     context = {
-        'products': account.products.all() if hasattr(account, 'products') else [],
+        'products': (
+            account.products.all() if hasattr(account, 'products') else []
+        ),
         'account': account,
+        'total_revenue': profile.total_revenue,
+        'orders': orders,
+        'user': user,
     }
 
     return render(request, template, context)
@@ -76,7 +85,7 @@ def withdraw_view(request):
         else:
             messages.error(request, 'Insufficient funds for withdrawal.')
 
-            return redirect('account_detail', user_id=request.user.id)
+            return redirect('account_details', user_id=request.user.id)
 
         template = 'withdraw.html'
     return render( request, template )
@@ -92,21 +101,21 @@ def order_history_list(request):
 
     return render(request, template, context)
 
+    """
+    def create_account(request):
+        if request.method == 'POST':
+            form = CreateAccountForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Account created successfully!')
+                return redirect(
+                    'profile'
+                )  
+        else:
+            form = CreateAccountForm()
 
-def create_account(request):
-    if request.method == 'POST':
-        form = CreateAccountForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Account created successfully!')
-            return redirect(
-                'profile'
-            )  
-    else:
-        form = CreateAccountForm()
-
-    return render(request, 'profiles/create_account.html', {'form': form})
-
+        return render(request, 'profiles/create_account.html', {'form': form})
+    """
 
 def sale_product_view(request):
     if request.method == 'POST':
@@ -120,9 +129,3 @@ def sale_product_view(request):
             )
             form.save()
         return render(request, 'sale_product.html', {'form': form})
-
-
-@login_required
-def user_products(request):
-    products = Product.objects.filter(user=request.user)
-    return render(request, {'products': products})
