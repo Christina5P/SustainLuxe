@@ -13,6 +13,9 @@ class UserProfile(models.Model):
     postcode = models.CharField(max_length=20, null=True, blank=True)
     town_or_city = models.CharField(max_length=40, null=True, blank=True)
     country = CountryField(blank_label='Country', null=True, blank=True)
+    total_revenue = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
     """
     A user profile model for maintaining default
     delivery information and order history, account and status

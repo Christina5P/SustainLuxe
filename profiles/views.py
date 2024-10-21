@@ -58,14 +58,21 @@ def account_details(request, user_id):
     user = get_object_or_404(User, id=user_id)
     profile = user.userprofile
     account, created = Account.objects.get_or_create(user_id=user_id)
-    orders = Order.objects.filter(user_profile=user)
+    orders = Order.objects.filter(user_profile=profile)
     template = 'profiles/account_details.html'
+
+    products = account.products.all() if hasattr(account, 'products') else []
+    for product in products:
+        remaining_time = product.time_until_expiration()
+        if remaining_time:
+            product.days_left = remaining_time.days
+        else:
+            product.days_left = None
+
     context = {
-        'products': (
-            account.products.all() if hasattr(account, 'products') else []
-        ),
+        'products': products,
         'account': account,
-        'total_revenue': profile.total_revenue,
+        'total_revenue': getattr(profile, 'total_revenue', 0),
         'orders': orders,
         'user': user,
     }
