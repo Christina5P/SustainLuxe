@@ -1,6 +1,6 @@
 from django import forms
 from .widgets import CustomClearableFileInput
-from .models import Product, Category, Brand, Size, Color 
+from .models import Product, Category
 
 
 class ProductForm(forms.ModelForm):
@@ -11,6 +11,11 @@ class ProductForm(forms.ModelForm):
 
     image = forms.ImageField(
         label='Image', required=False, widget=CustomClearableFileInput
+    )
+    Category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=True,
+        widget=forms.Select,
     )
 
     def __init__(self, *args, **kwargs):
@@ -28,4 +33,3 @@ class ProductFilterForm(forms.Form):
     condition = forms.CharField(required=False)
     brand = forms.CharField(required=False)
     size = forms.CharField(required=False)
-
