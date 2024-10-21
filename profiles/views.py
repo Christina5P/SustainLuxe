@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from .models import UserProfile, User
+from .models import UserProfile, User, Account
 from .forms import UserProfileForm, SellerForm
 from checkout.models import Order
-from .models import Account 
+from products.models import Product
 import uuid
+from decimal import Decimal
 
 
 @login_required
@@ -46,8 +47,8 @@ def create_sale(request):
             Order.objects.create(
                 user_profile=request.user.userprofile, product=product
             )
-
-            return redirect('profile') 
+            print(f"Produkt skapad: {product.name} för användare {request.user.username}")
+            return redirect('profile', user_id=request.user.id) 
     else:
         form = SellerForm()
     return render(request, 'profiles/sale_product.html', {'form': form})
@@ -61,7 +62,8 @@ def account_details(request, user_id):
     orders = Order.objects.filter(user_profile=profile)
     template = 'profiles/account_details.html'
 
-    products = account.products.all() if hasattr(account, 'products') else []
+    products = Product.objects.filter(user=user, sold=False)
+
     for product in products:
         remaining_time = product.time_until_expiration()
         if remaining_time:
@@ -69,10 +71,16 @@ def account_details(request, user_id):
         else:
             product.days_left = None
 
+    sold_products = Product.objects.filter(user=user, sold=True)
+    total_revenue = sum(product.price for product in sold_products) * Decimal(
+        '0.7'
+    )
+
     context = {
         'products': products,
+        'sold_products': sold_products,
         'account': account,
-        'total_revenue': getattr(profile, 'total_revenue', 0),
+        'total_revenue': total_revenue,
         'orders': orders,
         'user': user,
     }

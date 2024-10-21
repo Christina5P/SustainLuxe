@@ -44,15 +44,20 @@ class Product(models.Model):
     )
     description = models.TextField(null=True, blank=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='products',
     )
     created_at = models.DateTimeField(auto_now_add=True) 
+    listed_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
     return_option = models.BooleanField(
         default=False,
         verbose_name="Return unsold product?",
         help_text="Check this if you want to pay for return shipping. If unchecked, unsold items will be donated.")
     sold_at = models.DateTimeField(null=True, blank=True)  
+    sold = models.BooleanField(default=False)
 
     def time_until_expiration(self):
         if self.sold_at:
@@ -66,17 +71,11 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-# Lägg till intäkten till användarens saldo
-
-
 def mark_as_sold(self):
     self.sold = True
     self.sold_at = timezone.now()
-    self.user_profile.total_revenue += (
-        self.price
-    )  
-    self.user_profile.save()
     self.save()
+    self.user.userprofile.update_balance(self.price)
 
 
 class Size(models.Model):

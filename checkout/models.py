@@ -113,7 +113,5 @@ class OrderLineItem(models.Model):
             product = (
                 instance.product
             ) 
-            product.sold_at = (
-                instance.created_at
-            )  
+            product.sold = True
             product.save()

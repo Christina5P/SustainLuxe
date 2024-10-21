@@ -19,10 +19,12 @@
 
 <h1>{{ account.user.username }}'s Account</h1>
 <h2>Products for Sale</h2>
+<p>Number of products: {{ products|length }}</p>
+{% if products %}
 <ul>
  {% for product in products %}
         <li>
-            <strong>{{ product.name }}</strong> (SKU: {{ product.sku }})
+            <strong>{{ product.name }}</strong> EUR {{ product.price }}
             <p>Published on: {{ product.publication_date|date:"Y-m-d" }}</p>
 
            {% if product.sold %}
@@ -35,5 +37,42 @@
         <p>No products are on sale.</p>
     {% endfor %}
 </ul>
-        
+ {% else %}
+                    <p>No products are available.</p>
+                {% endif %}
+
+                  <h2>Account Balance</h2>
+                <p>Total Revenue from Sold Products: EUR{{ total_revenue|floatformat:2 }}</p>
+                  <h4>Sold Products</h4>
+                {% if sold_products %}
+                    <ul>
+                        {% for product in sold_products %}
+                            <li>
+                                <strong>{{ product.name }}</strong> - Sold for: EUR {{ product.price }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No products have been sold yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+                   
+                <h2>Withdrawal History</h2>
+                {% if account.withdrawal_history %}
+                    <ul>
+                        {% for withdrawal in account.withdrawal_history %}
+                            <li>
+                                Amount: EUR {{ withdrawal.amount }} - Date: {{ withdrawal.date|date:"F d, Y" }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No withdrawal history available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
