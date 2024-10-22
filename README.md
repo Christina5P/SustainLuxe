@@ -173,8 +173,10 @@ SustaineLuxe is host on GitHub and deployed on Heroku
 - https://www.paleblueapps.com/rockandnull/django-user-profile/
 - https://docs.djangoproject.com/en/5.1/howto/custom-management-commands/ - tutoring create accounts
 - https://simpleisbetterthancomplex.com/tutorial/2018/08/27/how-to-create-custom-django-management-commands.html 
-
-
+- https://www.youtube.com/watch?v=9X83BZ1cF7o - tutoring request cycle
+- https://simpleisbetterthancomplex.com/tutorial/2018/08/27/how-to-create-custom-django-management-commands.html - tutoring manage commands
+- https://groups.google.com/g/django-users/c/aSj3jGX2CLk -tutoring expire date
+- https://stackoverflow.com/questions/49366010/how-to-set-an-expiry-date-for-an-object-in-django 
 
 
 

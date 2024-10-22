@@ -2,14 +2,14 @@ from django.contrib import admin
 from .models import Order, OrderLineItem
 
 
-# OrderLineItem inline-admin (för att visa orderrader på ordersidan)
+# OrderLineItem inline in orders
 class OrderLineItemAdminInline(admin.TabularInline):
     model = OrderLineItem
     readonly_fields = ('lineitem_total',)
     extra = 0
 
 
-# Registrera Order-modellen
+# Order
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = (OrderLineItemAdminInline,)

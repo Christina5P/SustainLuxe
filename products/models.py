@@ -88,6 +88,14 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def expired(self):
+        if self.listed_at and not self.sold:
+            expiration_date = self.listed_at + timedelta(days=90)
+            return timezone.now() > expiration_date
+        return False 
+           
+
+
     def list_product(self):
         if not self.is_listed:
             self.is_listed = True

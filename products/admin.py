@@ -8,25 +8,23 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'sku',
-        'brand',
-        'size',
-        'fabric',
         'price',
         'condition',
-        'get_user'
+        'get_user',
+        'sold',
+        'return_option',
+        'expired',
     )
     list_filter = (
         'brand',
-        'fabric',
-        'size',
         'condition',
         'sku',
         'created_at',
+        'sold',
+        'return_option',
+        'listed_at',
         )
-     
-
-    list_filter = ('is_listed', 'sold')
-    actions = ['list_products']
+    actions = ['list_products', 'mark_for_return']
 
     search_fields = ('name', 'user__user__username')
 
@@ -39,6 +37,7 @@ class ProductAdmin(admin.ModelAdmin):
         )
 
     list_products.short_description = "List selected products"
+
     def get_user(self, obj):
         if obj.user:
             return obj.user.username
