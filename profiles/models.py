@@ -8,6 +8,8 @@ from django.utils import timezone
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=50, null=True, blank=True)
+    email = models.EmailField(max_length=254, null=False, blank=False)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     street_address1 = models.CharField(max_length=80, null=True, blank=True)
     postcode = models.CharField(max_length=20, null=True, blank=True)
@@ -72,7 +74,7 @@ class Account(models.Model):
     )
     withdrawal_history = models.JSONField(default=list, blank=True)
 
-    def withdraw(self, amount):
+    def withdrawal(self, amount):
         if amount <= self.total_revenue:
             self.total_revenue -= amount
             self.withdrawal_history.append(

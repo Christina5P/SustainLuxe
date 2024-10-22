@@ -20,20 +20,8 @@
             <div class="col">
                 <hr>
                 
-                   {% if request.user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                 <h2 class="logo-font mb-4">My Profile</h2>
-                        
-                              <ul>   
-                        <a href="{% url 'profile' %}" class="dropdown-item">Profile Settings</a> 
-                        <a href="{% url 'account_details' user_id=user.id %}" class="dropdown-item">Account</a> 
-                        <a href="{% url 'withdraw' %}" class="dropdown-item">Withdrawal</a> 
-                        <a href="{% url 'order_history_list' %}" class="dropdown-item">Order History</a>
-                        {% else %}
-                         <h4 class="logo-font mb-4">Create Profile for selling</h4>
-                                                {% endif %}
-                                                </ul>  
-                <hr>
-            </div>
         </div>
         <div class="row">
             <div class="col-12 col-lg-6">
@@ -43,7 +31,14 @@
                 <button class="btn btn-primary rounded-0 text-uppercase float-right mb-5">Update Information</button>
                 </form>
                  </div>
+                {% endif %}
            
         {{ profile }}
         
+{% endblock %}
+
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/countryfield.js' %}"></script>
 {% endblock %}

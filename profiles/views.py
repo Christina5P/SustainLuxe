@@ -93,34 +93,61 @@ def account_details(request, user_id):
 
 
 @login_required
-def withdraw_view(request):
+def withdrawal_view(request):
     account = get_object_or_404(Account, user=request.user)
 
     if request.method == 'POST':
         amount = float(request.POST.get('amount', 0))
 
-        if account.withdraw(amount):
+        if account.withdrawal(amount):
             messages.success(request, 'Withdrawal successful.')
         else:
             messages.error(request, 'Insufficient funds for withdrawal.')
 
             return redirect('account_details', user_id=request.user.id)
 
-        template = 'withdraw.html'
+        template = 'withdrawal.html'
     return render(request, template)
 
+@login_required
+def order_list(request):
+    orders = Order.objects.filter(user_profile=request.user.userprofile)
+    return render(request, 'profiles/order_list.html', {'orders': orders})
 
 @login_required
-def order_history_list(request):
-    orders = get_object_or_404(Order.objects.filter(full_name=request.user))
-    template = 'profiles/orderhistory.html'
+def order_history(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number, user_profile=request.user.userprofile)
+    return render(request, 'checkout/checkout_success.html', {'order': order})
+
+"""
+@login_required
+def order_list(request):
+    profile = request.user.userprofile
+    orders = profile.orders.all()
+    template = 'profiles/order_history.html'
+    context = {'orders': orders}
+    return render(request, template, context)
+
+
+def order_history(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number)
+
+    messages.info(
+        request,
+        (
+            f'This is a past confirmation for order number {order_number}. '
+            'A confirmation email was sent on the order date.'
+        ),
+    )
+
+    template = 'checkout/checkout_success.html'
     context = {
-        'orders': orders,
-       }
+        'order': order,
+        'from_profile': True,
+    }
 
     return render(request, template, context)
 
-    """
     def create_account(request):
         if request.method == 'POST':
             form = CreateAccountForm(request.POST)

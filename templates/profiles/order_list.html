@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Order History{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Order History</h2>
+    
+    {% if orders %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'order_history' order_number=order.order_number %}">
+                                    {{ order.order_number|truncatechars:8 }}
+                                </a>
+                            </td>
+                            <td>{{ order.date|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    {% for item in order.lineitems.all %}
+                                        <li>
+                                            {{ item.product.name }} x {{ item.quantity }}
+                                            {% if item.product_size %}
+                                                - Size: {{ item.product_size }}
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>${{ order.grand_total|floatformat:2 }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>
+                                <a href="{% url 'order_history' order_number=order.order_number %}" class="btn btn-sm btn-info">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>You haven't placed any orders yet.</p>
+    {% endif %}
+    
+    <a href="{% url 'products' %}" class="btn btn-primary mt-3">Continue Shopping</a>
+</div>
+{% endblock %}

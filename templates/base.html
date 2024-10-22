@@ -104,9 +104,11 @@
                                 {% if request.user.is_superuser %}
                                     <a href="{% url 'add_product'%}" class="dropdown-item">Product Management</a>
                                 {% endif %}
-                                <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
+                                <a href="{% url 'profile' %}" class="dropdown-item">Profile settings</a>
                                 <a href="{% url 'sale_product' %}" class="dropdown-item"> Sale Registration Form </a>
                                 <a href="{% url 'account_details' user_id=user.id %}" class="dropdown-item"> Account details </a>
+                                <a href="{% url 'order_list' %}" class="dropdown-item"> Order history </a>
+                                 <a href="{% url 'withdrawal' %}" class="dropdown-item"> Withdrawal </a>
                                 <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
                             {% else %}
                             {% endif %}
