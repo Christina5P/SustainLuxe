@@ -6,33 +6,25 @@ from products.models import Product, Size, Condition
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        exclude = ('user',)
+        fields = ['full_name', 'email', 'phone_number', 'street_address1', 'postcode', 'town_or_city', 'country']
+        exclude = ('user', 'total_revenue')
 
     def __init__(self, *args, **kwargs):
-        """
-        Add placeholders and classes, remove auto-generated
-        labels and set autofocus on first field
-        """
         super().__init__(*args, **kwargs)
         placeholders = {
-            'name': 'Name',
-            'e-mail': 'e-mail',
+            'full_name': 'Full Name',
+            'email': 'Email Address',
             'phone_number': 'Phone Number',
             'street_address1': 'Street Address 1',
             'postcode': 'Postal Code',
             'town_or_city': 'Town or City',
         }
-
-        self.fields['phone_number'].widget.attrs['autofocus'] = True
+        
         for field in self.fields:
-            if field != 'default_country':
-                placeholder = placeholders.get(field, field)
-                if self.fields[field].required:
-                    placeholder += ' *'
-                self.fields[field].widget.attrs['placeholder'] = placeholder
-                self.fields[field].widget.attrs[
-                    'class'
-                ] = 'border-black rounded-0 profile-form-input'
+            if field != 'country':
+                self.fields[field].widget.attrs['placeholder'] = placeholders.get(field, '')
+            self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
+            self.fields[field].label = False
 
 
 class SellerForm(forms.ModelForm):

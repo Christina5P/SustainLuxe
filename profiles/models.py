@@ -7,6 +7,10 @@ from django.utils import timezone
 
 
 class UserProfile(models.Model):
+    """
+    A user profile model for maintaining default
+    delivery information and order history, account and status
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(max_length=254, null=False, blank=False)
@@ -18,10 +22,9 @@ class UserProfile(models.Model):
     total_revenue = models.DecimalField(
         max_digits=10, decimal_places=2, default=0
     )
-    """
-    A user profile model for maintaining default
-    delivery information and order history, account and status
-    """
+
+    def __str__(self):
+        return self.user.username
 
 
 class Product(models.Model):
