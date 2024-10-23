@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_filters%}
+
 
 {% block page_header %}
-    <div class="container header-container">
+
+
+<div class="container header-container">
         <div class="row">
             <div class="col"></div>
         </div>
@@ -10,140 +14,87 @@
 {% endblock %}
 
 {% block content %}
-
-
 <!--Main layout-->
 <main>
-   
   <!-- Products -->
   <section>
-    <div class="text-center">
-        <div class="row">
-            <div class="col text-center mt-3">
-                <h2 class="logo-font">Products</h2>
-              
-                <hr class="mb-1">
-            </div>
+    <div class="container">
+      <div class="row">
+        <div class="col text-center mt-3">
+          <h2 class="logo-font">Products</h2>
+          {% for c in current_categories %}
+            <a class="category-badge text-decoration-none" href="{% url 'all_products' %}?category={{ c.name }}">
+              <span class="p-2 mt-2 badge badge-white text-black rounded-0 border border-dark">{{ c.friendly_name }}</span>
+            </a>
+          {% endfor %}
+          <hr class="mb-1">
         </div>
-<div class="container">
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Categories:</a>
-      <button 
-         class="navbar-toggler" 
-         type="button" 
-         data-mdb-toggle="collapse" 
-         data-mdb-target="#navbarSupportedContent2" 
-         aria-controls="navbarSupportedContent2" 
-         aria-expanded="false" 
-         aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent2">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item active">
-        <a class="nav-link text-white" href="{% url 'products' %}">All</a>
-          </li>
-          {% for category in all_categories %}
-          <li class="nav-item">
-            <a class="nav-link text-white" href="{% url 'products' %}?category={{ category.name }}">{{ category.get_friendly_name }}</a>
-            </li>
-             {% endfor %}
-        </ul>
- <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
-                        <div class="sort-select-wrapper w-50">
-                            <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border">
-                                <option value="reset">Sort by...</option>
-                                <option value="price_asc">Price (low to high)</option>
-                                <option value="price_desc">Price (high to low)</option>
-                                <option value="name_asc">Name (A-Z)</option>
-                                <option value="name_desc">Name (Z-A)</option>
-                                 <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
-                                <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
-                            </select>
-                        </div>
-                    </div>
-      
+      </div>
+
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Categories:</a>
+        
+          <div class="collapse navbar-collapse" id="navbarCategories">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              {% for main_category in main_categories %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                    {{ main_category.friendly_name|default:main_category.name }}
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
+                    <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
+                    {% for subcategory in main_category.subcategories.all %}
+                      <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- Navbar -->
+
+      <!-- Sorting products-->
+      <div class="row mb-3">
+        <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
+          <div class="sort-select-wrapper w-50">
+            <select id="sort-selector" class="form-select rounded-0 border">
+              <option value="reset">Sort by...</option>
+              <option value="price_asc">Price (low to high)</option>
+              <option value="price_desc">Price (high to low)</option>
+              <option value="name_asc">Name (A-Z)</option>
+              <option value="name_desc">Name (Z-A)</option>
+              <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
+              <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
-  </nav>
-  <!-- Navbar -->
-         
+  </section>
+</main>
         <div class="row">
             <div class="product-container col-10 offset-1">
                 <div class="row mt-1 mb-2">
                    
-                    <div class="col-12 col-md-6 order-md-first">
-                        <p class="text-muted mt-3 text-center text-md-left">
-                            {{ products|length }} Products
-                        </p>
-                    </div>
-                </div>
+                  
 
-                <!-- Filter form-->
-           
-
-    <h4 class="col-md-3">Product Filter</h4>
+          
+ <h4 class="col-md-3">Product Filter</h4>
 <div class="row">
   <div class="col-md-3"> 
-   <form id="filterForm" method="GET" action="{% url 'all_products' %}">
-  <div class="form-group">
-    <label for="category">Category:</label>
-    <select name="category" id="category" class="form-control">
-      <option value="">--Please select--</option>
-      {% for category in categories %}
-        <option value="{{ category.id }}" {% if request.GET.category == category.id %}selected{% endif %}>
-          {{ category.name }}
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="brand">Brand:</label>
-    <select name="brand" id="brand" class="form-control">
-      <option value="">-- Please select --</option>
-      {% for brand in brand %}
-        <option value="{{ brand.id }}" {% if request.GET.brand == brand.id %}selected{% endif %}>
-          {{ brand.name }}
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="condition">Condition:</label>
-    <select name="condition" id="condition" class="form-control">
-      <option value="">-- Please select --</option>
-      {% for condition in conditions %}
-        <option value="{{ condition.id }}" {% if request.GET.condition == condition.id %}selected{% endif %}>
-          {{ condition.name }}
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="size">Size:</label>
-    <select name="size" id="size" class="form-control">
-      <option value="">-- Please select --</option>
-      {% for size in sizes %}
-        <option value="{{ size.id }}" {% if request.GET.size == size.id %}selected{% endif %}>
-          {{ size.name }}
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-
+  <form id="filterForm" method="GET" action="{% url 'all_products' %}">
+    {{ form.as_p }}
     <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Filter</button>
-  <button type="reset" class="btn btn-secondary" id="clearButton">Clear Filters</button>
+   <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
 </form>
-
   </div>
 </div>
-
-                      <!-- Product cards-->
+  
+  <!-- Product cards-->
                 <div class="row">
                     {% for product in products %}
                        {% if product.is_listed and not product.is_sold %}
@@ -190,10 +141,8 @@
     </div>
 {% endblock %}
   
-
 {% block postloadjs %}
- <script type="text/javascript">
-
+<script type="text/javascript">
   // Scroll to top
   $(document).ready(function () {
     $('.btt-link').click(function(e) {
@@ -226,18 +175,9 @@
     // Clear Filters button
     $('#clearButton').click(function (e) {
       e.preventDefault(); 
-
-      var currentUrl = new URL(window.location.href);
-      
-    
-      currentUrl.searchParams.delete("category");
-      currentUrl.searchParams.delete("brand");
-      currentUrl.searchParams.delete("condition");
-      currentUrl.searchParams.delete("size");
-
-      window.location.replace(currentUrl);
-    });
+      $('input[type="checkbox"]').prop('checked', false);
+      $('#filterForm').submit();
+    }); 
   });
 </script>
-
 {% endblock %}

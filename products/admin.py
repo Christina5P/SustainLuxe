@@ -1,9 +1,13 @@
 from django.contrib import admin
 from .models import Product, Category
-from .models import Brand, Condition, Fabric, Size, Color 
+from .models import Brand, Condition, Fabric, Size, Color
 
 
-# Register your models here.
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'friendly_name', 'parent_category')
+    search_fields = ('name', 'friendly_name')
+
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'name',
@@ -27,7 +31,6 @@ class ProductAdmin(admin.ModelAdmin):
         'weight_in_kg',
     )
     actions = ['list_products', 'mark_for_return']
-
     search_fields = ('name', 'user__user__username')
 
     def list_products(self, request, queryset):
@@ -44,11 +47,12 @@ class ProductAdmin(admin.ModelAdmin):
         if obj.user:
             return obj.user.username
         return "No user"
+
     get_user.short_description = 'User'
 
 
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Category)
 admin.site.register(Size)
 admin.site.register(Brand)
 admin.site.register(Condition)

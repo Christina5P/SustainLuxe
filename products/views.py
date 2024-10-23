@@ -3,65 +3,81 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models.functions import Lower
-from .models import Product, Fabric
+from .models import Product, Fabric, Category, Brand, Condition, Size
 from .forms import ProductForm, ProductFilterForm
+
+main_categories = Category.objects.filter(parent_category=None)
 
 
 def all_products(request):
-    """A view to show all products, including sorting, filtering, and search queries"""
-
-    products = Product.objects.all()
-    categories = Category.objects.all()
-    brand = Brand.objects.all()
+    products = Product.objects.filter(is_listed=True, sold=False)
+    categories = Category.objects.filter(parent_category=None)
+    brands = Brand.objects.all()
     conditions = Condition.objects.all()
     sizes = Size.objects.all()
-    fabrics = Fabric.objects.all()
-    query = request.GET.get('q', '')  
+    fabric = Fabric.objects.all()
+
+    query = request.GET.get('q', '')
     category_id = request.GET.get('category')
     brand_id = request.GET.get('brand')
     condition_id = request.GET.get('condition')
     size_id = request.GET.get('size')
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
+
     form = ProductFilterForm(request.GET)
 
-    if category_id:
-        products = products.filter(category__id=category_id)
-
-    if brand_id:
-        products = products.filter(brand__id=brand_id)
-
-    if condition_id:
-        products = products.filter(condition__id=condition_id)
-
-    if size_id:
-        products = products.filter(size__id=size_id)
+    if form.is_valid():
+        if form.cleaned_data.get('categories'):
+            products = products.filter(
+                categories__in=form.cleaned_data['categories']
+            )
+        if form.cleaned_data.get('brands'):
+            products = products.filter(brand__in=form.cleaned_data['brands'])
+        if form.cleaned_data.get('conditions'):
+            products = products.filter(
+                condition__in=form.cleaned_data['conditions']
+            )
+        if form.cleaned_data.get('sizes'):
+            products = products.filter(size__in=form.cleaned_data['sizes'])
 
     # Search functionality
-    search_query = request.GET.get('q')
-    if search_query:
-        products = products.filter(name__icontains=search_query)
+    if query:
+        products = products.filter(
+            Q(name__icontains=query)
+            | Q(description__icontains=query)
+            | Q(brand__name__icontains=query)
+        )
+
+    # list functionality
+    if category_id:
+        category = get_object_or_404(Category, id=category_id)
+        if category.parent_category:
+            products = products.filter(categories=category)
+        else:
+            products = products.filter(Q(categories=category) | Q(categories__parent_category=category))
 
     # Sorting functionality
     if sort == 'name':
         sortkey = 'lower_name'
         products = products.annotate(lower_name=Lower('name'))
-    elif sort == 'category':
-        sortkey = 'category__name'
     elif sort == 'price':
         sortkey = 'price'
+    elif sort == 'category':
+        sortkey = 'categories__name'
     else:
-        sortkey = 'id'
+        sortkey = 'name'
 
     if direction == 'desc':
         sortkey = f'-{sortkey}'
 
     products = products.order_by(sortkey)
+    main_categories = Category.objects.filter(parent_category=None)
 
     context = {
         'products': products,
-        'categories': categories,
-        'brand': brand,
+        'main_categories': main_categories,
+        'brands': brands,
         'conditions': conditions,
         'sizes': sizes,
         'search_term': query,
@@ -70,16 +86,8 @@ def all_products(request):
         'selected_brand': brand_id,
         'selected_condition': condition_id,
         'selected_size': size_id,
-    }
-
-    return render(request, 'products/products.html', context)
-
-
-def product_list(request):
-    products = Product.objects.filter(is_listed=True, sold=False)
-
-    context = {
-        'products': products,
+        'form': form,
+        #'categories': categories,
     }
 
     return render(request, 'products/products.html', context)
@@ -103,12 +111,13 @@ def product_detail(request, product_id):
 
     return render(request, 'products/product_detail.html', context)
 
+
 # To calculate sustainable. Just add more fabrics if needed
 CARBON_EMISSIONS = {
     'cotton': 15,  # kg CO2 per kg of cotton
     'polyester': 30,  # kg CO2 per kg of polyester
     'wool': 20,  # kg CO2 per kg of wool
-   }
+}
 
 
 def calculate_carbon_saving(product):
@@ -116,13 +125,17 @@ def calculate_carbon_saving(product):
     Calculate carbon emission of products fabric and weight
     """
     fabric_name = product.fabric.name if product.fabric else None
-    carbon_per_kg = CARBON_EMISSIONS.get(fabric_name.lower(), 0)  
-    return carbon_per_kg * float(product.weight_in_kg) if product.weight_in_kg else 0 
+    carbon_per_kg = CARBON_EMISSIONS.get(fabric_name.lower(), 0)
+    return (
+        carbon_per_kg * float(product.weight_in_kg)
+        if product.weight_in_kg
+        else 0
+    )
 
 
 @login_required
 def add_product(request):
-  
+
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
@@ -151,7 +164,7 @@ def add_product(request):
 
 @login_required
 def edit_product(request, product_id):
-    
+
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
@@ -183,7 +196,7 @@ def edit_product(request, product_id):
 
 @login_required
 def delete_product(request, product_id):
-    
+
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
