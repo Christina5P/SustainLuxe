@@ -4,7 +4,7 @@ from .models import Brand, Condition, Fabric, Size, Color
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'friendly_name', 'parent_category')
+    list_display = ('name', 'friendly_name')
     search_fields = ('name', 'friendly_name')
 
 

@@ -35,26 +35,25 @@
       <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Categories:</a>
-        
-          <div class="collapse navbar-collapse" id="navbarCategories">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              {% for main_category in main_categories %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                    {{ main_category.friendly_name|default:main_category.name }}
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
-                    <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
-                    {% for subcategory in main_category.subcategories.all %}
-                      <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
-                    {% endfor %}
-                  </ul>
-                </li>
+       <div class="collapse navbar-collapse" id="navbarCategories">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% for main_category in main_categories %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+              {{ main_category.friendly_name|default:main_category.name }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
+              <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
+              {% for subcategory in main_category.subcategories.all %}
+                <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
               {% endfor %}
             </ul>
-          </div>
-        </div>
-      </nav>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>
       <!-- Navbar -->
 
       <!-- Sorting products-->

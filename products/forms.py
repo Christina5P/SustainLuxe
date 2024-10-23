@@ -53,7 +53,7 @@ class ProductFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
  
-        main_categories = Category.objects.filter(parent_category=None)
+        main_categories = Category.objects.filter(parent_categories=None)
         choices = []
         for main_cat in main_categories:
             choices.append((main_cat.id, main_cat.name))

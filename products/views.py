@@ -6,12 +6,12 @@ from django.db.models.functions import Lower
 from .models import Product, Fabric, Category, Brand, Condition, Size
 from .forms import ProductForm, ProductFilterForm
 
-main_categories = Category.objects.filter(parent_category=None)
+main_categories = Category.objects.filter(parent_categories=None)
 
 
 def all_products(request):
     products = Product.objects.filter(is_listed=True, sold=False)
-    categories = Category.objects.filter(parent_category=None)
+    main_categories = Category.objects.filter(parent_categories=None)
     brands = Brand.objects.all()
     conditions = Condition.objects.all()
     sizes = Size.objects.all()
@@ -52,10 +52,10 @@ def all_products(request):
     # list functionality
     if category_id:
         category = get_object_or_404(Category, id=category_id)
-        if category.parent_category:
+        if category.parent_categories:
             products = products.filter(categories=category)
         else:
-            products = products.filter(Q(categories=category) | Q(categories__parent_category=category))
+            products = products.filter(Q(categories=category) | Q(categories__parent_categories=category))
 
     # Sorting functionality
     if sort == 'name':
@@ -72,7 +72,7 @@ def all_products(request):
         sortkey = f'-{sortkey}'
 
     products = products.order_by(sortkey)
-    main_categories = Category.objects.filter(parent_category=None)
+    main_categories = Category.objects.filter(parent_categories=None)
 
     context = {
         'products': products,

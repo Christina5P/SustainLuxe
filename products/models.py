@@ -15,32 +15,21 @@ class Category(models.Model):
     """
 
     name = models.CharField(max_length=100)
-    friendly_name = models.CharField(max_length=254, null=True, blank=True)
-    parent_category = models.ForeignKey(
-        'self',
-        null=True,
-        blank=True,
-        related_name='subcategories',
-        on_delete=models.CASCADE,
+    friendly_name = models.CharField(max_length=254, blank=True, null=True)
+    parent_categories = models.ManyToManyField(
+        'self', blank=True, related_name='subcategories', symmetrical=False
     )
 
     def __str__(self):
         return self.name
 
-    class Meta:
-        verbose_name_plural = 'Categories'
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class Meta:
+    verbose_name_plural = 'Categories'
 
-    class Meta:
-        verbose_name_plural = "categories"
-
-    def get_friendly_name(self):
-        return self.friendly_name or self.name or "Unnamed Category"
-
-    def __str__(self):
-        return self.name
+        
+def get_friendly_name(self):
+    return self.friendly_name or self.name or "Unnamed Category"
 
 
 class Product(models.Model):
