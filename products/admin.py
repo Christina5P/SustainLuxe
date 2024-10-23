@@ -14,6 +14,7 @@ class ProductAdmin(admin.ModelAdmin):
         'sold',
         'return_option',
         'expired',
+        'weight_in_kg',
     )
     list_filter = (
         'brand',
@@ -23,7 +24,8 @@ class ProductAdmin(admin.ModelAdmin):
         'sold',
         'return_option',
         'listed_at',
-        )
+        'weight_in_kg',
+    )
     actions = ['list_products', 'mark_for_return']
 
     search_fields = ('name', 'user__user__username')

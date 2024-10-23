@@ -14,6 +14,8 @@ It should still feel luxurious and stylish to buy from this shop.
 * https://www.refunder.se/
 * https://www.sellpy.se/
 * https://us.vestiairecollective.com/
+* https://static.schibsted.com/wp-content/uploads/2020/06/04123109/schibsted-adevinta-second-hand-effect-2020.pdf
+
 
 ### [Media](#media)
 * https://stocksnap.io/

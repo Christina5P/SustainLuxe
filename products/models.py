@@ -56,8 +56,11 @@ class Product(models.Model):
     color = models.ForeignKey('Color',
         max_length=254, null=True, blank=True, on_delete=models.SET_NULL
     )
+    weight_in_kg = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True) 
-    
+
     description = models.TextField(null=True, blank=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -93,8 +96,6 @@ class Product(models.Model):
             expiration_date = self.listed_at + timedelta(days=90)
             return timezone.now() > expiration_date
         return False 
-           
-
 
     def list_product(self):
         if not self.is_listed:
@@ -146,3 +147,4 @@ class Brand(models.Model):
 
     def __str__(self):
         return self.name
+

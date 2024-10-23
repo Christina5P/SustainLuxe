@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models.functions import Lower
-from .models import Product, Category, Brand, Condition, Size
+from .models import Product, Fabric
 from .forms import ProductForm, ProductFilterForm
 
 
@@ -15,6 +15,7 @@ def all_products(request):
     brand = Brand.objects.all()
     conditions = Condition.objects.all()
     sizes = Size.objects.all()
+    fabrics = Fabric.objects.all()
     query = request.GET.get('q', '')  
     category_id = request.GET.get('category')
     brand_id = request.GET.get('brand')
@@ -85,19 +86,38 @@ def product_list(request):
 
 
 def product_detail(request, product_id):
-  
+
     product = get_object_or_404(Product, pk=product_id)
+    carbon_saving = calculate_carbon_saving(product)
+    fabrics = Fabric.objects.all()
 
     context = {
         'product': product,
         'size': product.size,
         'brand': product.brand,
         'condition': product.condition,
-        'fabric': product.fabric,
+        'fabrics': fabrics,
         'color': product.color,
+        'carbon_saving': carbon_saving,
     }
 
     return render(request, 'products/product_detail.html', context)
+
+# To calculate sustainable. Just add more fabrics if needed
+CARBON_EMISSIONS = {
+    'cotton': 15,  # kg CO2 per kg of cotton
+    'polyester': 30,  # kg CO2 per kg of polyester
+    'wool': 20,  # kg CO2 per kg of wool
+   }
+
+
+def calculate_carbon_saving(product):
+    """
+    Calculate carbon emission of products fabric and weight
+    """
+    fabric_name = product.fabric.name if product.fabric else None
+    carbon_per_kg = CARBON_EMISSIONS.get(fabric_name.lower(), 0)  
+    return carbon_per_kg * float(product.weight_in_kg) if product.weight_in_kg else 0 
 
 
 @login_required

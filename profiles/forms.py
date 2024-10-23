@@ -1,7 +1,6 @@
 from django import forms
 from .models import UserProfile
-from products.models import Product, Size, Condition
-
+from products.models import Product, Size, Condition, Fabric
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -85,7 +84,7 @@ class SellerForm(forms.ModelForm):
         label="Product Name",
         widget=forms.TextInput(attrs={'placeholder': 'Enter product name'}),
     )
-    
+
     SIZE = [
         ('XS', 'XS'),
         ('S', 'S'),
@@ -125,6 +124,20 @@ class SellerForm(forms.ModelForm):
         widget=forms.Select,
     )
 
+    fabric = forms.ModelChoiceField(
+        queryset=Fabric.objects.all(),
+        required=True,
+        label="Fabric",
+        widget=forms.Select,
+    )
+
+    weight_in_kg = forms.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        required=True,
+        label="Weight (kg)",
+    )
+
     class Meta:
         model = Product
         fields = [
@@ -138,6 +151,8 @@ class SellerForm(forms.ModelForm):
             'name',
             'price',
             'size',
+            'fabric',
+            'weight_in_kg',
             'condition',
             'return_option',
         ]
