@@ -1,11 +1,8 @@
 {% load static %}
 
-
-
 <!doctype html>
 <html lang="en">
-  <head>
-
+<head>
 
     {% block meta %}
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -17,28 +14,20 @@
     {% endblock %}
     
     {% block corecss %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% endblock %}
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-{% endblock %}
-
-{% block extra_css %}      
-{% endblock %}
-
-{% block corejs %}
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Stripe -->
-<script src="https://js.stripe.com/v3/"></script>
-{% endblock %}
+    {% block extra_css %}      
+    {% endblock %}
 
 
     <title>SustainLuxe {% block extra_title %}{% endblock %}</title>
-  </head>
-  <body>   
-     
+</head>
+<body >   
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
     <header class="container"> 
@@ -74,200 +63,178 @@
                     </ul>
                 </div>
             </div>
- </div>
-            <!-- Right part of navbar (search and user icons) -->
-            <div class="col-md-6 d-flex justify-content-end align-items-center"> <!-- Adjusted to col-md-6 -->
-                <!-- Search bar -->
-                <form class="d-none d-md-flex input-group w-75 my-auto me-4 method="GET" action="{% url 'all_products' %}"">
-                    <input id="search" autocomplete="off" type="text" name="q" class="form-control rounded" placeholder="Search">
-                    <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
-                </form>
-          
-            
-                <div class="col-md-6 d-flex justify-content-end align-items-center">
-                   <span class="navbar-text ml-auto logged-in">
-                {% if user.is_authenticated %}
-                Welcome {{ user }} <br>You are logged in
-                {% else %}
-                You are not logged in
-                {% endif %}
-            </span>
+        </div>
+
+        <!-- Right part of navbar (search and user icons) -->
+        <div class="col-md-6 d-flex justify-content-end align-items-center">
+            <!-- Search bar -->
+            <form class="d-none d-md-flex input-group w-75 my-auto" method="GET" action="{% url 'all_products' %}">
+                <input id="search" autocomplete="off" type="text" name="q" class="form-control rounded" placeholder="Search">
+                <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
+            </form>
+
+            <div class="col-md-6 d-flex justify-content-end align-items-center">
+                <span class="navbar-text ml-auto logged-in">
+                    {% if user.is_authenticated %}
+                        Welcome {{ user }} <br>You are logged in
+                    {% else %}
+                        You are not logged in
+                    {% endif %}
+                </span>
             </div>
 
-  <!-- User dropdown -->
-                    <div class="dropdown ms-3">
-                            
-                    <a id="navbarDropdownMenuAvatar" role="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" href="{% url 'register' %}">
-                       <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
-                        <!-- Dropdown for user actions -->
-                        </a>
-                       
-                            {% if request.user.is_authenticated %}
-                                {% if request.user.is_superuser %}
-                                    <a href="{% url 'add_product'%}" class="dropdown-item">Product Management</a>
-                                {% endif %}
-                                <a href="{% url 'profile' %}" class="dropdown-item">Profile settings</a>
-                                <a href="{% url 'sale_product' %}" class="dropdown-item"> Sale Registration Form </a>
-                                <a href="{% url 'account_details' user_id=user.id %}" class="dropdown-item"> Account details </a>
-                                <a href="{% url 'order_list' %}" class="dropdown-item"> Order history </a>
-                                 <a href="{% url 'withdrawal' %}" class="dropdown-item"> Withdrawal </a>
-                                <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
-                            {% else %}
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-      
+          <!-- User dropdown -->
+<div class="dropdown ms-3">
+    <a id="navbarDropdownMenuAvatar" role="button" class="dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false" href="#">
+        <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+        {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %}
+                <li><a href="{% url 'add_product'%}" class="dropdown-item"><i class="fas fa-plus-circle me-2"></i>Product Management</a></li>
+                <li><hr class="dropdown-divider"></li>
+            {% endif %}
+            <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="fas fa-user-cog me-2"></i>Profile settings</a></li>
+            <li><a href="{% url 'sale_product' %}" class="dropdown-item"><i class="fas fa-tag me-2"></i>Sale Registration Form</a></li>
+            <li><a href="{% url 'account_details' user_id=user.id %}" class="dropdown-item"><i class="fas fa-info-circle me-2"></i>Account details</a></li>
+            <li><a href="{% url 'order_list' %}" class="dropdown-item"><i class="fas fa-history me-2"></i>Order history</a></li>
+            <li><a href="{% url 'withdrawal' %}" class="dropdown-item"><i class="fas fa-money-bill-wave me-2"></i>Withdrawal</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a href="{% url 'account_logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'account_login' %}" class="dropdown-item"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+            <li><a href="{% url 'account_signup' %}" class="dropdown-item"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+        {% endif %}
+    </ul>
+</div>
+        </div>
 
-                <!-- Cart -->
-                <a class="nav-link d-flex justify-content-center{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href={% url "view_bag" %}>
-                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-                    <span class="ms-2">
-                        {% if grand_total %}
-                            EUR{{ grand_total|floatformat:2 }}
-                        {% else %}
-                            EUR 0.00
-                        {% endif %}
-                    </span>
-                             </a>
-        </header>
-    </nav>
- 
-    {% if messages %}
-        <div class="message-container"></div>
-    {% endif %}
+        <!-- Cart -->
+        <a class="nav-link d-flex justify-content-center{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
+            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+            <span class="ms-2">
+                {% if grand_total %}
+                    EUR{{ grand_total|floatformat:2 }}
+                {% else %}
+                    EUR 0.00
+                {% endif %}
+            </span>
+        </a>
+    </header>
+</nav>
 
-    {% block page_header %}
- 
-    {% endblock %}
-
-    
-    {% block content %}
-    {% endblock %}
-
-    
+{% block content %}
+{% endblock %}
 
 <!-- Footer -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted">
-  <!-- Section: Social media -->
-   <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-    <!-- Left -->
-    <div class="d-flex justify-content-center align-items-center mb-3">
-      <span>Sign up for a newsletter</span>
-       <form class="d-none d-md-flex input-group w-75 my-auto">
-            <input id="mdb-5-search-input" autocomplete="off" type="search" class="form-control rounded" placeholder="Search">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+        <div class="d-flex justify-content-center align-items-center mb-3">
+            <span>Sign up for a newsletter</span>
+            <form class="d-none d-md-flex input-group w-75 my-auto">
+                <input id="mdb-5-search-input" autocomplete="off" type="search" class="form-control rounded" placeholder="Search">
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <a href="" class="me-5 text-reset">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Section: Links  -->
+    <section>
+        <div class="container text-center text-md-start mt-5">
+            <div class="row mt-3">
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        <i class="fa fa-cc-visa" aria-hidden="true"></i>
+                        <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
+                        <i class="fa fa-cc-amex" aria-hidden="true"></i>
+                    </h6>
+                </div>
+
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <p>
+                        <a href="#!" class="text-reset">ABOUT US</a>
+                    </p>
+                </div>
+
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <p>
+                        <a href="#!" class="text-uppercase fw-bold mb-4">Customer Service</a>
+                    </p>
+                    <p><i class="fas fa-home me-3"></i> <br>Sundsvall, Sweden</p>
+                    <p>
+                        <i class="fas fa-envelope me-3"></i>
+                        info@example.com
+                    </p>
+                    <p><i class="fas fa-phone me-3"></i><br> +46 70 175 35 85</p>
+                </div>
+
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        SustainLuxe | Krokviken 133, 865 92 Sundsvall
     </div>
-    <!-- Left -->
-
-    <!-- Right -->
-    <div class="d-flex justify-content-center">
-      <a href="" class="me-5 text-reset">
-        <i class="fab fa-facebook-f"></i>
-      </a>
-      <a href="" class="me-4 text-reset">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="" class="me-4 text-reset">
-        <i class="fab fa-instagram"></i>
-      </a>
-    </div>
-  </section>
-
-   <!-- Section: Links  -->
-  <section class="">
-    <div class="container text-center text-md-start mt-5">
-      <!-- Grid row -->
-      <div class="row mt-3">
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-          <!-- Content -->
-          <h6 class="text-uppercase fw-bold mb-4">
-        <i class="fa fa-cc-visa" aria-hidden="true"></i>
-          <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
-          <i class="fa fa-cc-amex" aria-hidden="true"></i>
-          </h6>
-          </h6>
-        
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-          <!-- Links -->
-       
-          <p>
-            <a href="#!" class="text-reset">ABOUT US</a>
-          </p>
-          
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-          <p>
-            <a href="#!"  class="text-uppercase fw-bold mb-4">Customer Service</a>
-          </p>
-          <p><i class="fas fa-home me-3"></i> <br>Sundsvall, Sweden</p>
-          <p>
-            <i class="fas fa-envelope me-3"></i>
-            info@example.com
-          </p>
-          <p><i class="fas fa-phone me-3"></i><br> +46 70 175 35 85</p>
-        
-          <!-- Links -->
-        </div>
-        
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-          
-        </div>
-        <!-- Grid column -->
-      </div>
-      <!-- Grid row -->
-    </div>
-  </section>
-  <!-- Section: Links  -->
-
-  <!-- Copyright -->
-  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-    SustainLuxe | Krokviken 133, 865 92 Sundsvall
-  </div>
-  <!-- Copyright -->
 </footer>
-<!--Footer-->
 
+{% if messages %}
+<h1>Messages</h1>
+<div class="message-container">
+    {% for message in messages %}
+        {% with message.level as level %}
+            {% if level == 40 %}
+                {% include 'includes/toast_notification/toast_error.html' %}
+            {% elif level == 30 %}
+                {% include 'includes/toast_notification/toast_warning.html' %}
+            {% elif level == 25 %}
+                {% include 'includes/toast_notification/toast_success.html' %}
+            {% else %}
+                {% include 'includes/toast_notification/toast_info.html' %}
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
+</div>
+{% endif %}
 
-    {% if messages %}
-    <h1>Messages</h1>
-        <div class="message-container">
-            {% for message in messages %}
-                {% with message.level as level %}
-                    {% if level == 40 %}
-                        {% include 'includes/toast_notification/toast_error.html' %}
-                    {% elif level == 30 %}
-                        {% include 'includes/toast_notification/toast_warning.html' %}
-                    {% elif level == 25 %}
-                        {% include 'includes/toast_notification/toast_success.html' %}
-                    {% else %}
-                        {% include 'includes/toast_notification/toast_info.html' %}
-                    {% endif %}
-                {% endwith %}
-            {% endfor %}
-        </div>
-    {% endif %}
-   
+</body>
+</html>
 
-
-    {% block postloadjs %}
-    <script type="text/javascript">
-        $('.toast').toast('show');
-    </script>
-    {% endblock %}
 
     
-  </body>
-</html>
+
+{% block corejs %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+<script src="https://kit.fontawesome.com/3090a0f319.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+
+<!-- Stripe -->
+<script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block postloadjs %}
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function () {
+    var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+    var toastList = toastElList.map(function (toastEl) {
+      return new mdb.Toast(toastEl);
+    });
+    toastList.forEach(toast => toast.show());
+  });
+</script>
+{% endblock %}

@@ -80,7 +80,7 @@ footer,
     height: 2px;
 }
 
-.toast .close {
+.toast btn-close {
     border: none;
     margin-left: auto;
     margin-right: 10px; 

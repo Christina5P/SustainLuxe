@@ -24,7 +24,6 @@ body {
     background: url('../media/background.png') no-repeat center center fixed;
     background-size: cover;
     height: calc(100vh - 164px);
-    color: #a8a3a3;
     font-family: 'Lato';
 }
 
@@ -36,35 +35,32 @@ footer,
 
 .navbar {
      background-color:#c0cdd4;  
+     margin-top: 20px;
 
 }
 
 .carousel-caption {
-    margin-bottom: 50px; /* Öka avståndet om det behövs */
-}
-
-.navbar {
-    margin-top: 20px; /* Justera avståndet efter behov */
+    margin-bottom: 50px; 
 }
 
 .section-spacing {
-    margin-bottom: 1rem; /* Justera efter behov */
+    margin-bottom: 1rem; 
 }
 
 .custom-img {
-    max-width: 100%; /* Säkerställer att bilden inte blir större än behållaren */
-    height: auto; /* Bevarar bildens proportioner */
+    max-width: 100%; 
+    height: auto;
     padding: 1rem;
 }
 
 .custom-btn {
-    display: block; /* Gör den block-formad för att kunna centrera */
-    max-width: 200px; /* Max bredd på knappen */
-    margin: 0 auto; /* Centrerar den horisontellt */
+    display: block; 
+    max-width: 200px; 
+    margin: 0 auto; 
 }
 
 .nav-link {
-    text-decoration: none; /* Ta bort understrykning */
+    text-decoration: none; 
 }
 
 /*  toasts */
@@ -82,4 +78,56 @@ footer,
 
 .toast-capper {
     height: 2px;
+}
+
+.toast btn-close {
+    border: none;
+    margin-left: auto;
+    margin-right: 10px; 
+    padding: 0; 
+    font-size: 1.5rem; 
+    background-color: transparent;
+}
+
+
+.arrow-up {
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent; 
+    border-bottom: 10px solid black;
+    position: absolute;
+    top: -10px;
+    right: 36px;
+}
+.arrow-primary {
+    border-bottom-color: #007bff !important;
+}
+
+.arrow-secondary {
+    border-bottom-color: #6c757d !important;
+}
+
+.arrow-success {
+    border-bottom-color: #28a745 !important;
+}
+
+.arrow-danger {
+    border-bottom-color: #dc3545 !important;
+}
+
+.arrow-warning {
+    border-bottom-color: #ffc107 !important;
+}
+
+.arrow-info {
+    border-bottom-color: #17a2b8 !important;
+}
+
+.arrow-light {
+    border-bottom-color: #f8f9fa !important;
+}
+
+.arrow-dark {
+    border-bottom-color: #343a40 !important;
 }
