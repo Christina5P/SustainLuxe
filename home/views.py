@@ -12,6 +12,3 @@ def index(request):
 def sell_view(request):
     return render(request, 'home/sell.html')
 
-
-def register(request):
-    return render(request, 'home/register.html')

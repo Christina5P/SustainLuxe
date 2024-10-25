@@ -25,15 +25,17 @@
 
 
     <title>SustainLuxe {% block extra_title %}{% endblock %}</title>
+
+    {% block page_header %}
 </head>
 <body >   
-
+  
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
-    <header class="container"> 
+    <header class="container-fluid"> 
         <div class="row align-items-center">
-            <!-- Left part of navbar (brand and links) -->
-            <div class="col-md-6 d-flex align-items-center"> 
+            <!-- Left part of navbar -->
+            <div class="col-md-6 d-flex align-items-center justify-content-start"> 
                 <!-- Toggle button -->
                 <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fas fa-bars"></i>
@@ -44,7 +46,7 @@
                     <img src="{% static 'media/logo.png' %}" height="70" alt="SustainLuxe" loading="lazy" />
                 </a>
 
-                <!-- Collapsible wrapper (links) -->
+                <!--Links to sell,home,info -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left links -->
                     <ul class="navbar-nav me-auto mb-2"> 
@@ -65,15 +67,26 @@
             </div>
         </div>
 
-        <!-- Right part of navbar (search and user icons) -->
-        <div class="col-md-6 d-flex justify-content-end align-items-center">
-            <!-- Search bar -->
-            <form class="d-none d-md-flex input-group w-75 my-auto" method="GET" action="{% url 'all_products' %}">
-                <input id="search" autocomplete="off" type="text" name="q" class="form-control rounded" placeholder="Search">
-                <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
-            </form>
+               <div class="extra-navbar-content">
+                {% block extra_navbar_content %}
+   
+                 {% endblock %}
+                 
+        <!-- Cart -->
+        <a class="nav-link d-flex ml-auto{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
+            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+            <span class="ms-3">
+                {% if grand_total %}
+                    EUR{{ grand_total|floatformat:2 }}
+                {% else %}
+                    EUR 0.00
+                {% endif %}
+            </span>
+        </a>
 
-            <div class="col-md-6 d-flex justify-content-end align-items-center">
+                </div>
+                <!-- Welcome status-->
+            <div class="col-md-6 d-flex justify-content-center ">
                 <span class="navbar-text ml-auto logged-in">
                     {% if user.is_authenticated %}
                         Welcome {{ user }} <br>You are logged in
@@ -84,7 +97,7 @@
             </div>
 
           <!-- User dropdown -->
-<div class="dropdown ms-3">
+        <div class="dropdown">
     <a id="navbarDropdownMenuAvatar" role="button" class="dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false" href="#">
         <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
     </a>
@@ -103,31 +116,23 @@
             <li><a href="{% url 'account_logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
         {% else %}
             <li><a href="{% url 'account_login' %}" class="dropdown-item"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
-            <li><a href="{% url 'account_signup' %}" class="dropdown-item"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+            <li><a href="{% url 'account_signup' %}" class="dropdown-item"><i class="fas fa-user-plus me-2"></i>Sign Up</a></li>
         {% endif %}
     </ul>
 </div>
         </div>
 
-        <!-- Cart -->
-        <a class="nav-link d-flex justify-content-center{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
-            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-            <span class="ms-2">
-                {% if grand_total %}
-                    EUR{{ grand_total|floatformat:2 }}
-                {% else %}
-                    EUR 0.00
-                {% endif %}
-            </span>
-        </a>
     </header>
 </nav>
+{% endblock %}
+
 
 {% block content %}
 {% endblock %}
 
 <!-- Footer -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted">
+    <div class="container-fluid"> 
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
         <div class="d-flex justify-content-center align-items-center mb-3">
@@ -191,9 +196,10 @@
         SustainLuxe | Krokviken 133, 865 92 Sundsvall
     </div>
 </footer>
+</body>
 
 {% if messages %}
-<h1>Messages</h1>
+
 <div class="message-container">
     {% for message in messages %}
         {% with message.level as level %}
@@ -211,7 +217,7 @@
 </div>
 {% endif %}
 
-</body>
+
 </html>
 
 

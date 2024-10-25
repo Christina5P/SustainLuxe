@@ -6,8 +6,11 @@ urlpatterns = [
     path('', views.profile, name='profile'),
     path('sale_product/', views.sale_product, name='sale_product'),
     path(
-        'order_history/', views.order_list, name='order_list'
-    ),  
+        'saleorder_success/',
+        views.saleorder_success,
+        name='saleorder_success',
+    ),
+    path('order_history/', views.order_list, name='order_list'),
     path(
         'order_history/<str:order_number>/',
         views.order_history,

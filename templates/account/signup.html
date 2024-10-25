@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block head_title %}
-    Register
+    Sign Up
 {% endblock %}
 
 {% block inner_content %}
@@ -14,11 +14,11 @@
             <div class="card shadow-0 mb-5">
                 <div class="card-body p-4">
 
-                         <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+                         <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">Log in</a>.{% endblocktrans %}</p>
 
                     <ul class="nav nav-pills nav-justified mb-3">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-mdb-toggle="pill" href="{% url 'account_signup' %}" role="tab" aria-selected="false">Register</a>
+                            <a class="nav-link" data-mdb-toggle="pill" href="{% url 'account_signup' %}" role="tab" aria-selected="false">Sign Up</a>
                         </li>
                     </ul>
 

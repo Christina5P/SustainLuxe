@@ -47,15 +47,44 @@ def sale_product(request):
             product.user = request.user
             product.save()
 
-            
+            request.session['save_info'] = {
+                'sku': product.sku,
+                'price': float(form.cleaned_data['price']),
+            }
             messages.success(
                 request, 'Your product has been listed successfully!'
             )
-            return redirect(reverse(sale_product))
+            return redirect('saleorder_success') 
     else:
         form = SellerForm()
 
     return render(request, template, {'form': form})
+
+
+def saleorder_success(request,):
+    """
+    Handle successful Sale Registration
+    """
+    save_info = request.session.get('save_info')
+
+    # Context to use for success confirmation
+    if save_info:
+
+        sku = save_info.get('sku', None)  
+        price = save_info.get('price', None)  
+
+        del request.session['save_info']
+
+        return render(
+            request,
+            'profiles/saleorder_success.html',
+            {'sku': sku, 'price': price},
+        )
+    else:
+        messages.warning(request, 'No sale information confirmed.')
+        form = SellerForm()
+
+    return redirect('sale_product')
 
 
 @login_required
