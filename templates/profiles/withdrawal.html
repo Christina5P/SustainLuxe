@@ -3,30 +3,45 @@
 {% load crispy_forms_tags %}
 
 
-
-{% block page_header %}
+{% block content %}
     <div class="container header-container">
         <div class="row">
             <div class="col"></div>
         </div>
     </div>
-{% endblock %}
 
-{% block content %}
+
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
             <div class="col">
+                <h1>{{ user.username }}'s Account</h1>
+                <h2>Withdrawal</h2>
+                
+                <!-- Show available balance -->
+                <p>Available Balance: {{ total_revenue }}</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="amount">Amount to Withdraw:</label>
+                        <input type="number" step="0.01" name="amount" id="amount" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Withdraw</button>
+                </form>
 
 
-<h1>{{ account.user.username }}'s Account</h1>
-<h2>Withdrawal</h2>
-<ul>
- {% for amount in total_revenue %}
-        <li>
-            <a href="#">Balance</a>
-            <strong>{{ self.total_revenue }}</strong> 
-          
-</ul>
-        
+                <h3>Withdrawal History</h3>
+                <ul>
+                    {% for withdrawal in account.withdrawal_history %}
+                        <li>
+                            Amount: {{ withdrawal.amount }}, Date: {{ withdrawal.date|date:"Y-m-d H:i" }}
+                        </li>
+                    {% empty %}
+                        <li>No withdrawals yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

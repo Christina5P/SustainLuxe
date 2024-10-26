@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_countries.fields import CountryField
 from django.utils import timezone
+from decimal import Decimal
 
 
 class UserProfile(models.Model):
@@ -52,7 +53,7 @@ class Product(models.Model):
     )
 
     def update_balance(self, sale_amount):
-        self.balance += sale_amount * 0.7
+        self.balance += Decimal(sale_amount) * Decimal('0.7')
         self.save()
 
     def __str__(self):

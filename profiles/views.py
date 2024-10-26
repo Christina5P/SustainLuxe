@@ -1,14 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from .models import UserProfile, User, Account
-from .forms import UserProfileForm, SellerForm
+from .forms import UserProfileForm, SellerForm, WithdrawalForm
 from checkout.models import Order
-from products.models import Product
+from .models import Product as ProfilesProduct
+from products.models import Product as ProductsProduct
 import uuid
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from decimal import Decimal
+from .utils import get_total_balance
 
 
 @login_required
@@ -46,6 +48,9 @@ def sale_product(request):
             product.sku = str(uuid.uuid4())
             product.user = request.user
             product.save()
+
+            profile = request.user.userprofile
+            profile.update_balance(product.price)
 
             request.session['save_info'] = {
                 'sku': product.sku,
@@ -95,19 +100,10 @@ def account_details(request, user_id):
     orders = Order.objects.filter(user_profile=profile)
     template = 'profiles/account_details.html'
 
-    products = Product.objects.filter(user=user, sold=False)
+    products = ProductsProduct.objects.filter(user=user, sold=False)
+    sold_products = ProductsProduct.objects.filter(user=user, sold=True)
 
-    for product in products:
-        remaining_time = product.time_until_expiration()
-        if remaining_time:
-            product.days_left = remaining_time.days
-        else:
-            product.days_left = None
-
-    sold_products = Product.objects.filter(user=user, sold=True)
-    total_revenue = sum(product.price for product in sold_products) * Decimal(
-        '0.7'
-    )
+    total_revenue = get_total_balance(request.user)  # Använd funktionen här
 
     context = {
         'products': products,
@@ -120,74 +116,43 @@ def account_details(request, user_id):
 
     return render(request, template, context)
 
-
 @login_required
 def withdrawal_view(request):
     account = get_object_or_404(Account, user=request.user)
 
-    if request.method == 'POST':
-        amount = float(request.POST.get('amount', 0))
+    # Använd get_total_balance för att hämta total revenue
+    total_revenue = get_total_balance(request.user)
 
-        if account.withdrawal(amount):
+    if request.method == 'POST':
+        amount = Decimal(request.POST.get('amount', 0))
+
+        # Kontrollera att användaren har tillräckligt med pengar
+        if amount <= total_revenue:
+            # Logik för uttag
+            account.withdrawal(amount)
             messages.success(request, 'Withdrawal successful.')
         else:
             messages.error(request, 'Insufficient funds for withdrawal.')
 
-            return redirect('account_details', user_id=request.user.id)
+        return redirect('withdrawal')
 
-        template = 'withdrawal.html'
-    return render(request, template)
+    context = {
+        'total_revenue': total_revenue,  # Skicka total_revenue till mallen
+        'account': account,
+    }
+
+    return render(request, 'profiles/withdrawal.html', context)
+
 
 @login_required
 def order_list(request):
     orders = Order.objects.filter(user_profile=request.user.userprofile)
     return render(request, 'profiles/order_list.html', {'orders': orders})
 
+
 @login_required
 def order_history(request, order_number):
-    order = get_object_or_404(Order, order_number=order_number, user_profile=request.user.userprofile)
-    return render(request, 'checkout/checkout_success.html', {'order': order})
-
-"""
-@login_required
-def order_list(request):
-    profile = request.user.userprofile
-    orders = profile.orders.all()
-    template = 'profiles/order_history.html'
-    context = {'orders': orders}
-    return render(request, template, context)
-
-
-def order_history(request, order_number):
-    order = get_object_or_404(Order, order_number=order_number)
-
-    messages.info(
-        request,
-        (
-            f'This is a past confirmation for order number {order_number}. '
-            'A confirmation email was sent on the order date.'
-        ),
+    order = get_object_or_404(
+        Order, order_number=order_number, user_profile=request.user.userprofile
     )
-
-    template = 'checkout/checkout_success.html'
-    context = {
-        'order': order,
-        'from_profile': True,
-    }
-
-    return render(request, template, context)
-
-    def create_account(request):
-        if request.method == 'POST':
-            form = CreateAccountForm(request.POST)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Account created successfully!')
-                return redirect(
-                    'profile'
-                )  
-        else:
-            form = CreateAccountForm()
-
-        return render(request, 'profiles/create_account.html', {'form': form})
-    """
+    return render(request, 'checkout/checkout_success.html', {'order': order})

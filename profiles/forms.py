@@ -1,6 +1,8 @@
 from django import forms
 from .models import UserProfile
 from products.models import Product, Size, Condition, Fabric
+from decimal import Decimal
+
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -181,3 +183,21 @@ def clean_price(self):
 def clean_email(self):
     email = self.cleaned_data.get('email')
     return email
+
+
+class WithdrawalForm(forms.Form):
+    amount = forms.DecimalField(
+        label='Withdrawal Amount',
+        min_value=Decimal('0.01'),
+        max_digits=10,
+        decimal_places=2,
+        widget=forms.NumberInput(attrs={'step': '0.01'}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.account = kwargs.pop('account', None)
+        super(WithdrawalForm, self).__init__(*args, **kwargs)
+
+    def clean_amount(self):
+        amount = self.cleaned_data['amount']
+        return amount
