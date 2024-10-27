@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from django_countries.fields import CountryField
 from django.utils import timezone
 from decimal import Decimal
+from products.models import Product as ProductsProduct
+from simple_history.models import HistoricalRecords
 
 
 class UserProfile(models.Model):
@@ -73,17 +75,32 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    total_revenue = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0.00
-    )
+    total_revenue = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     withdrawal_history = models.JSONField(default=list, blank=True)
+    history = HistoricalRecords(
+        history_id_field=models.AutoField(primary_key=True)
+    )
+
+    def calculate_balance(self):
+        # Beräkna totala intäkter
+        sold_products = ProductsProduct.objects.filter(user=self.user, sold=True)
+        total_revenue = sum(product.price for product in sold_products) * Decimal('0.7')
+
+        # Beräkna totalen av alla uttag
+        total_withdrawals = sum(Decimal(entry['amount']) for entry in self.withdrawal_history)
+
+        # Beräkna och returnera aktuell balans
+        return total_revenue - total_withdrawals
 
     def withdrawal(self, amount):
-        if amount <= self.total_revenue:
-            self.total_revenue -= amount
-            self.withdrawal_history.append(
-                {'amount': amount, 'date': timezone.now()}
-            )
+        amount = Decimal(amount).quantize(Decimal("0.01"))
+        available_balance = self.calculate_balance()
+
+        if amount <= self.calculate_balance():
+            self.withdrawal_history.append({
+                'amount': float(amount),
+                'date': timezone.now().isoformat()
+            })
             self.save()
             return True
         return False

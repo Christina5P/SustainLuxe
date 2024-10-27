@@ -10,7 +10,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from decimal import Decimal
-from .utils import get_total_balance
+from django.db import transaction
+from django.utils import timezone
 
 
 @login_required
@@ -103,48 +104,65 @@ def account_details(request, user_id):
     products = ProductsProduct.objects.filter(user=user, sold=False)
     sold_products = ProductsProduct.objects.filter(user=user, sold=True)
 
-    total_revenue = get_total_balance(request.user)  # Använd funktionen här
+    # Använd den nya metoden för att beräkna tillgänglig balans
+    available_balance = account.calculate_balance()
+    withdrawal_history = account.withdrawal_history
 
     context = {
         'products': products,
         'sold_products': sold_products,
         'account': account,
-        'total_revenue': total_revenue,
+        'available_balance': available_balance,
         'orders': orders,
-        'user': user,
+        'user': request.user,
+        'withdrawal_history': withdrawal_history,
     }
 
     return render(request, template, context)
 
-@login_required
+
+@transaction.atomic
 def withdrawal_view(request):
     account = get_object_or_404(Account, user=request.user)
-
-    # Använd get_total_balance för att hämta total revenue
-    total_revenue = get_total_balance(request.user)
+    available_balance = account.calculate_balance()
 
     if request.method == 'POST':
-        amount = Decimal(request.POST.get('amount', 0))
+        try:
+            amount = Decimal(request.POST.get('amount', '0')).quantize(
+                Decimal("0.01")
+            )
+        except (ValueError, TypeError):
+            messages.error(request, 'Invalid withdrawal amount.')
+            return redirect('withdrawal')
 
-        # Kontrollera att användaren har tillräckligt med pengar
-        if amount <= total_revenue:
-            # Logik för uttag
-            account.withdrawal(amount)
-            messages.success(request, 'Withdrawal successful.')
+        if amount <= available_balance:
+            success = account.withdrawal(amount)
+            if success:
+                account.history.create(
+                    history_date=timezone.now(),
+                    history_type="~",
+                    history_change_reason="Withdrawal",
+                    history_user=request.user,
+                    id=account.id,
+                    total_revenue=account.total_revenue,
+                    withdrawal_history=account.withdrawal_history,
+                )
+                messages.success(request, 'Withdrawal successful.')
+            else:
+                messages.error(request, 'Error processing withdrawal.')
         else:
             messages.error(request, 'Insufficient funds for withdrawal.')
 
         return redirect('withdrawal')
 
     context = {
-        'total_revenue': total_revenue,  # Skicka total_revenue till mallen
-        'account': account,
-    }
+        'available_balance': available_balance,
+        'user': request.user,
+        }
 
     return render(request, 'profiles/withdrawal.html', context)
 
 
-@login_required
 def order_list(request):
     orders = Order.objects.filter(user_profile=request.user.userprofile)
     return render(request, 'profiles/order_list.html', {'orders': orders})

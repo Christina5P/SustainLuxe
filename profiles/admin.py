@@ -1,6 +1,7 @@
-
 from django.contrib import admin
-from .models import UserProfile
+from .models import UserProfile, Account
+from simple_history.admin import SimpleHistoryAdmin
+from django.utils.html import format_html
 
 
 @admin.register(UserProfile)
@@ -34,10 +35,47 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('user', 'total_revenue')
-        
-    """
-        def get_user_balance(self, obj):
-            return obj.user_balance  # Anta att user_balance är ett fält i UserProfile-modellen
-        get_user_balance.short_description = 'User Balance'
-        Lägg till get_user_balance i list display senare
-    """
+
+
+@admin.register(Account)
+class AccountAdmin(SimpleHistoryAdmin):
+    list_display = ('user', 'total_revenue', 'current_balance')
+    readonly_fields = ('formatted_withdrawal_history', 'current_balance')
+
+    def current_balance(self, obj):
+        return obj.calculate_balance()
+
+    current_balance.short_description = 'Current Balance'
+
+    def formatted_withdrawal_history(self, obj):
+        withdrawals = obj.withdrawal_history or []
+        if not withdrawals:
+            return "No withdrawal history."
+
+        table_rows = "".join(
+            f"<tr><td>{w['date']}</td><td>{w['amount']}</td></tr>"
+            for w in sorted(withdrawals, key=lambda x: x['date'], reverse=True)
+        )
+
+        return format_html(
+            f"""
+            <table style="width:100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Date</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>{table_rows}</tbody>
+            </table>
+        """
+        )
+
+    formatted_withdrawal_history.short_description = 'Withdrawal History'
+
+    fieldsets = (
+        (
+            'Withdrawal History',
+            {'fields': ('formatted_withdrawal_history', 'current_balance')},
+        ),
+    )

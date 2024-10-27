@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'bag',
     'crispy_forms',
     'crispy_bootstrap5',
-    'storages'
+    'storages',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
