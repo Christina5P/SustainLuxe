@@ -221,9 +221,10 @@ class WithdrawalForm(forms.ModelForm):
 
     def save(self, commit=True):
         account = super().save(commit=False)
-        account.user = (
-            self.account.user
-        )  
+        account.user = self.account.user
+        account.bank_account_number = self.cleaned_data['bank_account_number'] 
+        print(f"Bank account number: {account.bank_account_number}")
+        
         if commit:
-            account.save()  
+            account.save()
         return account

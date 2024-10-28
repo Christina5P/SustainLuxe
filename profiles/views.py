@@ -135,13 +135,17 @@ def withdrawal_view(request):
         form = WithdrawalForm(request.POST, account=account)
         if form.is_valid():
             amount = form.cleaned_data['amount']
+            account.bank_account_number = form.cleaned_data[
+                'bank_account_number'
+            ]
+            account.save()
             if account.request_payout(amount):
                 messages.success(request, 'Withdrawal requested successfully.')
             else:
                 messages.error(request, 'Error processing withdrawal.')
             return redirect('withdrawal')
-
-    form = WithdrawalForm(account=account)
+    else:
+        form = WithdrawalForm(account=account)
 
     withdrawal_history = account.withdrawal_history
     pending_requests = account.get_pending_requests()

@@ -75,7 +75,9 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    total_revenue = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_revenue = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0.00
+    )
     withdrawal_history = models.JSONField(default=list, blank=True)
     history = HistoricalRecords(
         history_id_field=models.AutoField(primary_key=True)
@@ -104,15 +106,19 @@ class Account(models.Model):
     def request_payout(self, amount):
         amount = Decimal(amount).quantize(Decimal("0.01"))
         if amount <= self.calculate_balance():
-
-            self.withdrawal_history.append({
+            withdrawal_entry = {
                 'amount': float(amount),
                 'date': timezone.now().isoformat(),
-                'status': 'pending'
-            })
+                'status': 'pending',
+            }
+            self.withdrawal_history.append(withdrawal_entry)
+            print(f"Withdrawal entry: {withdrawal_entry}")
+            print(
+                f"Withdrawal History (before save): {self.withdrawal_history}"
+            )
 
             self.pending_payout = amount
-            self.payout_requested_at = timezone.now()
+            self.payout_requested_at = timezone.now().isoformat(),
             self.save()
             return True
         return False
@@ -130,12 +136,21 @@ class Account(models.Model):
             for withdrawal in reversed(self.withdrawal_history):
                 if withdrawal['status'] == 'pending':
                     withdrawal['status'] = 'completed'
-                    withdrawal['processed_date'] = timezone.now()
+                    withdrawal['processed_date'] = timezone.now().isoformat(),
                     break
 
-            # Återställ väntande utbetalning
             self.pending_payout = 0
             self.payout_requested_at = None
             self.save()
             return True
         return False
+
+
+def get_pending_requests(self):
+    pending_requests = []
+    for w in self.withdrawal_history:
+        if isinstance(w, dict) and 'status' in w:
+            if w['status'] == 'pending':
+                pending_requests.append(w)
+    return pending_requests
+

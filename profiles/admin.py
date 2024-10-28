@@ -37,7 +37,7 @@ class AccountAdmin(SimpleHistoryAdmin):
     )
     list_filter = (
         'pending_payout',
-        PayoutStatusFilter,  # Use the custom filter here
+        'payout_status',
     )
     actions = ['process_payouts']
 
@@ -118,7 +118,7 @@ class AccountAdmin(SimpleHistoryAdmin):
                 </thead>
                 <tbody>{table_rows}</tbody>
             </table>
-        """
+            """
         )
 
     formatted_withdrawal_history.short_description = 'Withdrawal History'
