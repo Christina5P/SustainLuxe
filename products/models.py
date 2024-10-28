@@ -20,6 +20,9 @@ class Category(models.Model):
         'self', blank=True, related_name='subcategories', symmetrical=False
     )
 
+    def get_friendly_name(self):
+        return self.friendly_name if self.friendly_name else self.name
+
     def __str__(self):
         return self.name
 

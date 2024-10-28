@@ -12,7 +12,7 @@ class ProductForm(forms.ModelForm):
     image = forms.ImageField(
         label='Image', required=False, widget=CustomClearableFileInput
     )
-    Category = forms.ModelChoiceField(
+    categories = forms.ModelMultipleChoiceField(
         queryset=Category.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         required=False
@@ -26,7 +26,7 @@ class ProductForm(forms.ModelForm):
         self.fields['categories'].choices = friendly_names
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'border-black rounded-0'
-
+      
 
 class ProductFilterForm(forms.Form):
     categories = forms.ModelMultipleChoiceField(

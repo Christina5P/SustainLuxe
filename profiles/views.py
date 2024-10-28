@@ -13,6 +13,7 @@ from decimal import Decimal
 from django.db import transaction
 from django.utils import timezone
 from .utils import get_total_balance
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -101,13 +102,13 @@ def account_details(request, user_id):
     account = get_object_or_404(Account, user=request.user)
     orders = Order.objects.filter(user_profile=profile)
     template = 'profiles/account_details.html'
-
-    products = ProductsProduct.objects.filter(user=user, sold=False)
+    products = ProductsProduct.objects.filter(sold=False)
     sold_products = ProductsProduct.objects.filter(user=user, sold=True)
-
-    # Använd den nya metoden för att beräkna tillgänglig balans
     available_balance = account.calculate_balance()
     withdrawal_history = account.withdrawal_history
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
         'products': products,
@@ -117,6 +118,7 @@ def account_details(request, user_id):
         'orders': orders,
         'user': request.user,
         'withdrawal_history': withdrawal_history,
+        'page_obj': page_obj,
     }
 
     return render(request, template, context)

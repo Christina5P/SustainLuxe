@@ -6,6 +6,7 @@ from django.db.models.functions import Lower
 from .models import Product, Fabric, Category, Brand, Condition, Size
 from .forms import ProductForm, ProductFilterForm
 
+
 main_categories = Category.objects.filter(parent_categories=None)
 
 
