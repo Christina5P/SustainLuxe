@@ -1,46 +1,96 @@
 from django.contrib import admin
-from .models import UserProfile, Account
-from simple_history.admin import SimpleHistoryAdmin
 from django.utils.html import format_html
+from .models import Account
+from simple_history.admin import SimpleHistoryAdmin
 
 
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('get_username', 'get_full_name', 'get_email', 'phone_number', 'street_address1', 'postcode', 'town_or_city', 'country', 'total_revenue')
-    list_filter = ('country',)
-    search_fields = ('user__username', 'user__email', 'phone_number', 'street_address1', 'postcode', 'town_or_city')
+class PayoutStatusFilter(admin.SimpleListFilter):
+    title = 'Payout Status'
+    parameter_name = 'payout_status'
 
-    def get_username(self, obj):
-        return obj.user.username
-    get_username.short_description = 'Username'
+    def lookups(self, request, model_admin):
+        return (
+            ('pending', 'Pending'),
+            ('completed', 'Completed'),
+        )
 
-    def get_full_name(self, obj):
-        return obj.user.get_full_name()
-    get_full_name.short_description = 'Full Name'
-
-    def get_email(self, obj):
-        return obj.user.email
-    get_email.short_description = 'Email'
-
-    fieldsets = (
-        ('User Information', {
-            'fields': ('user', 'full_name', 'email')
-        }),
-        ('Contact Information', {
-            'fields': ('phone_number', 'street_address1', 'postcode', 'town_or_city', 'country')
-        }),
-        ('Financial Information', {
-            'fields': ('total_revenue',)
-        }),
-    )
-
-    readonly_fields = ('user', 'total_revenue')
+    def queryset(self, request, queryset):
+        if self.value() == 'pending':
+            return queryset.filter(pending_payout__gt=0)
+        if self.value() == 'completed':
+            return queryset.filter(pending_payout=0)
+        return queryset
 
 
 @admin.register(Account)
 class AccountAdmin(SimpleHistoryAdmin):
-    list_display = ('user', 'total_revenue', 'current_balance')
-    readonly_fields = ('formatted_withdrawal_history', 'current_balance')
+    list_display = (
+        'user',
+        'current_balance',
+        'pending_payout',
+        'payout_status_display',
+        'bank_account_number',
+    )
+    readonly_fields = (
+        'formatted_withdrawal_history',
+        'current_balance',
+    )
+    list_filter = (
+        'pending_payout',
+        PayoutStatusFilter,  # Use the custom filter here
+    )
+    actions = ['process_payouts']
+
+    fieldsets = (
+        (
+            'Account Information',
+            {
+                'fields': (
+                    'user',
+                    'current_balance',
+                    'bank_account_number',
+                )
+            },
+        ),
+        (
+            'Payout Information',
+            {
+                'fields': (
+                    'pending_payout',
+                    'payout_requested_at',
+                    'payout_status',
+                ),
+            },
+        ),
+        (
+            'Withdrawal History',
+            {'fields': ('formatted_withdrawal_history',)},
+        ),
+    )
+
+    def payout_status_display(self, obj):
+        return format_html(
+            '<span style="color: {};">{}</span>',
+            'red' if obj.pending_payout > 0 else 'green',
+            'Pending' if obj.pending_payout > 0 else 'Completed',
+        )
+
+    payout_status_display.short_description = 'Payout Status'
+
+    def process_payouts(self, request, queryset):
+        for account in queryset:
+            if account.process_payout():
+                self.message_user(
+                    request, f'Payout processed for {account.user.username}.'
+                )
+            else:
+                self.message_user(
+                    request,
+                    f'No pending payout for {account.user.username}.',
+                    level='warning',
+                )
+
+    process_payouts.short_description = 'Process Pending Payouts'
 
     def current_balance(self, obj):
         return obj.calculate_balance()
@@ -72,10 +122,3 @@ class AccountAdmin(SimpleHistoryAdmin):
         )
 
     formatted_withdrawal_history.short_description = 'Withdrawal History'
-
-    fieldsets = (
-        (
-            'Withdrawal History',
-            {'fields': ('formatted_withdrawal_history', 'current_balance')},
-        ),
-    )

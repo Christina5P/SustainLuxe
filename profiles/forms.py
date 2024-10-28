@@ -3,7 +3,7 @@ from .models import UserProfile
 from products.models import Product, Size, Condition, Fabric
 from decimal import Decimal
 from django.utils.safestring import mark_safe
-import json
+from .models import Account
 
 
 class UserProfileForm(forms.ModelForm):
@@ -187,47 +187,12 @@ def clean_email(self):
     return email
 
 
-class WithdrawalHistoryWidget(forms.Widget):
-    def render(self, name, value, attrs=None, renderer=None):
-        if not value:
-            return "No withdrawal history."
+class WithdrawalForm(forms.ModelForm):
 
-        try:
-            withdrawals = (
-                json.loads(value) if isinstance(value, str) else value
-            )
-            withdrawals.sort(key=lambda x: x['date'], reverse=True)
-        except (json.JSONDecodeError, AttributeError):
-            return "Invalid withdrawal history data"
+    bank_account_number = forms.CharField(
+        label='Bank Account Number', max_length=255
+    )
 
-        table_html = """
-        <table style="width:100%; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Date</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-        """
-
-        for withdrawal in withdrawals:
-            table_html += f"""
-                <tr>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{withdrawal['date']}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">{withdrawal['amount']}</td>
-                </tr>
-            """
-
-        table_html += """
-            </tbody>
-        </table>
-        """
-
-        return mark_safe(table_html)
-
-
-class WithdrawalForm(forms.Form):
     amount = forms.DecimalField(
         label='Withdrawal Amount',
         min_value=Decimal('0.01'),
@@ -235,17 +200,14 @@ class WithdrawalForm(forms.Form):
         decimal_places=2,
         widget=forms.NumberInput(attrs={'step': '0.01'}),
     )
-    withdrawal_history = forms.CharField(
-        widget=WithdrawalHistoryWidget, required=False
-    )
+
+    class Meta:
+        model = Account  
+        fields = ['amount', 'bank_account_number']
 
     def __init__(self, *args, **kwargs):
         self.account = kwargs.pop('account', None)
-        super(WithdrawalForm, self).__init__(*args, **kwargs)
-        if self.account:
-            self.fields['withdrawal_history'].initial = (
-                self.account.withdrawal_history
-            )
+        super().__init__(*args, **kwargs)    
 
     def clean_amount(self):
         amount = self.cleaned_data['amount']
@@ -256,3 +218,12 @@ class WithdrawalForm(forms.Form):
                     f"Insufficient funds. Available balance: {available_balance}"
                 )
         return amount
+
+    def save(self, commit=True):
+        account = super().save(commit=False)
+        account.user = (
+            self.account.user
+        )  
+        if commit:
+            account.save()  
+        return account

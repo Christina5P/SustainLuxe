@@ -80,30 +80,62 @@ class Account(models.Model):
     history = HistoricalRecords(
         history_id_field=models.AutoField(primary_key=True)
     )
+    pending_payout = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
+    payout_requested_at = models.DateTimeField(null=True, blank=True)
+    payout_status = models.CharField(
+        max_length=20,
+        choices=[('pending', 'Pending'), ('completed', 'Completed')],
+        default='pending',
+    )
+    bank_account_number = models.CharField(
+        max_length=255, blank=True, null=True
+    )
 
     def calculate_balance(self):
-        # Beräkna totala intäkter
-        sold_products = ProductsProduct.objects.filter(user=self.user, sold=True)
-        total_revenue = sum(product.price for product in sold_products) * Decimal('0.7')
+        total_withdrawals = sum(
+            Decimal(w['amount'])
+            for w in self.withdrawal_history
+            if w.get('status') == 'completed'
+        )
+        return self.total_revenue - total_withdrawals
 
-        # Beräkna totalen av alla uttag
-        total_withdrawals = sum(Decimal(entry['amount']) for entry in self.withdrawal_history)
-
-        # Beräkna och returnera aktuell balans
-        return total_revenue - total_withdrawals
-
-    def withdrawal(self, amount):
+    def request_payout(self, amount):
         amount = Decimal(amount).quantize(Decimal("0.01"))
-        available_balance = self.calculate_balance()
-
         if amount <= self.calculate_balance():
+
             self.withdrawal_history.append({
                 'amount': float(amount),
-                'date': timezone.now().isoformat()
+                'date': timezone.now().isoformat(),
+                'status': 'pending'
             })
+
+            self.pending_payout = amount
+            self.payout_requested_at = timezone.now()
             self.save()
             return True
         return False
 
-    def __str__(self):
-        return self.user.username
+    def get_pending_requests(self):
+        pending_requests = []
+        for w in self.withdrawal_history:
+            if isinstance(w, dict) and 'status' in w:
+                if w['status'] == 'pending':
+                    pending_requests.append(w)
+        return pending_requests
+
+    def process_payout(self):
+        if self.pending_payout > 0:
+            for withdrawal in reversed(self.withdrawal_history):
+                if withdrawal['status'] == 'pending':
+                    withdrawal['status'] = 'completed'
+                    withdrawal['processed_date'] = timezone.now()
+                    break
+
+            # Återställ väntande utbetalning
+            self.pending_payout = 0
+            self.payout_requested_at = None
+            self.save()
+            return True
+        return False

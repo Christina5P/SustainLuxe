@@ -180,6 +180,6 @@ SustaineLuxe is host on GitHub and deployed on Heroku
 - https://groups.google.com/g/django-users/c/aSj3jGX2CLk -tutoring expire date
 - https://stackoverflow.com/questions/49366010/how-to-set-an-expiry-date-for-an-object-in-django 
 - https://django-simple-history.readthedocs.io/en/latest/ 
-
+- https://medium.com/django-unleashed/mastering-the-art-of-django-simple-history-a-tutorial-for-medium-with-examples-c25196339130
 
 

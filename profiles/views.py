@@ -12,6 +12,7 @@ from django.contrib import messages
 from decimal import Decimal
 from django.db import transaction
 from django.utils import timezone
+from .utils import get_total_balance
 
 
 @login_required
@@ -97,7 +98,7 @@ def saleorder_success(request,):
 def account_details(request, user_id):
     user = get_object_or_404(User, id=user_id)
     profile = user.userprofile
-    account, created = Account.objects.get_or_create(user_id=user_id)
+    account = get_object_or_404(Account, user=request.user)
     orders = Order.objects.filter(user_profile=profile)
     template = 'profiles/account_details.html'
 
@@ -126,39 +127,32 @@ def withdrawal_view(request):
     account = get_object_or_404(Account, user=request.user)
     available_balance = account.calculate_balance()
 
-    if request.method == 'POST':
-        try:
-            amount = Decimal(request.POST.get('amount', '0')).quantize(
-                Decimal("0.01")
-            )
-        except (ValueError, TypeError):
-            messages.error(request, 'Invalid withdrawal amount.')
-            return redirect('withdrawal')
+    form = WithdrawalForm(
+        account=account
+    )  
 
-        if amount <= available_balance:
-            success = account.withdrawal(amount)
-            if success:
-                account.history.create(
-                    history_date=timezone.now(),
-                    history_type="~",
-                    history_change_reason="Withdrawal",
-                    history_user=request.user,
-                    id=account.id,
-                    total_revenue=account.total_revenue,
-                    withdrawal_history=account.withdrawal_history,
-                )
-                messages.success(request, 'Withdrawal successful.')
+    if request.method == 'POST':
+        form = WithdrawalForm(request.POST, account=account)
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            if account.request_payout(amount):
+                messages.success(request, 'Withdrawal requested successfully.')
             else:
                 messages.error(request, 'Error processing withdrawal.')
-        else:
-            messages.error(request, 'Insufficient funds for withdrawal.')
+            return redirect('withdrawal')
 
-        return redirect('withdrawal')
+    form = WithdrawalForm(account=account)
+
+    withdrawal_history = account.withdrawal_history
+    pending_requests = account.get_pending_requests()
 
     context = {
+        'form': form,
         'available_balance': available_balance,
         'user': request.user,
-        }
+        'withdrawal_history': withdrawal_history,
+        'pending_requests': pending_requests,
+    }
 
     return render(request, 'profiles/withdrawal.html', context)
 
