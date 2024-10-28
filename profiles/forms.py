@@ -190,7 +190,8 @@ def clean_email(self):
 class WithdrawalForm(forms.ModelForm):
 
     bank_account_number = forms.CharField(
-        label='Bank Account Number', max_length=255
+        label='Bank Account Number',
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
     )
 
     amount = forms.DecimalField(
@@ -198,7 +199,7 @@ class WithdrawalForm(forms.ModelForm):
         min_value=Decimal('0.01'),
         max_digits=10,
         decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '0.01'}),
+        widget=forms.NumberInput(attrs={'step': '0.01', 'class': 'form-control'}),
     )
 
     class Meta:
@@ -208,6 +209,8 @@ class WithdrawalForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.account = kwargs.pop('account', None)
         super().__init__(*args, **kwargs)    
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
     def clean_amount(self):
         amount = self.cleaned_data['amount']
@@ -224,7 +227,7 @@ class WithdrawalForm(forms.ModelForm):
         account.user = self.account.user
         account.bank_account_number = self.cleaned_data['bank_account_number'] 
         print(f"Bank account number: {account.bank_account_number}")
-        
+
         if commit:
             account.save()
         return account

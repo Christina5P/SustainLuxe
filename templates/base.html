@@ -108,9 +108,10 @@
                 <li><hr class="dropdown-divider"></li>
             {% endif %}
             <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="fas fa-user-cog me-2"></i>Profile settings</a></li>
+            <li><a href="{% url 'order_list' %}" class="dropdown-item"><i class="fas fa-history me-2"></i>Order history</a></li>
             <li><a href="{% url 'sale_product' %}" class="dropdown-item"><i class="fas fa-tag me-2"></i>Sale Registration Form</a></li>
             <li><a href="{% url 'account_details' user_id=user.id %}" class="dropdown-item"><i class="fas fa-info-circle me-2"></i>Account details</a></li>
-            <li><a href="{% url 'order_list' %}" class="dropdown-item"><i class="fas fa-history me-2"></i>Order history</a></li>
+            
             <li><a href="{% url 'withdrawal' %}" class="dropdown-item"><i class="fas fa-money-bill-wave me-2"></i>Withdrawal</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a href="{% url 'account_logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>

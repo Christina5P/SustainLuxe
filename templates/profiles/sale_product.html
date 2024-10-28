@@ -3,42 +3,56 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<body>
-    <div class="container mt-5 mb-5">
-        <h2 class="text-center">Sale Registration Form</h2>
-        
-        <form method="post">
-            {% csrf_token %}
-         
-            <div class="card">
-            <div class="card-body ">
-                     {{ form|crispy }}
-           
-                <fieldset class="form-group">
-                      
-                <!--<label class="form-check-label" for="{{ choice.id_for_label }}">-->
-                        {{ choice }}                                    
-                </label>
-             </div>
-
-              </div>
-                </fieldset>
-                
-                    <button type="submit" class="btn btn-primary btn-block">Create an Order</button>
-                    <div class="card-footer ">
+<div class="container my-5">
+    <h2 class="text-center mb-4">Sale Registration Form</h2>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="post" class="sale-form">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-body">
+                        {{ form|crispy }}
+                        <fieldset class="form-group">
+                            {{ choice }}
+                        </fieldset>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Create an Order</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
-        </form>
- </div>
-    {% if messages %}
-    <div id="toast-container">
-        {% for message in messages %}
-            {% include 'includes/toast_notification/toast_saleconfirmation.html' %}
-        {% endfor %}
     </div>
+</div>
+
+{% if messages %}
+<div id="toast-container" class="position-fixed bottom-0 end-0 p-3">
+    {% for message in messages %}
+        {% include 'includes/toast_notification/toast_saleconfirmation.html' %}
+    {% endfor %}
+</div>
 {% endif %}
 
+<style>
+    .card {
+        transition: all 0.3s ease-in-out;
+    }
+    .card:hover {
+        box-shadow: 0 8px 26px -4px rgba(0,0,0,0.15), 0 8px 9px -5px rgba(0,0,0,0.06);
+    }
+    .btn-primary {
+        transition: all 0.3s ease-in-out;
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    .form-control:focus {
+        border-color: #4285f4;
+        box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+    }
+</style>
+
+
 {% endblock %}
- </body>
-</html>
