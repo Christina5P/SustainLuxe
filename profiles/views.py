@@ -102,7 +102,9 @@ def account_details(request, user_id):
     account = get_object_or_404(Account, user=request.user)
     orders = Order.objects.filter(user_profile=profile)
     template = 'profiles/account_details.html'
-    products = ProductsProduct.objects.filter(sold=False)
+    products = ProductsProduct.objects.filter(user=request.user).order_by(
+        '-created_at'
+    )
     sold_products = ProductsProduct.objects.filter(user=user, sold=True)
     available_balance = account.calculate_balance()
     withdrawal_history = account.withdrawal_history

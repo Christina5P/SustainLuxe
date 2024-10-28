@@ -15,6 +15,8 @@ class ProductAdmin(admin.ModelAdmin):
         'price',
         'condition',
         'get_user',
+        'created_at',
+        'listed_at',
         'sold',
         'return_option',
         'expired',
