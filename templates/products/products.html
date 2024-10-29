@@ -119,51 +119,10 @@
 
 
 <div class="btt-button shadow-sm rounded-0 border border-black">
-    <a class="btt-link d-flex h-100" aria-label="Scroll to top">
+    <a class="btt-link d-flex h-100  justify-content-end align-items-center" aria-label="Scroll to top">
         <i class="fa-solid fa-circle-chevron-up"></i>
     </a>
 </div>
 
 {% endblock %}
 
-
-{% block postloadjs %}
-<script type="text/javascript">
-    // Scroll to top
-    $(document).ready(function () {
-        $('.btt-link').click(function(e) {
-            e.preventDefault();  
-            window.scrollTo(0, 0);
-        });
-
-         // Sort by function
-        $('#sort-selector').change(function () {
-            var selector = $(this);
-            var currentUrl = new URL(window.location.href);  
-
-            var selectedVal = selector.val();
-            if (selectedVal != "reset") {
-                var sort = selectedVal.split("_")[0];
-                var direction = selectedVal.split("_")[1];
-
-                currentUrl.searchParams.set("sort", sort);
-                currentUrl.searchParams.set("direction", direction);
-
-                window.location.replace(currentUrl);
-            } else {
-                currentUrl.searchParams.delete("sort");
-                currentUrl.searchParams.delete("direction");
-
-                window.location.replace(currentUrl);
-            }
-        });
-
-        // Clear Filters button
-        $('#clearButton').click(function (e) {
-            e.preventDefault(); 
-            $('input[type="checkbox"]').prop('checked', false);
-            $('#filterForm').submit();
-        }); 
-    });
-</script>
-{% endblock %}

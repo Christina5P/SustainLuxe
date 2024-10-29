@@ -72,17 +72,6 @@ footer,
     text-decoration: none; 
 }
 
-/* Page up icon */
-.container {
-    position: fixed; 
-    right: 0; 
-    bottom: 20px; 
-    width: 100%; 
-    display: flex; 
-    justify-content: flex-end; 
-    align-items: center; 
-}
-
 .btt-button {
     background-color: #607D8B; 
     padding: 15px; 

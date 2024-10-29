@@ -25,6 +25,7 @@
 </head>
 <body>
 
+    <header>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
     <div class="container-fluid">
@@ -53,6 +54,7 @@
         </div>
         {% block extra_navbar_content %}
         {% endblock %}
+
         <!-- Right: User info, cart och user icon dropdown -->
         <div class="d-flex align-items-center justify-content-end">
 
@@ -106,10 +108,13 @@
         </div>
     </div>
 </nav>
+    </header>
 
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
 
-
-{% block content %}{% endblock %}
 <!-- Footer -->
 <footer class="text-center text-lg-start bg-body-tertiary text-muted mt-5 py-4">
     <div class="container-fluid">
@@ -160,7 +165,6 @@
     </div>
 </footer>
 
-</body>
 
 {% if messages %}
 
@@ -191,10 +195,7 @@
 {% endblock %}
 
 {% block postloadjs %}
-
- <script type="text/javascript">
-
-    // toasts 
+<script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function () {
     var toastElList = [].slice.call(document.querySelectorAll('.toast'));
     var toastList = toastElList.map(function (toastEl) {
@@ -202,6 +203,45 @@
     });
     toastList.forEach(toast => toast.show());
   });
+</script>
+
+<script type="text/javascript">
+    // Scroll to top
+    $(document).ready(function () {
+        $('.btt-link').click(function(e) {
+            e.preventDefault();  
+            window.scrollTo(0, 0);
+        });
+
+         // Sort by function
+        $('#sort-selector').change(function () {
+            var selector = $(this);
+            var currentUrl = new URL(window.location.href);  
+
+            var selectedVal = selector.val();
+            if (selectedVal != "reset") {
+                var sort = selectedVal.split("_")[0];
+                var direction = selectedVal.split("_")[1];
+
+                currentUrl.searchParams.set("sort", sort);
+                currentUrl.searchParams.set("direction", direction);
+
+                window.location.replace(currentUrl);
+            } else {
+                currentUrl.searchParams.delete("sort");
+                currentUrl.searchParams.delete("direction");
+
+                window.location.replace(currentUrl);
+            }
+        });
+
+        // Clear Filters button
+        $('#clearButton').click(function (e) {
+            e.preventDefault(); 
+            $('input[type="checkbox"]').prop('checked', false);
+            $('#filterForm').submit();
+        }); 
+    });
 </script>
 {% endblock %}
 

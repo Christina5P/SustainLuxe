@@ -36,13 +36,22 @@ footer,
 .navbar {
      background-color:#c0cdd4;  
      margin-top: 20px;
-
 }
 
+/* Separator CSS */
+.navbar-nav .nav-item {
+    display: flex; 
+    align-items: center; 
+}
+.navbar-nav .separator::after {
+    content: "|"; 
+    margin-right: 10px; 
+    color: #000;
+    font-weight: 300;
+}
 .carousel-caption {
     margin-bottom: 50px; 
 }
-
 .section-spacing {
     margin-bottom: 1rem; 
 }
@@ -63,11 +72,21 @@ footer,
     text-decoration: none; 
 }
 
-#sort-selector {
-        width: auto;
-        max-width: 200px;
-        font-size: 0.9rem;
-    }
+.btt-button {
+    background-color: #607D8B; 
+    padding: 15px; 
+    border-radius: 50%; 
+    transition: background-color 0.3s; 
+}
+
+.btt-button:hover {
+    background-color: #455A64; 
+}
+
+.btt-link i {
+    font-size: 36px; 
+    color: #fff; 
+}
 
 /*  toasts */
 
@@ -94,7 +113,6 @@ footer,
     font-size: 1.5rem; 
     background-color: transparent;
 }
-
 
 .arrow-up {
     width: 0; 
