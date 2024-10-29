@@ -63,6 +63,12 @@ footer,
     text-decoration: none; 
 }
 
+#sort-selector {
+        width: auto;
+        max-width: 200px;
+        font-size: 0.9rem;
+    }
+
 /*  toasts */
 
 .message-container {

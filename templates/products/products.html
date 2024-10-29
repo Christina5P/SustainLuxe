@@ -2,6 +2,9 @@
 {% load static %}
 {% load crispy_forms_filters %}
 
+<div class="container header-container">
+
+    <!-- search field in navbar-->
 {% block extra_navbar_content %}
 <div class="row">
     <div class="col-md-6 d-flex justify-content-end align-items-center">
@@ -14,6 +17,50 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- Categories Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Categories:</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCategories" aria-controls="navbarCategories" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCategories">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% for main_category in main_categories %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                        {{ main_category.friendly_name|default:main_category.name }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
+                        <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
+                        {% for subcategory in main_category.subcategories.all %}
+                        <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <!-- Sorting products -->
+            <div class="d-flex align-items-center">
+                <select id="sort-selector" class="form-select rounded-0 border">
+                    <option value="reset">Sort by...</option>
+                    <option value="price_asc">Price (low to high)</option>
+                    <option value="price_desc">Price (high to low)</option>
+                    <option value="name_asc">Name (A-Z)</option>
+                    <option value="name_desc">Name (Z-A)</option>
+                    <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
+                    <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</nav>
+        </div>
+    </section>
+
+<!-- Product Filter--> 
 <main>
     <section>
         <div class="container-fluid">
@@ -32,26 +79,91 @@
                     </div>
                 </div>
 
+                <!-- Product cards -->
                 <div class="col-md-9">
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                    <h2 class="logo-font">Products</h2>
+                    <div class="row">
                         {% for product in products %}
-                            <div class="col">
-                                <div class="card">
-                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ product.name }}</h5>
-                                        <p class="card-text">Price: EUR{{ product.price }}</p>
-                                        <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Details</a>
-                                    </div>
-                                </div>
+                        {% if product.is_listed and not product.is_sold %}
+                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                            <a href="{% url 'product_detail' product.id %}">
+                                {% if product.image %}
+                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                                {% endif %}
+                            </a>
+                            <div class="card-body pb-0">
+                                <h5 class="card-title">{{ product.name }}</h5>
                             </div>
-                        {% empty %}
-                            <p>No products found.</p>
-                        {% endfor %}
+                            <div class="card-footer bg-white pt-0 border-0 text-left">
+                                <p class="lead mb-0 font-weight-bold">EUR {{ product.price }}</p>
+                                {% if request.user.is_superuser %}
+                                <small class="ml-3">
+                                    <a href="{% url 'edit_product' product.id %}" class="text-info">Edit</a>
+                                    <a class="text-danger" href="{% url 'delete_product' product.id %}">Delete</a>
+                                </small>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+  </section>
 </main>
+
+
+<div class="btt-button shadow-sm rounded-0 border border-black">
+    <a class="btt-link d-flex h-100" aria-label="Scroll to top">
+        <i class="fa-solid fa-circle-chevron-up"></i>
+    </a>
+</div>
+
+{% endblock %}
+
+
+{% block postloadjs %}
+<script type="text/javascript">
+    // Scroll to top
+    $(document).ready(function () {
+        $('.btt-link').click(function(e) {
+            e.preventDefault();  
+            window.scrollTo(0, 0);
+        });
+
+         // Sort by function
+        $('#sort-selector').change(function () {
+            var selector = $(this);
+            var currentUrl = new URL(window.location.href);  
+
+            var selectedVal = selector.val();
+            if (selectedVal != "reset") {
+                var sort = selectedVal.split("_")[0];
+                var direction = selectedVal.split("_")[1];
+
+                currentUrl.searchParams.set("sort", sort);
+                currentUrl.searchParams.set("direction", direction);
+
+                window.location.replace(currentUrl);
+            } else {
+                currentUrl.searchParams.delete("sort");
+                currentUrl.searchParams.delete("direction");
+
+                window.location.replace(currentUrl);
+            }
+        });
+
+        // Clear Filters button
+        $('#clearButton').click(function (e) {
+            e.preventDefault(); 
+            $('input[type="checkbox"]').prop('checked', false);
+            $('#filterForm').submit();
+        }); 
+    });
+</script>
 {% endblock %}

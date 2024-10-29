@@ -2,7 +2,8 @@
 
 <!doctype html>
 <html lang="en">
-<head>
+    
+    <head>
     {% block meta %}
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta charset="utf-8">
@@ -50,7 +51,8 @@
                 <li class="nav-item mx-2 separator"><a class="nav-link" href="{% url 'sustainable' %}">Sustainable effect</a></li>
             </ul>
         </div>
-
+        {% block extra_navbar_content %}
+        {% endblock %}
         <!-- Right: User info, cart och user icon dropdown -->
         <div class="d-flex align-items-center justify-content-end">
 
@@ -189,7 +191,10 @@
 {% endblock %}
 
 {% block postloadjs %}
-<script>
+
+ <script type="text/javascript">
+
+    // toasts 
   document.addEventListener('DOMContentLoaded', function () {
     var toastElList = [].slice.call(document.querySelectorAll('.toast'));
     var toastList = toastElList.map(function (toastEl) {
