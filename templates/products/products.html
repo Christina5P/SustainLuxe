@@ -1,195 +1,57 @@
 {% extends "base.html" %}
 {% load static %}
-{% load crispy_forms_filters%}
+{% load crispy_forms_filters %}
 
-
-
-<div class="container header-container">
-  {% block extra_navbar_content %}
-        <div class="row">
-            <div class="col"></div>
-                 <!-- Right part of navbar (search ) -->
-        <div class="col-md-6 d-flex justify-content-end align-items-center">
-          
-
-        
-            <!-- Search bar -->
-            <form class="d-none d-md-flex input-group w-75 my-auto  me-4" method="GET" action="{% url 'all_products' %}" style="display: flex; align-items: center;">
-                <input id="search" autocomplete="off" type="text" name="q" class="form-control rounded" placeholder="Search" style="width: 400px; font-size: 16px; ">
-                <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
-            </form>
-        </div>
+{% block extra_navbar_content %}
+<div class="row">
+    <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <form class="d-none d-md-flex input-group w-75 my-auto me-4" method="GET" action="{% url 'all_products' %}">
+            <input id="search" autocomplete="off" type="text" name="q" class="form-control rounded" placeholder="Search" style="width: 400px; font-size: 16px;">
+            <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
+        </form>
     </div>
 </div>
-
 {% endblock %}
-   </div>
 
 {% block content %}
-<!--Main layout-->
 <main>
-  <!-- Products -->
-  <section>
-    <div class="container">
-      <div class="row">
-        <div class="col text-center mt-3">
-          <h2 class="logo-font">Products</h2>
-          {% for c in current_categories %}
-            <a class="category-badge text-decoration-none" href="{% url 'all_products' %}?category={{ c.name }}">
-              <span class="p-2 mt-2 badge badge-white text-black rounded-0 border border-dark">{{ c.friendly_name }}</span>
-            </a>
-          {% endfor %}
-          <hr class="mb-1">
-        </div>
-      </div>
-
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B">
+    <section>
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Categories:</a>
-       <div class="collapse navbar-collapse" id="navbarCategories">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          {% for main_category in main_categories %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-              {{ main_category.friendly_name|default:main_category.name }}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
-              <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
-              {% for subcategory in main_category.subcategories.all %}
-                <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
-              {% endfor %}
-            </ul>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-</nav>
-      <!-- Navbar -->
+            <div class="row">
+                <div class="col-md-3">
+                    <h4 class="mb-0">Product Filter</h4>
+                    <div class="p-3 bg-white border rounded shadow-sm">
+                        <form id="filterForm" method="GET" action="{% url 'all_products' %}">
+                            <button type="submit" class="btn btn-primary me-2">Filter</button>
+                            <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
+                            <hr>
+                            <div class="mb-3">
+                                {{ form.as_p }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
-      <!-- Sorting products-->
-      <div class="row mb-3">
-        <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
-          <div class="sort-select-wrapper w-50">
-            <select id="sort-selector" class="form-select rounded-0 border">
-              <option value="reset">Sort by...</option>
-              <option value="price_asc">Price (low to high)</option>
-              <option value="price_desc">Price (high to low)</option>
-              <option value="name_asc">Name (A-Z)</option>
-              <option value="name_desc">Name (Z-A)</option>
-              <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
-              <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-        <div class="row">
-            <div class="product-container col-10 offset-1">
-                <div class="row mt-1 mb-2">
-                   
-                  
-
-          
- <h4 class="col-md-3">Product Filter</h4>
-<div class="row">
-  <div class="col-md-3"> 
-  <form id="filterForm" method="GET" action="{% url 'all_products' %}">
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Filter</button>
-   <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
-</form>
-  </div>
-</div>
-  
-  <!-- Product cards-->
-                <div class="row">
-                    {% for product in products %}
-                       {% if product.is_listed and not product.is_sold %}
-                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                            <div class="card h-100 border-0">
-                                {% if product.image %}
-                                    <a href="{% url 'product_detail' product.id %}">
-                                        <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                                    </a>
-                                {% else %}
-                                    <a href="{% url 'product_detail' product.id %}">
-                                        <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-                                    </a>
-                                {% endif %}
-                                <div class="card-body pb-0">
-                                    <p class="mb-0">{{ product.name }}</p>
-                                </div>
-                                <div class="card-footer bg-white pt-0 border-0 text-left">
-                                    <div class="row">
-                                        <div class="col">
-                                            <p class="lead mb-0 text-left font-weight-bold">EUR {{ product.price }}</p>
-                                                                                   
-                                            {% if request.user.is_superuser %}
-                                                <small class="ml-3">
-                                                    <a href="{% url 'edit_product' product.id %}">Edit</a>
-                                                    <a class="text-danger" href="{% url 'delete_product' product.id %}">Delete</a>
-                                                </small>
-                                            {% endif %}
-                                        </div>
+                <div class="col-md-9">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                        {% for product in products %}
+                            <div class="col">
+                                <div class="card">
+                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class="card-text">Price: EUR{{ product.price }}</p>
+                                        <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Details</a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
+                        {% empty %}
+                            <p>No products found.</p>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="btt-button shadow-sm rounded-0 border border-black">
-        <a class="btt-link d-flex h-100">
-            <i class="fas fa-arrow-up text-black mx-auto my-auto"></i>
-        </a>	
-    </div>
-{% endblock %}
-
-
-{% block postloadjs %}
-<script type="text/javascript">
-  // Scroll to top
-  $(document).ready(function () {
-    $('.btt-link').click(function(e) {
-      e.preventDefault();  
-      window.scrollTo(0, 0);
-    });
-
-    // Sort by function
-    $('#sort-selector').change(function () {
-      var selector = $(this);
-      var currentUrl = new URL(window.location.href);  
-
-      var selectedVal = selector.val();
-      if (selectedVal != "reset") {
-        var sort = selectedVal.split("_")[0];
-        var direction = selectedVal.split("_")[1];
-
-        currentUrl.searchParams.set("sort", sort);
-        currentUrl.searchParams.set("direction", direction);
-
-        window.location.replace(currentUrl);
-      } else {
-        currentUrl.searchParams.delete("sort");
-        currentUrl.searchParams.delete("direction");
-
-        window.location.replace(currentUrl);
-      }
-    });
-
-    // Clear Filters button
-    $('#clearButton').click(function (e) {
-      e.preventDefault(); 
-      $('input[type="checkbox"]').prop('checked', false);
-      $('#filterForm').submit();
-    }); 
-  });
-</script>
+    </section>
+</main>
 {% endblock %}

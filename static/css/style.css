@@ -36,13 +36,22 @@ footer,
 .navbar {
      background-color:#c0cdd4;  
      margin-top: 20px;
-
 }
 
+/* Separator CSS */
+.navbar-nav .nav-item {
+    display: flex; 
+    align-items: center; 
+}
+.navbar-nav .separator::after {
+    content: "|"; 
+    margin-right: 10px; 
+    color: #000;
+    font-weight: 300;
+}
 .carousel-caption {
     margin-bottom: 50px; 
 }
-
 .section-spacing {
     margin-bottom: 1rem; 
 }
@@ -61,6 +70,33 @@ footer,
 
 .nav-link {
     text-decoration: none; 
+}
+
+/* Page up icon */
+.container {
+    position: fixed; 
+    right: 0; 
+    bottom: 20px; 
+    width: 100%; 
+    display: flex; 
+    justify-content: flex-end; 
+    align-items: center; 
+}
+
+.btt-button {
+    background-color: #607D8B; 
+    padding: 15px; 
+    border-radius: 50%; 
+    transition: background-color 0.3s; 
+}
+
+.btt-button:hover {
+    background-color: #455A64; 
+}
+
+.btt-link i {
+    font-size: 36px; 
+    color: #fff; 
 }
 
 /*  toasts */
@@ -88,7 +124,6 @@ footer,
     font-size: 1.5rem; 
     background-color: transparent;
 }
-
 
 .arrow-up {
     width: 0; 

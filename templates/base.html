@@ -3,15 +3,13 @@
 <!doctype html>
 <html lang="en">
 <head>
-
     {% block meta %}
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% endblock %}
 
-    {% block extra_meta %}
-    {% endblock %}
+    {% block extra_meta %}{% endblock %}
     
     {% block corecss %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -19,184 +17,147 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% endblock %}
-
-    {% block extra_css %}      
-    {% endblock %}
-
+    
+    {% block extra_css %}{% endblock %}
 
     <title>SustainLuxe {% block extra_title %}{% endblock %}</title>
-
-    {% block page_header %}
 </head>
-<body >   
-  
+<body>
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
-    <header class="container-fluid"> 
-        <div class="row align-items-center">
-            <!-- Left part of navbar -->
-            <div class="col-md-6 d-flex align-items-center justify-content-start"> 
-                <!-- Toggle button -->
-                <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
+    <div class="container-fluid">
+        
+        <!-- Left: Logo och toggle button -->
+        <div class="d-flex align-items-center" style="margin-left: -20px;">
+            <!-- Toggle button for mobile view -->
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
 
-                <!-- Navbar brand -->
-                <a class="navbar-brand" href="#">
-                    <img src="{% static 'media/logo.png' %}" height="70" alt="SustainLuxe" loading="lazy" />
-                </a>
-
-                <!--Links to sell,home,info -->
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left links -->
-                    <ul class="navbar-nav me-auto mb-2"> 
-                        <li class="nav-item mx-2">
-                            <a class="nav-link" href="{% url 'home' %}">Home</a>
-                        </li>
-                        <li class="nav-item mx-2">
-                            <a class="nav-link" href="{% url 'sell' %}">Sell with us</a>
-                        </li>
-                        <li class="nav-item mx-2">
-                            <a class="nav-link" href="{% url 'products' %}">Shop</a>
-                        </li>
-                        <li class="nav-item mx-2">
-                            <a class="nav-link" href="{% url 'sustainable' %}">Sustainable effect</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <!-- Navbar brand (logo) -->
+            <a class="navbar-brand ms-3" href="#" style="margin-left: -15px;">
+                <img src="{% static 'media/logo.png' %}" height="70" alt="SustainLuxe" loading="lazy" />
+            </a>
         </div>
 
-               <div class="extra-navbar-content">
-                {% block extra_navbar_content %}
-   
-                 {% endblock %}
-                 
-        <!-- Cart -->
-        <a class="nav-link d-flex ml-auto{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
-            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-            <span class="ms-3">
-                {% if grand_total %}
-                    EUR{{ grand_total|floatformat:2 }}
-                {% else %}
-                    EUR 0.00
-                {% endif %}
-            </span>
-        </a>
+        <!-- Center: Links with separators -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
+            <ul class="navbar-nav">
+                <li class="nav-item mx-2 separator"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                <li class="nav-item mx-2 separator"><a class="nav-link" href="{% url 'sell' %}">Sell with us</a></li>
+                <li class="nav-item mx-2 separator"><a class="nav-link" href="{% url 'products' %}">Shop</a></li>
+                <li class="nav-item mx-2 separator"><a class="nav-link" href="{% url 'sustainable' %}">Sustainable effect</a></li>
+            </ul>
+        </div>
 
-                </div>
-                <!-- Welcome status-->
-            <div class="col-md-6 d-flex justify-content-center ">
-                <span class="navbar-text ml-auto logged-in">
+        <!-- Right: User info, cart och user icon dropdown -->
+        <div class="d-flex align-items-center justify-content-end">
+
+            <!-- Cart total -->
+            <div class="text-center me-3">
+                <span class="navbar-text">
                     {% if user.is_authenticated %}
-                        Welcome {{ user }} <br>You are logged in
+                        Welcome {{ user }} <br> You are logged in
                     {% else %}
                         You are not logged in
                     {% endif %}
                 </span>
             </div>
-
-          <!-- User dropdown -->
-        <div class="dropdown">
-    <a id="navbarDropdownMenuAvatar" role="button" class="dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false" href="#">
-        <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-        {% if request.user.is_authenticated %}
-            {% if request.user.is_superuser %}
-                <li><a href="{% url 'add_product'%}" class="dropdown-item"><i class="fas fa-plus-circle me-2"></i>Product Management</a></li>
-                <li><hr class="dropdown-divider"></li>
-            {% endif %}
-            <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="fas fa-user-cog me-2"></i>Profile settings</a></li>
-            <li><a href="{% url 'order_list' %}" class="dropdown-item"><i class="fas fa-history me-2"></i>Order history</a></li>
-            <li><a href="{% url 'sale_product' %}" class="dropdown-item"><i class="fas fa-tag me-2"></i>Sale Registration Form</a></li>
-            <li><a href="{% url 'account_details' user_id=user.id %}" class="dropdown-item"><i class="fas fa-info-circle me-2"></i>Account details</a></li>
             
-            <li><a href="{% url 'withdrawal' %}" class="dropdown-item"><i class="fas fa-money-bill-wave me-2"></i>Withdrawal</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a href="{% url 'account_logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-        {% else %}
-            <li><a href="{% url 'account_login' %}" class="dropdown-item"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
-            <li><a href="{% url 'account_signup' %}" class="dropdown-item"><i class="fas fa-user-plus me-2"></i>Sign Up</a></li>
-        {% endif %}
-    </ul>
-</div>
-        </div>
-
-    </header>
-</nav>
-{% endblock %}
-
-
-{% block content %}
-{% endblock %}
-
-<!-- Footer -->
-<footer class="text-center text-lg-start bg-body-tertiary text-muted">
-    <div class="container-fluid"> 
-    <!-- Section: Social media -->
-    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-        <div class="d-flex justify-content-center align-items-center mb-3">
-            <span>Sign up for a newsletter</span>
-            <form class="d-none d-md-flex input-group w-75 my-auto">
-                <input id="mdb-5-search-input" autocomplete="off" type="search" class="form-control rounded" placeholder="Search">
-            </form>
-        </div>
-
-        <div class="d-flex justify-content-center">
-            <a href="" class="me-5 text-reset">
-                <i class="fab fa-facebook-f"></i>
+            <!-- Cart icon -->
+            <a class="nav-link me-3{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                <span class="ms-2">
+                    {% if grand_total %}
+                        EUR{{ grand_total|floatformat:2 }}
+                    {% else %}
+                        EUR 0.00
+                    {% endif %}
+                </span>
             </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="" class="me-4 text-reset">
-                <i class="fab fa-instagram"></i>
-            </a>
-        </div>
-    </section>
 
-    <!-- Section: Links  -->
-    <section>
-        <div class="container text-center text-md-start mt-5">
-            <div class="row mt-3">
-                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        <i class="fa fa-cc-visa" aria-hidden="true"></i>
-                        <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
-                        <i class="fa fa-cc-amex" aria-hidden="true"></i>
-                    </h6>
-                </div>
-
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <p>
-                        <a href="#!" class="text-reset">ABOUT US</a>
-                    </p>
-                </div>
-
-                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <p>
-                        <a href="#!" class="text-uppercase fw-bold mb-4">Customer Service</a>
-                    </p>
-                    <p><i class="fas fa-home me-3"></i> <br>Sundsvall, Sweden</p>
-                    <p>
-                        <i class="fas fa-envelope me-3"></i>
-                        info@example.com
-                    </p>
-                    <p><i class="fas fa-phone me-3"></i><br> +46 70 175 35 85</p>
-                </div>
-
-                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                    <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-                </div>
+            <!-- User icon and dropdown menu -->
+            <div class="dropdown" style="margin-right: -20px;">
+                <a id="navbarDropdownMenuAvatar" role="button" class="dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false" href="#">
+                    <i class="fa fa-user" aria-hidden="true" style="color: #000;"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_superuser %}
+                            <li><a href="{% url 'add_product'%}" class="dropdown-item"><i class="fas fa-plus-circle me-2"></i>Product Management</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        {% endif %}
+                        <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="fas fa-user-cog me-2"></i>Profile settings</a></li>
+                        <li><a href="{% url 'order_list' %}" class="dropdown-item"><i class="fas fa-history me-2"></i>Order history</a></li>
+                        <li><a href="{% url 'sale_product' %}" class="dropdown-item"><i class="fas fa-tag me-2"></i>Sale Registration Form</a></li>
+                        <li><a href="{% url 'account_details' user_id=user.id %}" class="dropdown-item"><i class="fas fa-info-circle me-2"></i>Account details</a></li>
+                        <li><a href="{% url 'withdrawal' %}" class="dropdown-item"><i class="fas fa-money-bill-wave me-2"></i>Withdrawal</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a href="{% url 'account_logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'account_login' %}" class="dropdown-item"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                        <li><a href="{% url 'account_signup' %}" class="dropdown-item"><i class="fas fa-user-plus me-2"></i>Sign Up</a></li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
-    </section>
+    </div>
+</nav>
 
+
+
+{% block content %}{% endblock %}
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary text-muted mt-5 py-4">
+    <div class="container-fluid">
+        <div class="row d-flex align-items-center justify-content-between">
+         
+            <!-- Payment-->
+            <div class="col-md-3 d-flex justify-content-start align-items-center">
+                <div class="col-md-3 d-flex justify-content-start align-items-center">
+                <i class="fab fa-cc-visa me-3" style="color: #1A1F71; font-size: 2rem;"></i>
+                <i class="fab fa-cc-mastercard me-3" style="color: #EB001B; font-size: 2rem;"></i>
+                <i class="fab fa-cc-amex" style="color: #0077A6; font-size: 2rem;"></i>
+            </div>
+            </div>
+
+            <!-- Signup email-->
+            <div class="col-md-3 text-center">
+                <h6 class="text-uppercase fw-bold mb-2">Sign up for our newsletter</h6>
+                <form class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="Your email" aria-label="Your email">
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                </form>
+            </div>
+
+            <!-- Social media -->
+            <div class="col-md-3 text-center">
+                <h6 class="text-uppercase fw-bold mb-2">Follow us</h6>
+                <a href="#" class="text-reset me-3"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-reset me-3"><i class="fab fa-instagram"></i></a>
+                 <a href="#" class="text-reset"><i class="fab fa-tiktok"></i></a>
+            </div>
+
+            <!-- Customer service-->
+            <div class="col-md-3 text-end">
+                <h6 class="text-uppercase fw-bold mb-2">Customer Service</h6>
+                <ul class="list-unstyled">
+               
+                     <li>Contact Us</a></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
         SustainLuxe | Krokviken 133, 865 92 Sundsvall
     </div>
 </footer>
+
 </body>
 
 {% if messages %}
@@ -219,23 +180,16 @@
 {% endif %}
 
 
-</html>
-
-
-    
-
 {% block corejs %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
 <script src="https://kit.fontawesome.com/3090a0f319.js" crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
-
-<!-- Stripe -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
 {% endblock %}
 
 {% block postloadjs %}
-<script type="text/javascript">
+<script>
   document.addEventListener('DOMContentLoaded', function () {
     var toastElList = [].slice.call(document.querySelectorAll('.toast'));
     var toastList = toastElList.map(function (toastEl) {
@@ -245,3 +199,7 @@
   });
 </script>
 {% endblock %}
+
+
+</body>
+</html>
