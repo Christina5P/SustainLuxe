@@ -20,6 +20,8 @@ It should still feel luxurious and stylish to buy from this shop.
 ### [Media](#media)
 * https://stocksnap.io/
 * https://www.istockphoto.com/
+* https://www.alamy.com/stock-photo
+
 
 
 
@@ -44,6 +46,7 @@ I planned and skiss the models in Google Drive
 
 ### [Marketing-Research--SEO](#marketing-Research -- seo) 
 Success search and marketing by
+Optimizing for SEO with relevant keywords like "second-hand," "designer brands," "sustainable fashion," and "carbon savings."
 
 
 ### [Buisness Model](#buisness_model)

@@ -1,5 +1,40 @@
 {% extends "base.html" %}
 {% load static %}
 
+<!--    <div class="row mt-4">
+         <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="your-image-url-1.jpg" class="card-img-top" alt="Create Your Account">
+                <div class="card-body">
+                    <h5 class="card-title">Create Your Account</h5>
+                    <p class="card-text">Signing up is quick and simple. Just fill out our registration form to get started.</p>
+                    <a class="btn btn-primary btn-rounded" href="https://mdbootstrap.com/docs/standard/getting-started/" role="button" target="_blank">Read more</a>
+                </div>-->
+
+         
+
 {% block content %}
+<div class="container mt-5">
+ <h1 class="text-center">Sell Your Designer Clothes at SustainLuxe</h1>
+
+    <div class="row mt-4">
+        {% for card in cards %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ card.image_url }}" class="card-img-top" alt="{{ card.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ card.title }}</h5>
+                        <p class="card-text">{{ card.description }}</p>
+                    </div>
+                </div>
+            </div>
+           {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <h2>Ready to Sell?</h2>
+        <p>Join us in promoting sustainable fashion today!</p>
+        <a href="{% url 'sale_product' %}" class="btn btn-primary">Fill out the Selling Form</a>
+    </div>
+</div>
 {% endblock %}
