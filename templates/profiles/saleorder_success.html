@@ -34,21 +34,3 @@
 </div>
 
 
-
-                   
-                <h2>Withdrawal History</h2>
-                {% if account.withdrawal_history %}
-                    <ul>
-                        {% for withdrawal in account.withdrawal_history %}
-                            <li>
-                                Amount: EUR {{ withdrawal.amount }} - Date: {{ withdrawal.date|date:"F d, Y" }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No withdrawal history available.</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-{% endblock %}

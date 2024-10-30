@@ -12,6 +12,10 @@ def sell_view(request):
     return render(request, 'home/sell.html')
 
 
+def sustainable_view(request):
+    return render(request, 'home/sustainable.html')
+
+
 def sell_clothes(request):
     cards = [
         {

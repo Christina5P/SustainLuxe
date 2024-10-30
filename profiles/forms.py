@@ -3,7 +3,7 @@ from .models import UserProfile
 from products.models import Product, Size, Condition, Fabric
 from decimal import Decimal
 from django.utils.safestring import mark_safe
-from .models import Account
+from .models import Account, Sale 
 
 
 class UserProfileForm(forms.ModelForm):

@@ -16,7 +16,8 @@
 {% block content %}
 <div class="container mt-5">
  <h1 class="text-center">Sell Your Designer Clothes at SustainLuxe</h1>
-
+<br>
+<br>
     <div class="row mt-4">
         {% for card in cards %}
             <div class="col-md-4 mb-4">
@@ -24,17 +25,21 @@
                     <img src="{{ card.image_url }}" class="card-img-top" alt="{{ card.title }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ card.title }}</h5>
-                        <p class="card-text">{{ card.description }}</p>
+                       
+                        <p class="card-text">{{ card.description }} <a href="https://din-lank-har.com" target="_blank">
+                            <i class="fa fa-info-circle" style="color:#4caf50"></i>
+                              </a>
+                               </p>
+                           </div>
                     </div>
                 </div>
-            </div>
            {% endfor %}
     </div>
 
     <div class="text-center mt-4">
         <h2>Ready to Sell?</h2>
         <p>Join us in promoting sustainable fashion today!</p>
-        <a href="{% url 'sale_product' %}" class="btn btn-primary">Fill out the Selling Form</a>
+        <a href="{% url 'sale_product' %}" class="btn btn-primary">Fill out the Sale Registration Form</a>
     </div>
 </div>
 {% endblock %}

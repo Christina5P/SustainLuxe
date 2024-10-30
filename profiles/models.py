@@ -30,12 +30,12 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-class Product(models.Model):
+class Sale(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.SET_NULL,
         null=True,
-        related_name='profile_products',
+        related_name='sale',
     )
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
@@ -54,8 +54,8 @@ class Product(models.Model):
         max_digits=10, decimal_places=2, default=0
     )
 
-    def update_balance(self, sale_amount):
-        self.balance += Decimal(sale_amount) * Decimal('0.7')
+    def update_balance(self, earned_amount):
+        self.balance += Decimal(earned_amount) * Decimal('0.7')
         self.save()
 
     def __str__(self):
@@ -153,4 +153,3 @@ def get_pending_requests(self):
             if w['status'] == 'pending':
                 pending_requests.append(w)
     return pending_requests
-

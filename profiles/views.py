@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from .models import UserProfile, User, Account
 from .forms import UserProfileForm, SellerForm, WithdrawalForm
 from checkout.models import Order
-from .models import Product as ProfilesProduct
+from .models import Sale
 from products.models import Product as ProductsProduct
 import uuid
 from django.shortcuts import render, get_object_or_404, redirect
@@ -43,6 +43,7 @@ def sale_product(request):
     """Form for selling product
     """
     template = 'profiles/sale_product.html'
+    sale, created = Sale.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         form = SellerForm(request.POST)
@@ -52,12 +53,12 @@ def sale_product(request):
             product.user = request.user
             product.save()
 
-            profile = request.user.userprofile
-            profile.update_balance(product.price)
+            earned_amount = product.price 
+            sale.update_balance(earned_amount)
 
             request.session['save_info'] = {
                 'sku': product.sku,
-                'price': float(form.cleaned_data['price']),
+                'earned_amount': float(earned_amount * Decimal('0.7')),
             }
             messages.success(
                 request, 'Your product has been listed successfully!'
