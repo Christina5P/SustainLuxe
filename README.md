@@ -21,6 +21,9 @@ It should still feel luxurious and stylish to buy from this shop.
 * https://stocksnap.io/
 * https://www.istockphoto.com/
 * https://www.alamy.com/stock-photo
+* https://clossue.com/eu/blog
+* http://almonds.ai  
+* https://urbanswall.com/luuxly-com-your-destination-for-luxury-fashion-and-lifestyle/
 
 
 

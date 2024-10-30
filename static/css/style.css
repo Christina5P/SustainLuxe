@@ -62,6 +62,14 @@ footer,
     padding: 1rem;
 }
 
+ .shop-now-button {
+    color: white; 
+    border: none; 
+    transition: background-color 0.3s; 
+    padding: 3rem; 
+    font-size: 6rem; 
+        }
+
 .custom-btn {
     display: block; 
     max-width: 200px; 

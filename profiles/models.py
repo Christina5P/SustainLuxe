@@ -5,8 +5,9 @@ from django.dispatch import receiver
 from django_countries.fields import CountryField
 from django.utils import timezone
 from decimal import Decimal
-from products.models import Product as ProductsProduct
+from products.models import Product 
 from simple_history.models import HistoricalRecords
+import json
 
 
 class UserProfile(models.Model):
@@ -96,10 +97,16 @@ class Account(models.Model):
     )
 
     def calculate_balance(self):
+        try:
+            withdrawal_history = json.loads(self.withdrawal_history) if self.withdrawal_history else []
+        except json.JSONDecodeError:
+            print(f"Kunde inte avkoda withdrawal_history: {self.withdrawal_history}")
+            withdrawal_history = []
+
         total_withdrawals = sum(
-            Decimal(w['amount'])
-            for w in self.withdrawal_history
-            if w.get('status') == 'completed'
+            Decimal(w.get('amount', 0))
+            for w in withdrawal_history
+            if isinstance(w, dict) and w.get('status') == 'completed'
         )
         return self.total_revenue - total_withdrawals
 
@@ -111,17 +118,22 @@ class Account(models.Model):
                 'date': timezone.now().isoformat(),
                 'status': 'pending',
             }
-            self.withdrawal_history.append(withdrawal_entry)
-            print(f"Withdrawal entry: {withdrawal_entry}")
-            print(
-                f"Withdrawal History (before save): {self.withdrawal_history}"
-            )
 
-            self.pending_payout = amount
-            self.payout_requested_at = timezone.now().isoformat(),
+            current_history = (
+                json.loads(self.withdrawal_history)
+                if self.withdrawal_history
+                else []
+            )
+        
+            current_history.append(withdrawal_entry)
+
+            self.withdrawal_history = json.dumps(current_history)
             self.save()
             return True
         return False
+
+    def load_withdrawal_history(self):
+        self.withdrawal_history = json.loads(self.withdrawal_history)    
 
     def get_pending_requests(self):
         pending_requests = []
@@ -136,20 +148,13 @@ class Account(models.Model):
             for withdrawal in reversed(self.withdrawal_history):
                 if withdrawal['status'] == 'pending':
                     withdrawal['status'] = 'completed'
-                    withdrawal['processed_date'] = timezone.now().isoformat(),
+                    withdrawal['processed_date'] = timezone.now().isoformat()
                     break
 
             self.pending_payout = 0
             self.payout_requested_at = None
+            self.withdrawal_history = json.dumps(self.withdrawal_history)
             self.save()
             return True
         return False
 
-
-def get_pending_requests(self):
-    pending_requests = []
-    for w in self.withdrawal_history:
-        if isinstance(w, dict) and 'status' in w:
-            if w['status'] == 'pending':
-                pending_requests.append(w)
-    return pending_requests

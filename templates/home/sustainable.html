@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block content %}
 <style>
  #introCarousel,
     .carousel-inner,
@@ -10,21 +11,21 @@
     }
 
     .carousel-item:nth-child(1) {
-      background-image: url('https://mdbootstrap.com/img/Photos/Others/images/76.jpg');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-
-    .carousel-item:nth-child(2) {
       background-image: url('https://mdbootstrap.com/img/Photos/Others/images/77.jpg');
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center center;
     }
 
+    .carousel-item:nth-child(2) {
+      background-image:{% static 'media/responsibility.png' %}"    
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+    }
+
     .carousel-item:nth-child(3) {
-      background-image: url('https://mdbootstrap.com/img/Photos/Others/images/78.jpg');
+      background-image: {% static 'media/sustainable3.png' %}"      
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center center;
@@ -33,71 +34,13 @@
     /* Height for devices larger than 576px */
     @media (min-width: 992px) {
       #introCarousel {
-        margin-top: -58.59px;
+        margin-top: 2rem;
       }
     }
 
-    .navbar .nav-link {
-      color: #fff !important;
-    }
   </style>
 
-
-{% block content %}
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark d-none d-lg-block" style="z-index: 2000;">
-    <div class="container-fluid">
-      <!-- Navbar brand -->
-      <a class="navbar-brand nav-link" target="_blank" href="https://mdbootstrap.com/docs/standard/">
-        <strong>MDB</strong>
-      </a>
-      <button class="navbar-toggler" type="button" data-mdb-collapse-init data-mdb-target="#navbarExample01"
-              aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarExample01">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link" aria-current="page" href="#intro">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://www.youtube.com/channel/UC5CF7mLQZhvx8O5GODZAhdA" rel="nofollow"
-               target="_blank">Learn Bootstrap 5</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://mdbootstrap.com/docs/standard/" target="_blank">Download MDB UI KIT</a>
-          </li>
-        </ul>
-
-        <ul class="navbar-nav list-inline">
-          <!-- Icons -->
-          <li class="">
-            <a class="nav-link" href="https://www.youtube.com/channel/UC5CF7mLQZhvx8O5GODZAhdA" rel="nofollow"
-               target="_blank">
-              <i class="fab fa-youtube"></i>
-            </a>
-          </li>
-          <li class="">
-            <a class="nav-link" href="https://www.facebook.com/mdbootstrap" rel="nofollow" target="_blank">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://twitter.com/MDBootstrap" rel="nofollow" target="_blank">
-              <i class="fab fa-twitter"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://github.com/mdbootstrap/mdb-ui-kit" rel="nofollow" target="_blank">
-              <i class="fab fa-github"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- Navbar -->
+<main class="mt-5">
 
   <!-- Carousel wrapper -->
   <div id="introCarousel" class="carousel slide carousel-fade shadow-2-strong" data-mdb-carousel-init>
@@ -113,15 +56,32 @@
       <!-- Single item -->
       <div class="carousel-item active">
         <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
-          <div class="d-flex justify-content-center align-items-center h-100">
+          <div class="d-flex justify-content-center aulgn-items-center h-100">
             <div class="text-white text-center" data-mdb-theme="dark">
-              <h1 class="mb-3">Learn Bootstrap 5 with MDB</h1>
-              <h5 class="mb-4">Best & free guide of responsive web design</h5>
-              <a class="btn btn-outline-light btn-lg m-2" data-mdb-ripple-init href="https://www.youtube.com/watch?v=c9B4TPnak1A"
-                 role="button" rel="nofollow" target="_blank">Start tutorial</a>
-              <a class="btn btn-outline-light btn-lg m-2" data-mdb-ripple-init href="https://mdbootstrap.com/docs/standard/"
-                 target="_blank" role="button">Download MDB UI KIT</a>
-            </div>
+              <h1 class="mb-3">SHE Second Hand Effect</h1>
+              <hr>
+              <br>
+              
+<h2>Definition of Carbon Savings</h2>
+<p>
+    By "carbon savings," we refer to the amount of greenhouse gases, measured in carbon dioxide equivalents (CO₂e) in kilograms,<br>required to produce a similar new item.<br> By choosing second-hand products, you can make a positive impact by reducing the emissions associated with manufacturing new items.
+</p>
+
+<h2>Assumptions Used in Our Carbon Savings Calculation</h2>
+<p>
+    To estimate carbon savings, we have made a few assumptions based on various sources.<br> We collect data on the materials used in the clothing we handle.<br> Based on this, we make assumptions about the material composition of each garment to calculate an average carbon savings figure per item.
+</p>
+<br>
+<h2>Sources Used</h2>
+<p>
+    Our assumptions are based on several sources, including:
+</p>
+
+    <ul>The HIGG MSI, Materials Sustainabiulty Index</ul>
+    <ul>haritable Reuse</ul>
+    <ul>Textile Exchange</ul>
+
+<div>
           </div>
         </div>
       </div>
@@ -129,7 +89,7 @@
       <!-- Single item -->
       <div class="carousel-item">
         <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
-          <div class="d-flex justify-content-center align-items-center h-100">
+          <div class="d-flex justify-content-center aulgn-items-center h-100">
             <div class="text-white text-center">
               <h2>You can place here any content</h2>
             </div>
@@ -146,18 +106,37 @@
                                  rgba(91, 14, 214, 0.7) 100%
                                  );
                                  ">
-          <div class="d-flex justify-content-center align-items-center h-100" data-mdb-theme="dark">
+          <div class="d-flex justify-content-center aulgn-items-center h-100" data-mdb-theme="dark">
             <div class="text-white text-center">
-              <h2>And cover it with any mask</h2>
-              <a class="btn btn-outline-light btn-lg m-2" data-mdb-ripple-init
-                 href="https://mdbootstrap.com/docs/standard/content-styles/masks/" target="_blank" role="button">Learn
-                about masks</a>
+             <h2>In an era where environmental concerns are at the forefront of global discussions, our fashion choices have never been more impactful. The fashion industry is known for its significant environmental footprint, from textile waste to pollution and resource consumption. Fortunately, there's a stylish and eco-conscious solution at hand – second-hand shopping. In this blog post, we'll explore the many environmental benefits of embracing second-hand fashion and how it contributes to a more sustainable future. 
+             </h2>
+   1. Reducing Textile Waste: The fashion industry is notorious for its disposable culture, with millions of tons of clothing ending up in landfills each year. Second-hand shopping helps combat this problem by giving clothing a second life. When you purchase pre-owned items, you're diverting them from the waste stream, reducing the demand for new production, and extending their usability.
+  </ul>
+<ul>
+  2. Lower Carbon Footprint: The production of new clothing involves numerous processes, from growing or manufacturing fibers to transportation and distribution. All of these contribute to greenhouse gas emissions. Second-hand shopping requires significantly fewer resources and reduces the carbon footprint associated with fashion, making it a more eco-friendly choice.
+ </ul>
+
+<ul>
+3. Conserving Resources: Creating new garments consumes vast amounts of water, energy, and raw materials. Second-hand shopping conserves these valuable resources by extending the lifespan of clothing. By choosing second-hand, you help reduce the strain on our planet's limited resources.
+</ul>
+
+<ul>
+4. Promoting Ethical Consumption: When you buy second-hand, you're not supporting the often unethical labor practices that can be associated with fast fashion. Instead, you're promoting a more ethical form of consumption by valuing and appreciating items that already exist. 
+</ul>
+
+<ul>
+5. Encouraging Circular Fashion: Second-hand shopping is a prime example of a circular fashion economy, where clothing is used and reused, rather than discarded after a short period. This model helps close the loop on fashion production and encourages a more sustainable industry. 
+</ul>
+
+<ul>6. Discovering Unique Pieces: Vintage and second-hand stores offer a wide range of unique and one-of-a-kind items. By choosing pre-loved pieces, you're not only reducing waste but also expressing your individual style in a way that's distinct from mass-produced fashion. </p>
+  </ul>
+
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- Inner -->
+ 
 
     <!-- Controls -->
     <a class="carousel-control-prev" href="#introCarousel" role="button" data-mdb-slide="prev">
@@ -169,14 +148,7 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
-  <!-- Carousel wrapper -->
-</header>
-<!--Main Navigation-->
 
-
-
-<p>Koldioxidbesparingarna är beräknade baserat på material och vikt enligt utsläppsdata från <a href="https://textileexchange.org">Textile Exchange’s Preferred Fiber and Materials Market Report</a>.</p>
-
-
+</main>
 
 {% endblock %}

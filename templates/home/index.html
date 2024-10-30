@@ -6,15 +6,14 @@
 <div id="carouselExampleCaptions" class="carousel slide section-spacing" data-mdb-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="{% static 'media/sellwithus.png' %}" class="d-block w-100 custom-img" alt="sell_clothes"/>
+      <img src="{% static 'media/sellsecondhand.png' %}" class="d-block w-100 custom-img" alt="sell_clothes"/>
       <div style="background-color: rgba(0, 0, 0, 0.4)"></div>
       <div class="carousel-caption d-none d-sm-block mb-5">
-      <p>
-              
-
-              <a target="_blank" href="{% url 'sell' %}" class="btn btn-outline-black fw-bold custom-button">Sell with Us
-                <i class="fas fa-graduation-cap ms-2"></i>
-              </a>
+     <div class="text-container">
+    <p class="relax-text">Relax, we do the job!</p>
+    </div>
+    <a target="_blank" href="{% url 'sell' %}" class="btn btn-lg btn-light rounded-0 text-uppercase py-3">Sell with Us
+    </a>
       </div>
     </div>
 </section>
@@ -29,7 +28,7 @@
       <div class="carousel-caption d-none d-sm-block mb-5">
              
 
-            <a href="{% url 'products' %}" class="shop-now-button btn btn-lg rounded-0 text-uppercase py-3">Shop Now</a>
+            <a href="{% url 'products' %}" class="shop-now-button btn btn-lg btn-light rounded-0 text-uppercase py-3">Shop Now</a>
       </div>
     </div>
 </section>
@@ -43,7 +42,8 @@
       <div style="background-color: rgba(0, 0, 0, 0.4)"></div>
       <div class="carousel-caption d-none d-sm-block mb-5">
             
-           <a href="{% url 'sustainable' %}" class="shop-now-button btn btn-lg rounded-0 text-uppercase py-3">Second Hand Effect</a>
+          <a href="{% url 'sustainable' %}" class="shop-now-button btn btn-lg btn-light rounded-0 text-uppercase py-3">READ MORE</a>
+
       </div>
     </div>
 </section>

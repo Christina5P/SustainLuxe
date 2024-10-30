@@ -14,6 +14,7 @@ from django.db import transaction
 from django.utils import timezone
 from .utils import get_total_balance
 from django.core.paginator import Paginator
+import json
 
 
 @login_required
@@ -132,9 +133,7 @@ def withdrawal_view(request):
     account = get_object_or_404(Account, user=request.user)
     available_balance = account.calculate_balance()
 
-    form = WithdrawalForm(
-        account=account
-    )  
+    form = WithdrawalForm(account=account)
 
     if request.method == 'POST':
         form = WithdrawalForm(request.POST, account=account)
@@ -149,10 +148,17 @@ def withdrawal_view(request):
             else:
                 messages.error(request, 'Error processing withdrawal.')
             return redirect('withdrawal')
-    else:
-        form = WithdrawalForm(account=account)
 
-    withdrawal_history = account.withdrawal_history
+    # Ladda withdrawal_history
+    withdrawal_history = (
+        json.loads(account.withdrawal_history)
+        if isinstance(account.withdrawal_history, str)
+        else account.withdrawal_history
+    )
+
+    # Debugging: Kontrollera innehållet i withdrawal_history
+    print(f"Withdrawal history: {withdrawal_history}")
+
     pending_requests = account.get_pending_requests()
 
     context = {
