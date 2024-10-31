@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import Account
 from simple_history.admin import SimpleHistoryAdmin
+import json
 
 
 class PayoutStatusFilter(admin.SimpleListFilter):
@@ -98,13 +99,19 @@ class AccountAdmin(SimpleHistoryAdmin):
     current_balance.short_description = 'Current Balance'
 
     def formatted_withdrawal_history(self, obj):
-        withdrawals = obj.withdrawal_history or []
+    # Ensure withdrawal_history is decoded properly
+        try:
+            withdrawals = json.loads(obj.withdrawal_history) if obj.withdrawal_history else []
+        except json.JSONDecodeError:
+            withdrawals = []
+            print(f"Failed to decode withdrawal_history: {obj.withdrawal_history}")
+
         if not withdrawals:
             return "No withdrawal history."
 
         table_rows = "".join(
-            f"<tr><td>{w['date']}</td><td>{w['amount']}</td></tr>"
-            for w in sorted(withdrawals, key=lambda x: x['date'], reverse=True)
+            f"<tr><td>{w.get('date', 'N/A')}</td><td>{w.get('amount', 0)}</td></tr>"  # Use .get to avoid KeyError
+            for w in sorted(withdrawals, key=lambda x: x.get('date', ''), reverse=True)  # Handle potential missing 'date'
         )
 
         return format_html(
@@ -121,4 +128,4 @@ class AccountAdmin(SimpleHistoryAdmin):
             """
         )
 
-    formatted_withdrawal_history.short_description = 'Withdrawal History'
+        formatted_withdrawal_history.short_description = 'Withdrawal History'

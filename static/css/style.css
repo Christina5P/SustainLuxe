@@ -49,46 +49,14 @@ footer,
     color: #000;
     font-weight: 300;
 }
- /* Carousel styling */
-    #introCarousel,
-    .carousel-inner,
-    .carousel-item,
-    .carousel-item.active {
-      height: 100vh;
-    }
 
-    .carousel-item:nth-child(1) {
-      background-image: url('https://mdbootstrap.com/img/Photos/Others/images/77.jpg');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-
-    .carousel-item:nth-child(2) {
-      background-image: url('https://sustainluxe.s3.eu-north-1.amazonaws.com/media/sustainable3.png');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-
-    .carousel-item:nth-child(3) {
-      background-image: url("https://sustainluxe.s3.eu-north-1.amazonaws.com/media/responsibility.png"); 
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
 
     /* Height for devices larger than 576px */
     @media (min-width: 992px) {
       #introCarousel {
         margin-top: 2rem;
       }
-      #introCarousel,
-      .carousel-inner,
-      .carousel-item,
-      .carousel-item.active {
-        height: 50vh;
-      }
+    
     }
     
 

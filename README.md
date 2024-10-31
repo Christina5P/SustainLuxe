@@ -1,21 +1,34 @@
-SustainLuxe
+# SustainLuxe - Shop luxurios and Sustainable
 
 ## Table of Contents
 
 ### [About](#about)
 
-SustainLuxe has a careful selection of clothes and accessories with quality made by designers and selling Second Hand.
-It should still feel luxurious and stylish to buy from this shop.
+SustainLuxe is a second Hand Shop online for designer clothes.
+You find a careful selection of clothes and accessories with quality made only by designers.
+Second Hand market grows fast!
+The reason for increased shopping in second Hand market is because of financial reason,
+but the next as much is environmental reason and it has become a trendy way of shopping.
+I will keep it luxury and financial giving, while I will be part of environmental participation.
+Through my shop I will be a part of saving the word, through impact people to aknowledge the Second Hand effect 
+and donate a part of the revenue to an important organisation to help environmental impact.
 
-### [Research](#research) 
-  Websites for research:
-* https://signofthetimeslondon.com/
-* https://www.climatestewards.org/offset/
-* https://www.refunder.se/
-* https://www.sellpy.se/
-* https://us.vestiairecollective.com/
-* https://static.schibsted.com/wp-content/uploads/2020/06/04123109/schibsted-adevinta-second-hand-effect-2020.pdf
+I think a lot of people is to busy to take their time for selling unused clothes, so my idea is to make it simple to sell, buy and collect revenues.
 
+You are welcome to visit my store and get to know more!
+
+Live web site: https://sustainluxe-b6e840083c68.herokuapp.com/
+
+I have thinking of this idea for some years and in the meantime, the buissness of Second Hand is growing, so I´m happy to present this fictive busisness.
+This is a Full-Stack project with Django.
+
+### [Marketing research](#marketing-research) 
+
+I started to make research to update from this market and to investigate the footprint and Carbon effect of shopping behaviors.
+[You can read more of my SEO and Marketing research here](seo_marketing_research.md)
+
+I also made a SEO research to get strong SEO words to use for high ranking in Google.
+Read more about SEO here.
 
 ### [Media](#media)
 * https://stocksnap.io/
@@ -174,7 +187,7 @@ SustaineLuxe is host on GitHub and deployed on Heroku
 - Inapiration from others PP5 projects
 - walk through Boutique Ado
 - https://www.youtube.com/watch?v=hZYWtK2k1P8 -tutoring stripe payment
-
+- https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
 - https://www.bigcommerce.com/articles/ecommerce/fashion-ecommerce/
 - https://python.plainenglish.io/creating-a-django-e-commerce-product-filter-prototype-a8e7409453fc -creating filter tutoring

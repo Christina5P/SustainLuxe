@@ -1,7 +1,39 @@
 {% extends "base.html" %}
 {% load static %}
 
+<style>
+   /* Carousel styling */
+    #introCarousel,
+    .carousel-inner,
+    .carousel-item,
+    .carousel-item.active {
+      height: 100vh;
+    }
+
+    .carousel-item:nth-child(1) {
+      background-image: url('https://mdbootstrap.com/img/Photos/Others/images/77.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+    }
+
+    .carousel-item:nth-child(2) {
+      background-image: url('https://sustainluxe.s3.eu-north-1.amazonaws.com/media/sustainable3.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+    }
+
+    .carousel-item:nth-child(3) {
+      background-image: url("https://sustainluxe.s3.eu-north-1.amazonaws.com/media/responsibility.png"); 
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+    }
+</style>
+
 {% block content %}
+
 <main class="mt-5">
   <div class="container-fluid">
     <div id="introCarousel" class="carousel slide carousel-fade shadow-2-strong" data-mdb-ride="carousel">

@@ -149,16 +149,11 @@ def withdrawal_view(request):
                 messages.error(request, 'Error processing withdrawal.')
             return redirect('withdrawal')
 
-    # Ladda withdrawal_history
     withdrawal_history = (
         json.loads(account.withdrawal_history)
         if isinstance(account.withdrawal_history, str)
         else account.withdrawal_history
     )
-
-    # Debugging: Kontrollera innehållet i withdrawal_history
-    print(f"Withdrawal history: {withdrawal_history}")
-
     pending_requests = account.get_pending_requests()
 
     context = {
