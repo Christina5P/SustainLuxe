@@ -33,6 +33,8 @@ I used https://www.wordtracker.com/ for SEO
 I have a list of key word search:
 https://docs.google.com/document/d/e/2PACX-1vQ6sKhLizm5AzfOiwKbFuMO1XqMFbYUj3TAuLa6HcRnzHU45e1Fib74I4NOSbatv46TctD6azuregIm/pub
 
+You can also se SEO rating when testing in Lighthouse.
+
 ## Meta tags
 
 I used the keywords in:
@@ -41,7 +43,7 @@ I used the keywords in:
 <meta name="description" content="Discover Sustainluxe – premium second-hand designer fashion with a climate-smart mission. Shop quality, eco-friendly clothes and make a sustainable impact." />
 <meta name="keywords" content="second hand, luxury second hand fashion, online second hand stores, eco-friendly fashion, vintage fashion, sustainable fashion, designer second hand, climate smart fashion, used clothes, quality clothes, carbon saving, footprint, circular fashion, save the world, second hand effect, CO2 savings" />
 
-It is also important to use <h1> with high impact keywords, so I added one to Homepage:
+It is also important to use h1 with high impact keywords, so I added one to Homepage:
 <h1 class="text-center">Luxury Second-Hand Fashion for a Sustainable Future at Sustainluxe</h1>
 
 Alt-text to img also affects the SEO
@@ -51,6 +53,8 @@ Alt-text to img also affects the SEO
 I use a:
 - sitemap.xlm
 - roboto.txt
+
+These are for collecting the url and which ine shouldn´t be collected.
 
 For the competition market I added:
 ## Facebook page

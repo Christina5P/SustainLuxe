@@ -24,11 +24,11 @@ This is a Full-Stack project with Django.
 
 ### [Marketing research](#marketing-research) 
 
-I started to make research to update from this market and to investigate the footprint and Carbon effect of shopping behaviors.
+I started to make research to update me of this market and to investigate the footprint and Carbon effect of shopping behaviors.
 [You can read more of my SEO and Marketing research here](seo_marketing_research.md)
 
 I also made a SEO research to get strong SEO words to use for high ranking in Google.
-Read more about SEO here.
+Read more about SEO here(#seo_marketing_research.md)
 
 ### [Media](#media)
 * https://stocksnap.io/
@@ -41,37 +41,49 @@ Read more about SEO here.
 
 
 
-
-
-
 ### [Agile method](#agile-method) 
 
-In the beginnig of the project I made some research of other e-commerce and similar Second Hand Stores.
-I also brainstormed what I want to achieve and how to plan the project.
-For this project with a buisness as e-commerce, it´s important to make the app rechable, so I add SEO and marketing strategy.
+After research of other e-commerce and similar Second Hand Stores, I also brainstormed what I want to achieve and how to plan the project.
 
-#### [Concept Chart](#concept_chart)
-
-#### [ERD](#erd)
-I planned and skiss the models in Google Drive
-
-#### [User Stories](#user-stories)
-- Milestones
-- EPICS
-- User stories
-
-#### [wireframes](#wireframes)  
-
-### [Marketing-Research--SEO](#marketing-Research -- seo) 
-Success search and marketing by
-Optimizing for SEO with relevant keywords like "second-hand," "designer brands," "sustainable fashion," and "carbon savings."
-
+#### [Concept Chart](#static/images/Readme_img/concept_chart_sustainLuxe.png)
+I created de a concept chart to have an idea to stick with.
+I used Lucid chart to my concept chart and buisness model.
 
 ### [Buisness Model](#buisness_model)
 The business operates on a C2C model (Consumer-to-Consumer) and revenue comes from administration fee and profit share of the selling price.
-The emphasis is on the traffic to the e-commerce and it should feel more serious and luxury to buy from credible and attractive design store. Focus is also to make people consious of Sustainable choices, Climate Controll and how to make resposible of their purposes without reduce the quality.
-Key features is to sell good but not used stuff easily and quisck without own commitment needed.
+The emphasis is on the traffic to the e-commerce and it should feel more serious and luxury to buy from credible and attractive design store.
+Focus is also to make people consious of Sustainable choices, Climate Controll and how to make resposible of their purposes without reduce the quality.
+Key features is to sell used stuff easily and quick without own commitment needed.
+I added a buisness process to formulate the different modules I will work on
+![Buisness Process](#static/images/Readme_img/sustainlux_buisnessprocess.png)
 
+#### [ERD](#erd)
+I planned and skiss the models in [Google Drive ](https://drive.google.com/file/d/1SYwaMzGs6PuOuEuA6Yi4T2Q0p8dvmSvd/view?usp=sharing)
+There are different modules since the product is for both selling and buying.
+It got mixed up between Products app and Profiles app, since I had Product model in both but in different use.
+Then I changed Product model in Profiles app to Sale model to separate them.
+
+![Product Model](#static/images/Readme_img/Sustainluxe_productmodel.png)
+![Order Model](#static/images/Readme_img/Sustainluxe_ordermodel.png)
+![User Model](#static/images/Readme_img/sustainluxe_usermodel.png)
+
+
+#### [User Stories](#user-stories)
+I set up a project in Github https://github.com/users/Christina5P/projects/8/views/1?layout=board
+In this the method are divided into  
+- Milestones
+![Milestones](#static/images/Readme_img/milestones.png)
+  - EPICS
+  In every milestone, there is divided in EPICS, for ex.
+  ![EPICS](#static/images/Readme_img/epics.png)
+    - User stories
+    In EPICS, it is divided to userstories, for ex.
+    ![Userstories](#static/images/Readme_img/userstories.png)
+      - Tasks
+      There could also be some tasks.
+
+
+#### [wireframes](#wireframes)  
 
 ### [UX](#ux)
 Goal to keep good UX principles regarding layout/colors/interaction
