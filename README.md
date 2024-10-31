@@ -24,6 +24,8 @@ It should still feel luxurious and stylish to buy from this shop.
 * https://clossue.com/eu/blog
 * http://almonds.ai  
 * https://urbanswall.com/luuxly-com-your-destination-for-luxury-fashion-and-lifestyle/
+* https://www.lifestyleasia.com/ind/style/fashion/second-hand-luxury-is-the-new-sustainable-trend/
+
 
 
 

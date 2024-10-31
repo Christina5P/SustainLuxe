@@ -59,8 +59,16 @@ footer,
 .custom-img {
     max-width: 100%; 
     height: auto;
-    padding: 1rem;
+    padding: 3rem;
 }
+
+ .shop-now-button {
+    color: #607D8B; 
+    border: none; 
+    transition: background-color 0.3s; 
+    padding: 3rem; 
+    font-size: 4rem; 
+        }
 
 .custom-btn {
     display: block; 
