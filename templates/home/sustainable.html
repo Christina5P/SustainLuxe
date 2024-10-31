@@ -2,153 +2,96 @@
 {% load static %}
 
 {% block content %}
-<style>
- #introCarousel,
-    .carousel-inner,
-    .carousel-item,
-    .carousel-item.active {
-      height: 100vh;
-    }
-
-    .carousel-item:nth-child(1) {
-      background-image: url('https://mdbootstrap.com/img/Photos/Others/images/77.jpg');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-
-    .carousel-item:nth-child(2) {
-      background-image:{% static 'media/responsibility.png' %}"    
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-
-    .carousel-item:nth-child(3) {
-      background-image: {% static 'media/sustainable3.png' %}"      
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
-
-    /* Height for devices larger than 576px */
-    @media (min-width: 992px) {
-      #introCarousel {
-        margin-top: 2rem;
-      }
-    }
-
-  </style>
-
 <main class="mt-5">
+  <div class="container-fluid">
+    <div id="introCarousel" class="carousel slide carousel-fade shadow-2-strong" data-mdb-ride="carousel">
 
-  <!-- Carousel wrapper -->
-  <div id="introCarousel" class="carousel slide carousel-fade shadow-2-strong" data-mdb-carousel-init>
-    <!-- Indicators -->
-    <div class="carousel-indicators">
-      <li data-mdb-target="#introCarousel" data-mdb-slide-to="0" class="active"></li>
-      <li data-mdb-target="#introCarousel" data-mdb-slide-to="1"></li>
-      <li data-mdb-target="#introCarousel" data-mdb-slide-to="2"></li>
-    </div>
+      <!-- Indicators -->
+      <div class="carousel-indicators">
+        <button type="button" data-mdb-target="#introCarousel" data-mdb-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-mdb-target="#introCarousel" data-mdb-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-mdb-target="#introCarousel" data-mdb-slide-to="2" aria-label="Slide 3"></button>
+      </div>
 
-    <!-- Inner -->
-    <div class="carousel-inner">
-      <!-- Single item -->
-      <div class="carousel-item active">
-        <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
-          <div class="d-flex justify-content-center aulgn-items-center h-100">
-            <div class="text-white text-center" data-mdb-theme="dark">
-              <h1 class="mb-3">SHE Second Hand Effect</h1>
-              <hr>
-              <br>
+      <!-- Inner -->
+      <div class="carousel-inner">
+        <!-- First Carousel Item -->
+        <div class="carousel-item active">
+          <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+            <div class="d-flex justify-content-center align-items-center h-100">
+              <div class="text-white text-center">
+                <h1>SHE Second Hand Effect</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Second Carousel Item -->
+        <div class="carousel-item">
+          <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
+            <div class="d-flex justify-content-center align-items-center h-100">
+              <div class="text-white text-center">
+            
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Third Carousel Item -->
+        <div class="carousel-item">
+          <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+            <div class="d-flex justify-content-center align-items-center h-100">
+              <div class="text-white text-center">
+                <h2>What is our responsibility?</h2>
               
-<h2>Definition of Carbon Savings</h2>
-<p>
-    By "carbon savings," we refer to the amount of greenhouse gases, measured in carbon dioxide equivalents (CO₂e) in kilograms,<br>required to produce a similar new item.<br> By choosing second-hand products, you can make a positive impact by reducing the emissions associated with manufacturing new items.
-</p>
-
-<h2>Assumptions Used in Our Carbon Savings Calculation</h2>
-<p>
-    To estimate carbon savings, we have made a few assumptions based on various sources.<br> We collect data on the materials used in the clothing we handle.<br> Based on this, we make assumptions about the material composition of each garment to calculate an average carbon savings figure per item.
-</p>
-<br>
-<h2>Sources Used</h2>
-<p>
-    Our assumptions are based on several sources, including:
-</p>
-
-    <ul>The HIGG MSI, Materials Sustainabiulty Index</ul>
-    <ul>haritable Reuse</ul>
-    <ul>Textile Exchange</ul>
-
-<div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Single item -->
-      <div class="carousel-item">
-        <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
-          <div class="d-flex justify-content-center aulgn-items-center h-100">
-            <div class="text-white text-center">
-              <h2>You can place here any content</h2>
+            </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Single item -->
-      <div class="carousel-item">
-        <div class="mask" style="
-                                 background: linear-gradient(
-                                 45deg,
-                                 rgba(29, 236, 197, 0.7),
-                                 rgba(91, 14, 214, 0.7) 100%
-                                 );
-                                 ">
-          <div class="d-flex justify-content-center aulgn-items-center h-100" data-mdb-theme="dark">
-            <div class="text-white text-center">
-             <h2>In an era where environmental concerns are at the forefront of global discussions, our fashion choices have never been more impactful. The fashion industry is known for its significant environmental footprint, from textile waste to pollution and resource consumption. Fortunately, there's a stylish and eco-conscious solution at hand – second-hand shopping. In this blog post, we'll explore the many environmental benefits of embracing second-hand fashion and how it contributes to a more sustainable future. 
-             </h2>
-   1. Reducing Textile Waste: The fashion industry is notorious for its disposable culture, with millions of tons of clothing ending up in landfills each year. Second-hand shopping helps combat this problem by giving clothing a second life. When you purchase pre-owned items, you're diverting them from the waste stream, reducing the demand for new production, and extending their usability.
-  </ul>
-<ul>
-  2. Lower Carbon Footprint: The production of new clothing involves numerous processes, from growing or manufacturing fibers to transportation and distribution. All of these contribute to greenhouse gas emissions. Second-hand shopping requires significantly fewer resources and reduces the carbon footprint associated with fashion, making it a more eco-friendly choice.
- </ul>
-
-<ul>
-3. Conserving Resources: Creating new garments consumes vast amounts of water, energy, and raw materials. Second-hand shopping conserves these valuable resources by extending the lifespan of clothing. By choosing second-hand, you help reduce the strain on our planet's limited resources.
-</ul>
-
-<ul>
-4. Promoting Ethical Consumption: When you buy second-hand, you're not supporting the often unethical labor practices that can be associated with fast fashion. Instead, you're promoting a more ethical form of consumption by valuing and appreciating items that already exist. 
-</ul>
-
-<ul>
-5. Encouraging Circular Fashion: Second-hand shopping is a prime example of a circular fashion economy, where clothing is used and reused, rather than discarded after a short period. This model helps close the loop on fashion production and encourages a more sustainable industry. 
-</ul>
-
-<ul>6. Discovering Unique Pieces: Vintage and second-hand stores offer a wide range of unique and one-of-a-kind items. By choosing pre-loved pieces, you're not only reducing waste but also expressing your individual style in a way that's distinct from mass-produced fashion. </p>
-  </ul>
-
-            </div>
-          </div>
+      <!-- Controls -->
+      <button class="carousel-control-prev" type="button" data-mdb-target="#introCarousel" data-mdb-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-mdb-target="#introCarousel" data-mdb-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+<!-- Text box below carousel -->
+  <div class="col-12 mt-4">
+     <div class="card">
+      <div class="card-body">
+        <h2 id="slideTitle">SHE Second Hand Effect</h2>
+        <h3 id="slideSubtitle" class="card-subtitle mb-2 text-muted">Definition of Carbon Savings</h3>
+        <div id="slideContent">
+           <p>By "carbon savings," we refer to the amount of greenhouse gases, measured in carbon dioxide equivalents (CO₂e) in kilograms,
+              required to produce a similar new item. By choosing second-hand products, you can make a positive impact by reducing the emissions
+              associated with manufacturing new items.
+                <h3>Assumptions Used in Our Carbon Savings Calculation</h3>
+              <p>
+                To estimate carbon savings, we have made a few assumptions based on various sources. We collect data on the materials used in the clothing we handle.
+                Based on this, we make assumptions about the material composition of each garment to calculate an average carbon savings figure per item.
+              </p>
+              <h3>Sources Used</h3>
+              <ul>
+                <li>The HIGG MSI, Materials Sustainability Index</li>
+                <li>Charitable Reuse</li>
+                <li>Textile Exchange</li>
+              </ul>
+              </p>
         </div>
       </div>
     </div>
- 
-
-    <!-- Controls -->
-    <a class="carousel-control-prev" href="#introCarousel" role="button" data-mdb-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#introCarousel" role="button" data-mdb-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
+  
+  
+{% block postloadjs %}
+{{ block.super }}
+<script src="{% static 'js/sustainable.js' %}"></script>
+{% endblock %}
 
 </main>
-
 {% endblock %}
