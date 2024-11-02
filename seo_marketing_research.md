@@ -47,6 +47,7 @@ It is also important to use h1 with high impact keywords, so I added one to Home
 <h1 class="text-center">Luxury Second-Hand Fashion for a Sustainable Future at Sustainluxe</h1>
 
 Alt-text to img also affects the SEO
+I have named the favicon with secondhandclothes.
 
 ## Sitemap
 
