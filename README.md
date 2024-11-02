@@ -172,6 +172,15 @@ I use the same image for favicon and "no img" to show sustainable and clothes
 I also load the favicon to work on different devices
 ![Favicon](static/images/Readme_img/favicon/favicon-32x32.png)
 
+Background is by recycled paper to give the touch to sustainable.
+
+- Font
+ Playfair Display SC
+ The font is simple to read and have a luxury touch, which is important for user to understand the class of selling clothes.
+ It showing seriously sell and buy.
+ I have the same font across the pages to make it consistent.
+
+
 ### CRUD
 
 ### [Media](#media)
