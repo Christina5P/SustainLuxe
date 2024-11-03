@@ -181,9 +181,11 @@ Background is by recycled paper to give the touch to sustainable.
  I have the same font across the pages to make it consistent.
 
 
-### CRUD
 
 ### [Media](#media)
+
+Image and content used from media:
+
 * https://stocksnap.io/
 * https://www.istockphoto.com/
 * https://www.alamy.com/stock-photo
@@ -215,30 +217,59 @@ Background is by recycled paper to give the touch to sustainable.
 #### [Future Features](#future_features)
 
 
+### CRUD
+
+-Create
+User can create a selling order, and create an order in shop
+Authorized users can create a withdrawal request.
+Superuser can add an product in Product Management view.
+
+-Read 
+Users van view homepage, sell page, sustainpage and shop.
+Authorized users can view order history, products for sale, withdrawal history
+
+-Update
+Authorized users can update profil settings
+Superuser can update product info. 
+
+-Delete
+Users can delete products in shoppingbag 
+Superuser can delete product from Product Management view.
+
 ### [Technologies Used](#technologies_used)
 
-* GitHub
+#### Platforms
+* GitHub - Web-based platform to manage repository and collaboration tool.
+* Stripe - Payment processing platform
+
+#### IDE
 * GitPod
-* Stripe
 
 #### Languages:
--HTML
--CSS
--Python
--JS
+* HTML
+* CSS
+* Python
+* JS
 
 #### Frameworks and libraries:
--Django
--MBD (Bootstrap)
--Psycopg2: the database driver used to connect to the database.
--Django-allauth: the authentication library used to create the user accounts.
--Django-crispy-forms: was used to control the rendering behavior of Django forms.
-- Mailchimp
+* Django
+* MBD (Bootstrap5)
+* Psycopg2: the database driver used to connect to the database.
+* Django-allauth: the authentication library used to create the user accounts.
+* Django-crispy-forms: was used to control the rendering behavior of Django forms.
+* Django-filter- for adding filter capabilities
+* Django- countries - Liberary for handling country fields
+* dj-stripe - integrationg stripe payment
+* gunicorn- used for deploying
+* jmespath - for querying JSON data structures
+* pillow - libarery for img processing
+* pytz - liberary for handöing timezones  
+* Mailchimp
 
 #### Databases:
-SQLite: was used as a development database.
-PostgreSQL: the database used to store all the data.
-AWS Web Services
+* SQLite: was used as a development database.
+* PostgreSQL: the database used to store all the data.
+* AWS Web Services: service used to store media and static files
 
 
 ### [Testing](#testing)
