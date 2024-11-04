@@ -199,12 +199,37 @@ Image and content used from media:
 * https://us.vestiairecollective.com/ - I have borrowed product img from this second hand store
 
 
-### [Features](#features) 
+## [Features](#features) 
 
-#### [Existing Features](#existing_featuers)
 
--Navbar
--Registration/Log in Page
+
+### [Existing Features](#existing_featuers)
+
+#### Navbar
+
+
+![navbar](navbar.png)
+
+
+Visible for all users.
+Navigate users to different sections for sell, buy and read more about Sustainable effect.<br>
+Clear view if you are logged in or not.
+Menu for profile.
+You view different choice if you are logged in or not.
+
+![logintoggle](logintoggle.png)
+
+![profilemenu](profilemenu.png)
+
+If you go to shoåp you view an extended navbar that also includes shopping bag and search field.
+
+![navbar_shop](navbar_shop.png)
+
+#### Registration/Log in Page
+
+
+
+
 -Profile Page
 -Shopping page
 -Category search

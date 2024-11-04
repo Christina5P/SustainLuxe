@@ -14,6 +14,18 @@
         </form>
     </div>
 </div>
+
+ <!-- Cart icon -->
+            <a class="nav-link me-3{% if grand_total %} text-info font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                <span class="ms-2">
+                    {% if grand_total %}
+                        EUR{{ grand_total|floatformat:2 }}
+                    {% else %}
+                        EUR 0.00
+                    {% endif %}
+                </span>
+            </a>
 {% endblock %}
 
 {% block content %}
