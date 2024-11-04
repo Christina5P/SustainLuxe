@@ -25,17 +25,54 @@ def profile(request):
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Profile updated successfully')
+            messages.success(
+                request,
+                (
+                    'Profile updated successfully'
+                    if not created
+                    else 'Account created successfully'
+                ),
+            )
+            return redirect('profile')
         else:
-            messages.error(request, 'Update failed. Please ensure the form is valid.')
+            messages.error(
+                request, 'Update failed. Please ensure the form is valid.'
+            )
     else:
         form = UserProfileForm(instance=profile)
 
-    template = 'profiles/profile.html'
+    template = 'profiles/account.html'
     context = {
         'form': form,
-        'on_profile_page': True
+        'profile': profile,
+        'created': created,
+        'on_profile_page': True,
     }
+
+    return render(request, template, context)
+
+@login_required
+def create_account(request):
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account created successfully')
+            return redirect(
+                'profile'
+            ) 
+        else:
+            messages.error(
+                request,
+                'Account creation failed. Please ensure the form is valid.',
+            )
+    else:
+        form = UserProfileForm(instance=profile)
+
+    template = 'profiles/create_account.html'
+    context = {'form': form}
 
     return render(request, template, context)
 
@@ -62,7 +99,7 @@ def sale_product(request):
                 'earned_amount': float(earned_amount * Decimal('0.7')),
             }
             messages.success(
-                request, 'Your product has been listed successfully!'
+                request, 'Your Form has been sended!'
             )
             return redirect('saleorder_success') 
     else:

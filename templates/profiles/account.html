@@ -18,12 +18,22 @@
         <div class="col-12 col-md-8 col-lg-6">
             <div class="card">
                 <div class="card-body">
+                      {% if created %}
+                        <h5 class="card-title text-center mb-4">Create Your Profile</h5>
+                    {% else %}
                     <h5 class="card-title text-center mb-4">Update Profile Information</h5>
+                       {% endif %}
                     <form action="{% url 'profile' %}" method="POST">
                         {% csrf_token %}
                         {{ form|crispy }}
                         <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-primary btn-rounded">Update Information</button>
+                               <button type="submit" class="btn btn-primary btn-rounded">
+                                {% if created %}
+                                    Create Account
+                                {% else %}
+                                    Update Information
+                                {% endif %}
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -45,19 +55,4 @@
     {% endif %}
 </div>
 
-<style>
-    .card {
-        transition: all 0.3s ease;
-    }
-    .card:hover {
-        box-shadow: 0 8px 26px -4px rgba(0,0,0,0.15), 0 8px 9px -5px rgba(0,0,0,0.06);
-    }
-    .btn-primary {
-        transition: all 0.3s ease;
-    }
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-    }
-</style>
 {% endblock %}

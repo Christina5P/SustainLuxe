@@ -196,6 +196,7 @@ Image and content used from media:
 * http://almonds.ai  
 * https://urbanswall.com/luuxly-com-your-destination-for-luxury-fashion-and-lifestyle/
 * https://www.lifestyleasia.com/ind/style/fashion/second-hand-luxury-is-the-new-sustainable-trend/
+* https://us.vestiairecollective.com/ - I have borrowed product img from this second hand store
 
 
 ### [Features](#features) 

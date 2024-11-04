@@ -113,25 +113,29 @@ def product_detail(request, product_id):
     return render(request, 'products/product_detail.html', context)
 
 
-# To calculate sustainable. Just add more fabrics if needed
-CARBON_EMISSIONS = {
-    'cotton': 15,  # kg CO2 per kg of cotton
-    'polyester': 30,  # kg CO2 per kg of polyester
-    'wool': 20,  # kg CO2 per kg of wool
-}
-
-
 def calculate_carbon_saving(product):
     """
-    Calculate carbon emission of products fabric and weight
+    Calculate carbon emission of the given product's fabric and weight.
     """
-    fabric_name = product.fabric.name if product.fabric else None
-    carbon_per_kg = CARBON_EMISSIONS.get(fabric_name.lower(), 0)
-    return (
-        carbon_per_kg * float(product.weight_in_kg)
-        if product.weight_in_kg
-        else 0
-    )
+    if product.fabric:
+        carbon_per_kg = (
+            product.fabric.carbon_emission_per_kg
+        ) 
+        return carbon_per_kg * product.weight_in_kg  
+    return 0
+
+
+@login_required
+def product_emissions_view(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    total_emissions = calculate_carbon_saving(product)
+
+    context = {
+        'product': product,
+        'total_emissions': total_emissions,
+    }
+
+    return render(request, 'product.html', context)
 
 
 @login_required

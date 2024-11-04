@@ -30,7 +30,7 @@ class Category(models.Model):
 class Meta:
     verbose_name_plural = 'Categories'
 
-        
+
 def get_friendly_name(self):
     return self.friendly_name or self.name or "Unnamed Category"
 
@@ -86,6 +86,12 @@ class Product(models.Model):
     sold_at = models.DateTimeField(null=True, blank=True)  
     sold = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
+    def __str__(self):
+        return f"{self.fabric.name} - {self.weight_in_kg} kg"
+
     def time_until_expiration(self):
         if self.sold_at:
             return None 
@@ -94,10 +100,7 @@ class Product(models.Model):
         if remaining_time.total_seconds() <= 0:
             return None 
         return remaining_time
-
-    def __str__(self):
-        return self.name
-
+   
     def expired(self):
         if self.listed_at and not self.sold:
             expiration_date = self.listed_at + timedelta(days=90)
@@ -127,6 +130,9 @@ class Size(models.Model):
 
 class Fabric(models.Model):
     name = models.CharField(max_length=50)
+    carbon_emission_per_kg = models.FloatField(
+        help_text="carbon save in kg"
+    )
 
     def __str__(self):
         return self.name
