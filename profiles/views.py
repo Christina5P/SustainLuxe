@@ -20,6 +20,7 @@ import json
 @login_required
 def profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
+    account, account_created = Account.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=profile)
@@ -41,38 +42,14 @@ def profile(request):
     else:
         form = UserProfileForm(instance=profile)
 
-    template = 'profiles/account.html'
+    template = 'profiles/profile.html'
     context = {
         'form': form,
         'profile': profile,
         'created': created,
         'on_profile_page': True,
+        'account_created': account_created,
     }
-
-    return render(request, template, context)
-
-@login_required
-def create_account(request):
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
-
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Account created successfully')
-            return redirect(
-                'profile'
-            ) 
-        else:
-            messages.error(
-                request,
-                'Account creation failed. Please ensure the form is valid.',
-            )
-    else:
-        form = UserProfileForm(instance=profile)
-
-    template = 'profiles/create_account.html'
-    context = {'form': form}
 
     return render(request, template, context)
 
@@ -137,8 +114,16 @@ def saleorder_success(request,):
 @login_required
 def account_details(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    profile = user.userprofile
-    account = get_object_or_404(Account, user=request.user)
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    try:
+        account = Account.objects.get(user=user)
+    except Account.DoesNotExist:
+        messages.warning(
+            request, "Account not found. Please create an account first."
+        )
+        return redirect('profile.html')
+
+    account = get_object_or_404(Account, user=request.user) 
     orders = Order.objects.filter(user_profile=profile)
     template = 'profiles/account_details.html'
     products = ProductsProduct.objects.filter(user=request.user).order_by(

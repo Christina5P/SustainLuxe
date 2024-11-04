@@ -221,22 +221,64 @@ You view different choice if you are logged in or not.
 
 ![profilemenu](profilemenu.png)
 
-If you go to shoåp you view an extended navbar that also includes shopping bag and search field.
+If you go to shop you view an extended navbar that also includes shopping bag and search field.
 
 ![navbar_shop](navbar_shop.png)
 
 #### Registration/Log in Page
 
+![login](login.png)
+
+Log In page with a navigator back to homepage.
+
+Sign Up page with navigator back to Log in
+
+If you click Forgot password:
+
+![passwordreset](passwordreset.png)
+
+![signup](signup.png)
+
+![verifymail](verifymail.png)
+
+Sign Out page
+
+![signout](signout.png)
 
 
 
--Profile Page
--Shopping page
--Category search
--Filter
--Product detail
+### Profile Page
+
+When you are logged in you will reach your profile and account from a dropdown menu for easy navigation.
+
+### Sellers Products for sale
+
+As a user, you fill in the form to sell a product and submit. 
+After that you get a sale confirmation with information how to proceed.
+
+You have a checkbox if you want to pay for return of unsold product, so admin can monitor reutrns from database.
+ 
+![sale_confirmation](sale_confirmation.png)
+
+As an admin, you pick up the product in database, complete the information anf image and list it in shop.
+
+![product_in_database](product_in_database.png)
+
+The product get listed in shop and you can click on the image to get details
+
+![productdetail](productdetail.png)
+
+The user can now follow the product in account detail
+
+![accountdetail](accountdetail.png)
+
+### Shopping page
+#### Category search
+#### Filter
+
 -Shopping Bag
 -Checkout 
+
 -About us
 -Customer service
 -Product Management

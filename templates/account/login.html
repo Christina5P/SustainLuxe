@@ -21,14 +21,7 @@
                     </li>
                     </ul>
 <div class="text-center mb-3">
-<p>Log in with:</p>
-<a rel="nofollow" href="#" title="Connect with Google" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
-<i class="fab fa-google"></i>
-</a>
-<a rel="nofollow" href="#" title="Connect with Facebook" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
-<i class="fab fa-facebook"></i>
-</a>
-       <p class="text-center">or:</p>
+
 </div>
 <form class="login" method="POST" action="{% url 'account_login' %}">
 {% csrf_token %}  
@@ -40,20 +33,6 @@
 </div>
 </div>
 
-           
-
-  <div class="tab-content">
-                        <!-- Your tab content here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer stays at the bottom -->
-    <footer class="mt-auto">
-        <!-- Your footer content here -->
-    </footer>
-</div>
+          
 
 {% endblock %}

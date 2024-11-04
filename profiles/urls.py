@@ -20,7 +20,7 @@ urlpatterns = [
     path(
         'account/<int:user_id>/', views.account_details, name='account_details'
     ),
-]
+  ]
 
 """
 urlpatterns = [

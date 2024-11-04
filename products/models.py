@@ -130,8 +130,8 @@ class Size(models.Model):
 
 class Fabric(models.Model):
     name = models.CharField(max_length=50)
-    carbon_emission_per_kg = models.FloatField(
-        help_text="carbon save in kg"
+    carbon_emission_per_kg = models.DecimalField(
+        max_digits=10, decimal_places=2
     )
 
     def __str__(self):

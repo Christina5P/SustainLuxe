@@ -23,20 +23,9 @@
                     </ul>
 
                     <div class="text-center mb-3">
-                        <p>Sign in with:</p>
-                        <a rel="nofollow" href="#" title="Connect with Google" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
-                            <i class="fab fa-google"></i>
-                        </a>
-                        <a rel="nofollow" href="#" title="Connect with Facebook" class="btn btn-link btn-lg btn-floating mx-1 ripple-surface-primary" data-ripple-color="primary">
-                            <i class="fab fa-facebook"></i>
-                        </a>
-                           <p class="text-center">or:</p>
-
-                       </div>      
-
-
-          
- 
+                    
+                    </div>      
+      
                     <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
                  {% csrf_token %}
                    {{ form|crispy }}
@@ -50,11 +39,5 @@
             </div>
         </div>
     </div>
-</div>
-
-    <!-- Footer stays at the bottom -->
-    <footer class="mt-auto">
-        <!-- Your footer content here -->
-    </footer>
 </div>
 {% endblock %}

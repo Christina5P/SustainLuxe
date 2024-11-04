@@ -63,17 +63,6 @@ class Sale(models.Model):
         return f'{self.user.username} - Balance: {self.balance}'
 
 
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    """
-    Create or update the user profile
-    """
-    if created:
-        UserProfile.objects.create(user=instance)
-    else:
-        instance.userprofile.save()
-
-
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     total_revenue = models.DecimalField(

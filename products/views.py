@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.db.models.functions import Lower
 from .models import Product, Fabric, Category, Brand, Condition, Size
 from .forms import ProductForm, ProductFilterForm
+from decimal import Decimal, ROUND_DOWN
 
 
 main_categories = Category.objects.filter(parent_categories=None)
@@ -118,11 +119,13 @@ def calculate_carbon_saving(product):
     Calculate carbon emission of the given product's fabric and weight.
     """
     if product.fabric:
-        carbon_per_kg = (
-            product.fabric.carbon_emission_per_kg
-        ) 
-        return carbon_per_kg * product.weight_in_kg  
-    return 0
+        carbon_per_kg = product.fabric.carbon_emission_per_kg  
+        total_saving = carbon_per_kg * product.weight_in_kg
+      
+        total_saving = total_saving.quantize(Decimal('0.01'), rounding=ROUND_DOWN)
+        return total_saving
+
+    return Decimal(0).quantize(Decimal('0.01'), rounding=ROUND_DOWN)
 
 
 @login_required
