@@ -108,6 +108,15 @@ git push
 ![buildpack](static/images/Readme_img/buildpack.png)
 
 
+## Database Setup
+
+I choosed PostgreSQL from Code Institute.
+I logged in at https://dbs.ci-dbs.net/ 
+I received an e-mail with the name of database and added to:
+-env.py
+-config vars in Heroku
+
+
 ## aws Setup
 
 

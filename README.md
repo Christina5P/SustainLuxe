@@ -165,21 +165,24 @@ I want the user to realize that you can combinate this two foundations and that 
   I use colors from a palette to harmonize together.
   They are calm, but heading to green/blue scale to visualize luxurize and nature.
       
- ![colors](colors.png)
+ ![colors](static/images/Readme_img/colors.png)
 
 - Favicon
 I use the same image for favicon and "no img" to show sustainable and clothes
 I also load the favicon to work on different devices
-![Favicon](static/images/Readme_img/favicon/favicon-32x32.png)
+
+![Favicon](static/images/Readme_img/favicon/secondhandclothes-32x32.png)
 
 Background is by recycled paper to give the touch to sustainable.
 
 - Font
  Playfair Display SC
+
  The font is simple to read and have a luxury touch, which is important for user to understand the class of selling clothes.
  It showing seriously sell and buy.
  I have the same font across the pages to make it consistent.
 
+ ![Font](static/images/Readme_img/font.png)
 
 
 ### [Media](#media)
@@ -271,6 +274,14 @@ Superuser can delete product from Product Management view.
 * PostgreSQL: the database used to store all the data.
 * AWS Web Services: service used to store media and static files
 
+### [Setup](#setup)
+
+[Read Document](setups.md)
+
+### [Deployment](#deployment) 
+
+
+[Read Document](deployment.md)
 
 ### [Testing](#testing)
 
@@ -294,9 +305,8 @@ Result:
 
 ### [Bug Report](#bugreport)
 
-### [Deployment](#deployment) 
 
-SustaineLuxe is host on GitHub and deployed on Heroku
+
 
 ### [Credits](#credits)
 
