@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category
+from .models import Product, Category, ProductImage
 from .models import Brand, Condition, Fabric, Size, Color
 
 
@@ -8,9 +8,14 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name', 'friendly_name')
 
 
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 2
+
+
 class ProductAdmin(admin.ModelAdmin):
     readonly_fields = ('sku',)
-    
+
     list_display = (
         'name',
         'sku',
@@ -36,6 +41,8 @@ class ProductAdmin(admin.ModelAdmin):
     )
     actions = ['list_products', 'mark_for_return']
     search_fields = ('name', 'user__user__username')
+
+    inlines = [ProductImageInline]
 
     def list_products(self, request, queryset):
         for product in queryset:

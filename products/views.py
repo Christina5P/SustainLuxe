@@ -3,7 +3,15 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models.functions import Lower
-from .models import Product, Fabric, Category, Brand, Condition, Size
+from .models import (
+    Product,
+    Fabric,
+    Category,
+    Brand,
+    Condition,
+    Size,
+    ProductImage,
+)
 from .forms import ProductForm, ProductFilterForm
 from decimal import Decimal, ROUND_DOWN
 
@@ -99,6 +107,7 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     carbon_saving = calculate_carbon_saving(product)
     fabrics = Fabric.objects.all()
+    images = ProductImage.objects.filter(product=product)
 
     context = {
         'product': product,
@@ -108,6 +117,7 @@ def product_detail(request, product_id):
         'fabrics': fabrics,
         'color': product.color,
         'carbon_saving': carbon_saving,
+        'images': images,
     }
 
     return render(request, 'products/product_detail.html', context)
