@@ -4,7 +4,7 @@ from .models import UserProfile, User, Account
 from .forms import UserProfileForm, SellerForm, WithdrawalForm
 from checkout.models import Order
 from .models import Sale
-from products.models import Product as ProductsProduct
+from products.models import Product
 import uuid
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -59,6 +59,7 @@ def sale_product(request):
     """
     template = 'profiles/sale_product.html'
     sale, created = Sale.objects.get_or_create(user=request.user)
+    account, created = Account.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         form = SellerForm(request.POST)
@@ -70,6 +71,12 @@ def sale_product(request):
 
             earned_amount = product.price 
             sale.update_balance(earned_amount)
+            print("Anropar update_balance i vyn", sale.balance)
+
+            account.total_revenue += Decimal(earned_amount) * Decimal('0.7')
+            account.save()
+            print(f"Product sold for: {earned_amount}")
+            print(f"Updated account total revenue: {account.total_revenue}")
 
             request.session['save_info'] = {
                 'sku': product.sku,
@@ -115,21 +122,21 @@ def saleorder_success(request,):
 def account_details(request, user_id):
     user = get_object_or_404(User, id=user_id)
     profile, created = UserProfile.objects.get_or_create(user=request.user)
-    try:
-        account = Account.objects.get(user=user)
-    except Account.DoesNotExist:
-        messages.warning(
-            request, "Account not found. Please create an account first."
-        )
-        return redirect('profile.html')
+    # try:
+    #    account = Account.objects.get(user=user)
+    # except Account.DoesNotExist:
+    #    messages.warning(
+    #        request, "Account not found. Please create an account first."
+    #    )
+    #    return redirect('profile.html')
 
     account = get_object_or_404(Account, user=request.user) 
     orders = Order.objects.filter(user_profile=profile)
     template = 'profiles/account_details.html'
-    products = ProductsProduct.objects.filter(user=request.user).order_by(
+    products = Product.objects.filter(user=request.user).order_by(
         '-created_at'
     )
-    sold_products = ProductsProduct.objects.filter(user=user, sold=True)
+    sold_products = Product.objects.filter(user=user, sold=True)
     available_balance = account.calculate_balance()
     withdrawal_history = account.withdrawal_history
     paginator = Paginator(products, 10)

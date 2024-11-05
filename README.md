@@ -2,6 +2,27 @@
 
 ## Table of Contents
 
+
+- [About](#about)
+- [Marketing research](#marketing-research) 
+- [Agile method](#agile-method) 
+  - [Concept Chart](#static/images/Readme_img/concept_chart_sustainLuxe.png)
+  - [Buisness Model](#buisness_model)
+  - [ERD](#erd)
+  - [User Stories](#user-stories) 
+- [wireframes](#wireframes)
+- [UX](#ux)
+- [Design](#design)
+- [Media](#media)
+- [Features](#features) 
+  - [Existing Features](#existing_featuers)
+  - 
+
+
+
+
+
+
 ### [About](#about)
 
 SustainLuxe is a second Hand Shop online for designer clothes.
@@ -197,6 +218,13 @@ Image and content used from media:
 * https://urbanswall.com/luuxly-com-your-destination-for-luxury-fashion-and-lifestyle/
 * https://www.lifestyleasia.com/ind/style/fashion/second-hand-luxury-is-the-new-sustainable-trend/
 * https://us.vestiairecollective.com/ - I have borrowed product img from this second hand store
+* https://app.logomaster.ai/ - help making a logotype
+* https://www.colorhexa.com/ - Colorscheme
+* https://climatepartnerimpact.com/get-involved/ - derivation to a project for donation
+* http://lucid.app - Creating a concept Plan
+* https://fontawesome.com/ -font awesome icons
+* https://www.istockphoto.com/ -pictures
+
 
 
 ## [Features](#features) 
@@ -205,10 +233,9 @@ Image and content used from media:
 
 ### [Existing Features](#existing_featuers)
 
-#### Navbar
+<details><summary>Navbar</summary>
 
-
-![navbar](navbar.png)
+![navbar](static/images/Readme_img/navbar.png)
 
 
 Visible for all users.
@@ -217,17 +244,20 @@ Clear view if you are logged in or not.
 Menu for profile.
 You view different choice if you are logged in or not.
 
-![logintoggle](logintoggle.png)
+![logintoggle](static/images/Readme_img/logintoggle.png)
 
-![profilemenu](profilemenu.png)
+![profilemenu](static/images/Readme_img/profilemenu.png)
 
 If you go to shop you view an extended navbar that also includes shopping bag and search field.
 
-![navbar_shop](navbar_shop.png)
+![navbar_shop](static/images/Readme_img/navbar_shop.png)
 
-#### Registration/Log in Page
+</details>
 
-![login](login.png)
+<details><summary>Registration / Log In</summary>
+
+
+![login](static/images/Readme_img/login.png)
 
 Log In page with a navigator back to homepage.
 
@@ -235,60 +265,116 @@ Sign Up page with navigator back to Log in
 
 If you click Forgot password:
 
-![passwordreset](passwordreset.png)
+![passwordreset](static/images/Readme_img/passwordreset.png)
 
-![signup](signup.png)
+![signup](static/images/Readme_img/signup.png)
 
-![verifymail](verifymail.png)
+![verifymail](static/images/Readme_img/verifymail.png)
 
 Sign Out page
 
-![signout](signout.png)
+![signout](static/images/Readme_img/signout.png)
+
+</details>
 
 
+<details><summary>Profile Page</summary>
 
-### Profile Page
 
 When you are logged in you will reach your profile and account from a dropdown menu for easy navigation.
 
-### Sellers Products for sale
+<details><summary>Sellers Products for sale</summary>
 
 As a user, you fill in the form to sell a product and submit. 
-After that you get a sale confirmation with information how to proceed.
+
+![Selling Form](static/images/Readme_img/sellingform.png)
+
 
 You have a checkbox if you want to pay for return of unsold product, so admin can monitor reutrns from database.
+
+After that you get a sale confirmation with information how to proceed.
  
-![sale_confirmation](sale_confirmation.png)
-
-As an admin, you pick up the product in database, complete the information anf image and list it in shop.
-
-![product_in_database](product_in_database.png)
-
-The product get listed in shop and you can click on the image to get details
-
-![productdetail](productdetail.png)
+![sale_confirmation](static/images/Readme_img/sale_confirmation.png)
 
 The user can now follow the product in account detail
 
-![accountdetail](accountdetail.png)
+![accountdetail](static/images/Readme_img/accountdetail.png)
 
-### Shopping page
-#### Category search
+</details>
+
+
+<details><summary>Shopping page</summary>
+
+#### Category / search
+
+There is a navbar with the categories, where you can choose from
+
+![category](static/images/Readme_img/category.png)
+
+
+You can also sort from diffrent choices
+
+![sortby](static/images/Readme_img/sortby.png)
+
 #### Filter
 
--Shopping Bag
--Checkout 
 
--About us
--Customer service
--Product Management
-- Footer
--Error page
+If you like to filter from multiple choices, you can use the filter form
+
+![filter](static/images/Readme_img/filter.png)
+
+
+#### Product details
+
+Click on an img to get product detail as brand, size, condition and carbon saving
+
+![productdetail](static/images/Readme_img/productdetail.png)
+
+User can add multiple img to the product:
+
+![multiple_img](static/images/Readme_img/multiple_img.png)
+
+#### Shopping Bag
+
+User can click on shoppingbag in menu to see bags content and any delivery costs.
+
+There is a possible to remove products, keep shopping or go to checkout
+
+![shoppingbag](static/images/Readme_img/shoppingbag.png)
+#### Checkout 
+
+You click on checkout and make your payment
+
+![checkout](static/images/Readme_img/checkout.png)
+
+After process, you get a confirmation
+
+![profilemenu](static/images/Readme_img/checkout_success.png)
+
+</details>
+
+
+<details><summary>Admin</summary>
+
+
+
+As an admin, you pick up the product in database, complete the information anf image and list it in shop.
+
+![product_in_database](static/images/Readme_img/product_in_database.png)
+</details>
+
+
+<details><summary>Footer</summary></details>
+
+<details><summary>Error page</summary></details>
+
 
 #### [Future Features](#future_features)
 
+* change visual layout of  multiple img  to be clickable and navigation buttons
 
-### CRUD
+
+### [CRUD](#crud)
 
 -Create
 User can create a selling order, and create an order in shop
@@ -344,12 +430,16 @@ Superuser can delete product from Product Management view.
 
 ### [Setup](#setup)
 
+Read about setups in this document:
+
 [Read Document](setups.md)
 
 ### [Deployment](#deployment) 
 
+Read about setups in this document:
 
 [Read Document](deployment.md)
+
 
 ### [Testing](#testing)
 
@@ -371,20 +461,15 @@ Result:
 
 #### [Manual Testing](#manual_testing) 
 
+I need to test continously and before submitting the project I made manual testing of the project.
+I had a separate test dokumnent for reporting
+Link to my test dokument: https://docs.google.com/document/d/1LPkE_CAtZQuE4urXtBMwkbCD7vIR0EaKDLfl37nrFYM/edit?usp=sharing
+
+
 ### [Bug Report](#bugreport)
 
-
-
-
-### [Credits](#credits)
-
-* https://app.logomaster.ai/ - help making a logotype
-* https://www.colorhexa.com/ - Colorscheme
-* https://climatepartnerimpact.com/get-involved/ - derivation to a project for donation
-* http://lucid.app - Creating a concept Plan
-* https://fontawesome.com/ -font awesome icons
-* https://www.istockphoto.com/ -pictures
-* https://pypi.org/project/psycopg2/ -tutoring psycopg2
+I created a separate bug report.
+You can read the report with this link: https://docs.google.com/document/d/1Q_QkhXgTo5Ocxd-jRNPWcHfwuIycwIpS62rIy_T5-KQ/edit?usp=sharing
 
 * 
 ### [Acknowledgements](#acknowledgements)
@@ -394,7 +479,7 @@ Result:
 - walk through Boutique Ado
 - https://www.youtube.com/watch?v=hZYWtK2k1P8 -tutoring stripe payment
 - https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
-
+- https://pypi.org/project/psycopg2/ -tutoring psycopg2
 - https://www.bigcommerce.com/articles/ecommerce/fashion-ecommerce/
 - https://python.plainenglish.io/creating-a-django-e-commerce-product-filter-prototype-a8e7409453fc -creating filter tutoring
 - https://stackoverflow.com/ - -creating filter tutoring

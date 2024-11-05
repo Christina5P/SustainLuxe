@@ -88,14 +88,6 @@ footer,
     font-weight: 300;
 }
 
-
-    /* Height for devices larger than 576px */
-    @media (min-width: 992px) {
-      #introCarousel {
-        margin-top: 2rem;
-      }
-    
-    }
     
 
 .carousel-caption {
@@ -212,3 +204,12 @@ footer,
 .arrow-dark {
     border-bottom-color: #343a40 !important;
 }
+
+
+    /* Height for devices larger than 576px */
+    @media (min-width: 992px) {
+      #introCarousel {
+        margin-top: 2rem;
+      }
+    
+    }

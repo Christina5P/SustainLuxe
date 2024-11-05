@@ -63,6 +63,7 @@ def checkout(request):
             'country': request.POST['country'],
         }
         order_form = OrderForm(form_data)
+
         if order_form.is_valid():
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
@@ -75,23 +76,27 @@ def checkout(request):
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
-                    if isinstance(item_data, int):
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            product=product,
-                            quantity=item_data,
-                        )
-                        order_line_item.save()
-                    else:
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            product=product,
-                            product_size=item_data['size'],
-                            quantity=item_data['quantity'],
-                        )
+                    quantity = (
+                        item_data
+                        if isinstance(item_data, int)
+                        else item_data['quantity']
+                    )
+                    product_size = (
+                        item_data['size']
+                        if isinstance(item_data, dict)
+                        else None
+                    )
+
+                    order_line_item = OrderLineItem(
+                        order=order,
+                        product=product,
+                        product_size=product_size,
+                        quantity=quantity,
+                    )
                     order_line_item.save()
                     print(f"Saved order line item: {order_line_item}")
 
+                    # Set the product for the order
                     if not order.product:
                         order.product = product
                         order.save()

@@ -6,6 +6,7 @@ from django_countries.fields import CountryField
 from django.utils import timezone
 from decimal import Decimal
 from products.models import Product 
+
 from simple_history.models import HistoricalRecords
 import json
 
@@ -85,11 +86,15 @@ class Account(models.Model):
         max_length=255, blank=True, null=True
     )
 
+    def update_total_revenue(self, amount):
+        self.total_revenue += Decimal(amount) * Decimal('0.7')
+        self.save()
+        print(f"Updated total revenue: {self.total_revenue}")
+
     def calculate_balance(self):
         try:
             withdrawal_history = json.loads(self.withdrawal_history) if self.withdrawal_history else []
         except json.JSONDecodeError:
-            print(f"Kunde inte avkoda withdrawal_history: {self.withdrawal_history}")
             withdrawal_history = []
 
         total_withdrawals = sum(
@@ -97,8 +102,12 @@ class Account(models.Model):
             for w in withdrawal_history
             if isinstance(w, dict) and w.get('status') == 'completed'
         )
-        return self.total_revenue - total_withdrawals
-
+        # return self.total_revenue - total_withdrawals
+        balance = self.total_revenue - total_withdrawals
+        print(f"Calculated balance: {balance}")
+        # return balance
+        return self.total_revenue
+    """
     def request_payout(self, amount):
         amount = Decimal(amount).quantize(Decimal("0.01"))
         if amount <= self.calculate_balance():
@@ -117,6 +126,18 @@ class Account(models.Model):
             current_history.append(withdrawal_entry)
 
             self.withdrawal_history = json.dumps(current_history)
+            self.save()
+            return True
+        return False
+    """
+
+    def request_payout(self, amount):
+        available_balance = self.calculate_balance()
+        if amount <= available_balance:
+            self.pending_payout += amount
+            self.withdrawal_history.append(
+                {'amount': str(amount), 'status': 'pending', 'timestamp': str(timezone.now())}
+            )
             self.save()
             return True
         return False
@@ -146,4 +167,3 @@ class Account(models.Model):
             self.save()
             return True
         return False
-
