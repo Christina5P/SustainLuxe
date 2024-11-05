@@ -89,8 +89,7 @@ def all_products(request):
         'selected_condition': condition_id,
         'selected_size': size_id,
         'form': form,
-        #'categories': categories,
-    }
+        }
 
     return render(request, 'products/products.html', context)
 

@@ -9,6 +9,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
+    readonly_fields = ('sku',)
+    
     list_display = (
         'name',
         'sku',
