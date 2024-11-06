@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from .models import UserProfile
 from products .models import Product
-
+from .models import Sale
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
@@ -15,9 +15,7 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     # Existing users: just save the profile
     instance.userprofile.save()
 
-    @receiver(post_save, sender=User)
-    def create_or_update_sale_profile(sender, instance, created, **kwargs):
-        if created:
-            Sale.objects.create(user=instance)
-        else:
-            instance.sale.save()
+@receiver(post_save, sender=User)
+def create_sale_for_new_user(sender, instance, created, **kwargs):
+    if created:
+        Sale.objects.create(user=instance)
