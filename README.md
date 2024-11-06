@@ -282,10 +282,12 @@ Sign Out page
 
 
 When you are logged in you will reach your profile and account from a dropdown menu for easy navigation.
+</details>
 
 <details><summary>Sellers Products for sale</summary>
 
 As a user, you fill in the form to sell a product and submit. 
+You need to be logged in to use the sale order form.
 
 ![Selling Form](static/images/Readme_img/sellingform.png)
 
@@ -341,6 +343,7 @@ User can click on shoppingbag in menu to see bags content and any delivery costs
 There is a possible to remove products, keep shopping or go to checkout
 
 ![shoppingbag](static/images/Readme_img/shoppingbag.png)
+
 #### Checkout 
 
 You click on checkout and make your payment
@@ -355,12 +358,20 @@ After process, you get a confirmation
 
 
 <details><summary>Admin</summary>
+As an admin you connect:
+Product model - Represent products users can sell.
+  Fields for price, weight, categories, fabric, color, Sixe, Brand and condition.
+UserProfile model - from Django allauth with necessary userinformation.
+Account model - to view balance and transaction history fpr selling items.
+Sale model - for information of productsale
 
+Views are added for render function to htmls:s and interaction from users and forms for selling products and update profiles.
 
-
-As an admin, you pick up the product in database, complete the information anf image and list it in shop.
+As an admin, you pick up the product in database, complete the information anf image and list product in shop.
+Signals is created in checkout-app to update status and calculate revenue balance.
 
 ![product_in_database](static/images/Readme_img/product_in_database.png)
+
 </details>
 
 
@@ -430,15 +441,11 @@ Superuser can delete product from Product Management view.
 
 ### [Setup](#setup)
 
-Read about setups in this document:
-
-[Read Document](setups.md)
+Read about setups in this document: [Setups](setups.md)
 
 ### [Deployment](#deployment) 
 
-Read about setups in this document:
-
-[Read Document](deployment.md)
+Read about setups in this document: [Deployment](deployment.md)
 
 
 ### [Testing](#testing)
@@ -471,7 +478,7 @@ Link to my test dokument: https://docs.google.com/document/d/1LPkE_CAtZQuE4urXtB
 I created a separate bug report.
 You can read the report with this link: https://docs.google.com/document/d/1Q_QkhXgTo5Ocxd-jRNPWcHfwuIycwIpS62rIy_T5-KQ/edit?usp=sharing
 
-* 
+
 ### [Acknowledgements](#acknowledgements)
 
 - Tutoring, Q&A and criteria videos in slack channel project-potfolio-5-e-commerce
@@ -495,3 +502,4 @@ You can read the report with this link: https://docs.google.com/document/d/1Q_Qk
 - https://medium.com/django-unleashed/mastering-the-art-of-django-simple-history-a-tutorial-for-medium-with-examples-c25196339130
 
 
+[Go to Top](#sustainluxe---e-commerce-site)

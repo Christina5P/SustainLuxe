@@ -3,6 +3,7 @@ from django.utils.html import format_html
 from .models import Account
 from simple_history.admin import SimpleHistoryAdmin
 import json
+from products.models import Product
 
 
 class PayoutStatusFilter(admin.SimpleListFilter):
@@ -17,10 +18,10 @@ class PayoutStatusFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == 'pending':
-            return queryset.filter(pending_payout__gt=0)
+            return queryset.filter(payout_status='pending')
         if self.value() == 'completed':
-            return queryset.filter(pending_payout=0)
-        return queryset
+            return queryset.filter(payout_status='completed')
+        return queryset 
 
 
 @admin.register(Account)
@@ -69,6 +70,12 @@ class AccountAdmin(SimpleHistoryAdmin):
         ),
     )
 
+    def current_balance(self, obj):
+        print(f'Calling calculate_balance for {obj.user.username}')  # Lägg till print här för att säkerställa att metoden anropas
+        balance = obj.calculate_balance()
+        print(f"Calculated balance for {obj.user.username}: {balance}")  # Utskrift av beräknat saldo
+        return balance
+
     def payout_status_display(self, obj):
         return format_html(
             '<span style="color: {};">{}</span>',
@@ -93,39 +100,25 @@ class AccountAdmin(SimpleHistoryAdmin):
 
     process_payouts.short_description = 'Process Pending Payouts'
 
-    def current_balance(self, obj):
-        return obj.calculate_balance()
-
-    current_balance.short_description = 'Current Balance'
-
     def formatted_withdrawal_history(self, obj):
-    # Ensure withdrawal_history is decoded properly
-        try:
-            withdrawals = json.loads(obj.withdrawal_history) if obj.withdrawal_history else []
-        except json.JSONDecodeError:
-            withdrawals = []
-            print(f"Failed to decode withdrawal_history: {obj.withdrawal_history}")
+        """Return formatted withdrawal history for display in Django admin."""
+        # Kontrollera om withdrawal_history redan är en lista
+        if isinstance(obj.withdrawal_history, str):
+            try:
+                withdrawal_history = json.loads(obj.withdrawal_history)
+            except json.JSONDecodeError:
+                withdrawal_history = []
+                print(f"Error decoding withdrawal_history for {obj.user.username}")
+        else:
+            withdrawal_history = obj.withdrawal_history  # Använd den direkt om det redan är en lista
 
-        if not withdrawals:
-            return "No withdrawal history."
-
-        table_rows = "".join(
-            f"<tr><td>{w.get('date', 'N/A')}</td><td>{w.get('amount', 0)}</td></tr>"  # Use .get to avoid KeyError
-            for w in sorted(withdrawals, key=lambda x: x.get('date', ''), reverse=True)  # Handle potential missing 'date'
+        # Generera en läsbar sträng från withdrawal_history
+        formatted_history = "\n".join(
+            [
+                f"Date: {entry.get('date')}, Amount: {entry.get('amount')}, Status: {entry.get('status')}"
+                for entry in withdrawal_history
+            ]
         )
+        return formatted_history if formatted_history else "No withdrawal history"
 
-        return format_html(
-            f"""
-            <table style="width:100%; border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th style="border: 1px solid #ddd; padding: 8px;">Date</th>
-                        <th style="border: 1px solid #ddd; padding: 8px;">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>{table_rows}</tbody>
-            </table>
-            """
-        )
-
-        formatted_withdrawal_history.short_description = 'Withdrawal History'
+    formatted_withdrawal_history.short_description = "Formatted Withdrawal History"

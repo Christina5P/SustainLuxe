@@ -8,6 +8,8 @@ from decimal import Decimal
 from django.conf import settings
 from django.utils.text import slugify
 import uuid
+from profiles.models import UserProfile, Sale, Account 
+from django.apps import apps
 
 
 class Category(models.Model):
@@ -33,8 +35,8 @@ class Meta:
     verbose_name_plural = 'Categories'
 
 
-def get_friendly_name(self):
-    return self.friendly_name or self.name or "Unnamed Category"
+# def get_friendly_name(self):
+#    return self.friendly_name or self.name or "Unnamed Category"
 
 
 class Product(models.Model):
@@ -89,7 +91,7 @@ class Product(models.Model):
     sold = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.fabric.name} - {self.weight_in_kg} kg"
+        return f"{self.name} ({self.fabric.name} - {self.weight_in_kg} kg)"
 
     def save(self, *args, **kwargs):
         if not self.sku:
@@ -115,17 +117,23 @@ class Product(models.Model):
         if not self.is_listed:
             self.is_listed = True
             self.listed_at = timezone.now()
-            self.save()        
+            self.save()  
 
     def mark_as_sold(self):
-        self.sold = True
-        self.sold_at = timezone.now()
-        self.is_listed = False
-        self.save()
-        self.user.userprofile.update_balance(self.price)
+        if not self.sold:
+            self.sold = True
+            self.sold_at = timezone.now()
+            self.is_listed = False
+            self.save()
+            print('sold item')
 
-    def __str__(self):
-        return self.name
+            try:
+                sale = Sale.objects.get(user=self.user)
+            except Sale.DoesNotExist:
+                sale = Sale.objects.create(user=self.user)
+
+            sale.update_balance_and_revenue(self.price)
+            print('update balance', sale.balance)
 
 
 class Size(models.Model):

@@ -1,9 +1,9 @@
+from django.db import models
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
-from .models import UserProfile, User, Account
+from .models import UserProfile, User, Account, Sale
 from .forms import UserProfileForm, SellerForm, WithdrawalForm
 from checkout.models import Order
-from .models import Sale
 from products.models import Product
 import uuid
 from django.shortcuts import render, get_object_or_404, redirect
@@ -15,7 +15,6 @@ from django.utils import timezone
 from .utils import get_total_balance
 from django.core.paginator import Paginator
 import json
-
 
 @login_required
 def profile(request):
@@ -53,10 +52,9 @@ def profile(request):
 
     return render(request, template, context)
 
-
+@login_required
 def sale_product(request):
-    """Form for selling product
-    """
+    """Form for selling product"""
     template = 'profiles/sale_product.html'
     sale, created = Sale.objects.get_or_create(user=request.user)
     account, created = Account.objects.get_or_create(user=request.user)
@@ -69,23 +67,16 @@ def sale_product(request):
             product.user = request.user
             product.save()
 
-            earned_amount = product.price 
+            earned_amount = product.price
             sale.update_balance(earned_amount)
-            print("Anropar update_balance i vyn", sale.balance)
-
-            account.total_revenue += Decimal(earned_amount) * Decimal('0.7')
-            account.save()
-            print(f"Product sold for: {earned_amount}")
-            print(f"Updated account total revenue: {account.total_revenue}")
+            account.update_total_revenue(earned_amount)
 
             request.session['save_info'] = {
                 'sku': product.sku,
                 'earned_amount': float(earned_amount * Decimal('0.7')),
             }
-            messages.success(
-                request, 'Your Form has been sended!'
-            )
-            return redirect('saleorder_success') 
+            messages.success(request, 'Your product has been listed for sale!')
+            return redirect('saleorder_success')
     else:
         form = SellerForm()
 
@@ -122,23 +113,21 @@ def saleorder_success(request,):
 def account_details(request, user_id):
     user = get_object_or_404(User, id=user_id)
     profile, created = UserProfile.objects.get_or_create(user=request.user)
-    # try:
-    #    account = Account.objects.get(user=user)
-    # except Account.DoesNotExist:
-    #    messages.warning(
-    #        request, "Account not found. Please create an account first."
-    #    )
-    #    return redirect('profile.html')
-
-    account = get_object_or_404(Account, user=request.user) 
+    account, account_created = Account.objects.get_or_create(user=request.user)
     orders = Order.objects.filter(user_profile=profile)
-    template = 'profiles/account_details.html'
-    products = Product.objects.filter(user=request.user).order_by(
-        '-created_at'
-    )
+    products = Product.objects.filter(user=request.user).order_by('-created_at')
     sold_products = Product.objects.filter(user=user, sold=True)
+    template = 'profiles/account_details.html'
+
+    # Calculate and display available balance
     available_balance = account.calculate_balance()
-    withdrawal_history = account.withdrawal_history
+
+    withdrawal_history = (
+        json.loads(account.withdrawal_history)
+        if isinstance(account.withdrawal_history, str)
+        else account.withdrawal_history
+    )
+
     paginator = Paginator(products, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -172,12 +161,16 @@ def withdrawal_view(request):
                 'bank_account_number'
             ]
             account.save()
+
             if account.request_payout(amount):
+                # Efter en uttagsbegäran, försök behandla uttaget
+                account.process_payout()  # Uppdaterar status om det finns pending requests
                 messages.success(request, 'Withdrawal requested successfully.')
             else:
                 messages.error(request, 'Error processing withdrawal.')
             return redirect('withdrawal')
 
+    # Förbered data för GET-begäran
     withdrawal_history = (
         json.loads(account.withdrawal_history)
         if isinstance(account.withdrawal_history, str)

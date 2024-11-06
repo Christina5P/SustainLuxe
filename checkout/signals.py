@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
 from .models import OrderLineItem, Order 
-from products.models import Product
+
 
 
 @receiver(post_save, sender=OrderLineItem)
@@ -14,7 +14,12 @@ def update_on_save(sender, instance, created, **kwargs):
         instance.order.update_total()
         if created:
             product = instance.product
-            product.mark_as_sold()
+            if product:
+                product.mark_as_sold()
+            else:
+                print(
+                    "Warning: OrderLineItem created without associated product"
+                )
     except Exception as e:
         print(f"Error in update_on_save: {e}")
 
