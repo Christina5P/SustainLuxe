@@ -139,3 +139,46 @@
 
 {% endblock %}
 
+
+{% block postloadjs %}
+<script type="text/javascript">
+    // Scroll to top
+    $(document).ready(function () {
+        $('.btt-link').click(function(e) {
+            e.preventDefault();  
+            window.scrollTo(0, 0);
+        });
+
+         // Sort by function
+        $('#sort-selector').change(function () {
+            var selector = $(this);
+            var currentUrl = new URL(window.location.href);  
+
+            var selectedVal = selector.val();
+            if (selectedVal != "reset") {
+                var sort = selectedVal.split("_")[0];
+                var direction = selectedVal.split("_")[1];
+
+                currentUrl.searchParams.set("sort", sort);
+                currentUrl.searchParams.set("direction", direction);
+
+                window.location.replace(currentUrl);
+            } else {
+                currentUrl.searchParams.delete("sort");
+                currentUrl.searchParams.delete("direction");
+
+                window.location.replace(currentUrl);
+            }
+        });
+
+        // Clear Filters button
+        $('#clearButton').click(function (e) {
+            e.preventDefault(); 
+            $('input[type="checkbox"]').prop('checked', false);
+            $('#filterForm').submit();
+        }); 
+    });
+</script>
+
+{% endblock %}
+

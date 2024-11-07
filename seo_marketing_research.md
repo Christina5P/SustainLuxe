@@ -62,7 +62,31 @@ For the competition market I added:
 
 ## Newsletter
 
-![Subscribe to newsletter](docs/readme-img/bn-subscribe.png)
+As a marketing action I provides users with a newsletter from SustainLuxe.
+Users are able to subscribe to the newsletter on the website.
+I use mailchimp to handle subscribers and newsletter.
+
+![mailschimp](mailchimp.png)
+
+When you are logged in at https://us12.admin.mailchimp.com/ you have access to Audience, where you can follow contacts, growth and create segments for example.
+
+![contacts](contacts.png)
+
+From this site, you create your newsletter and make your set ups.
+
+![Setup Mail](setup_mail.png)
+
+Here is an example of a newsletter to send
+
+![Example newsletter](example_newsletter.png)
+
+Users can subscribe to newsletter in the footer and after submit, they get a confirmation.
+
+![Newsletter](newsletter.png)
+
+![Newslette subscribed](<newsletter_subscribed.png>)
+
+
 
 
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
+ {% block extra_css %}
 <style>
    /* Carousel styling */
     #introCarousel,
@@ -31,6 +32,7 @@
       background-position: center center;
     }
 </style>
+{% endblock %}
 
 {% block content %}
 
@@ -119,11 +121,10 @@
       </div>
     </div>
   
-  
+
 {% block postloadjs %}
-{{ block.super }}
+   {{ block.super }}
 <script src="{% static 'js/sustainable.js' %}"></script>
 {% endblock %}
 
-</main>
 {% endblock %}
