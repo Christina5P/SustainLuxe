@@ -174,7 +174,7 @@
       </div>
 
       <!-- Customer Service -->
-      <div class="col-md-3 ms-auto text-end">
+      <div class="col-md-3 ms-auto text-center">
         <h6 class="text-uppercase fw-bold mb-2">Customer Service</h6>
         <ul class="list-unstyled">
           <li><a href="#" class="text-reset">Contact Us</a></li>
@@ -216,6 +216,7 @@
 
 {% block corejs %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
 <script src="https://kit.fontawesome.com/3090a0f319.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
@@ -225,6 +226,26 @@
 {% endblock %}
 
 {% block postloadjs %}
+
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mailchimp form submit and validation initialization here
+            (function($) {
+                window.fnames = new Array(); 
+                window.ftypes = new Array();
+                fnames[0] = 'EMAIL';
+                ftypes[0] = 'email';
+                fnames[1] = 'FNAME';
+                ftypes[1] = 'text';
+                fnames[2] = 'LNAME';
+                ftypes[2] = 'text';
+                // Add other fields as needed
+            }(jQuery));
+            var $mcj = jQuery.noConflict(true);
+        });
+    </script>
+
 <script type="text/javascript">
 
     // toast function

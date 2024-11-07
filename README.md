@@ -254,6 +254,19 @@ If you go to shop you view an extended navbar that also includes shopping bag an
 
 </details>
 
+<details><summary>Home Page</summary>
+
+You will be inviting to action in the Homepage and view easy navigation of your interest.
+
+![Home Page](homepage.png)
+
+In "Sell with us" section, you find a visual and clear information for selling a product.
+
+In "Read more" section, you find information and trigger to sustainable think.
+
+![Sustainable](sustainable.png)
+
+
 <details><summary>Registration / Log In</summary>
 
 
@@ -282,6 +295,34 @@ Sign Out page
 
 
 When you are logged in you will reach your profile and account from a dropdown menu for easy navigation.
+You have your settings and account in Profile Page, including:
+
+- Profile settings
+
+![Update Profile](static/images/Readme_img/update_profile.png)
+You can change your e-mail or adress.
+
+- Order History
+All orders from shopping and pop up for more details.
+
+![Order History](static/images/Readme_img/orderhistory.png)
+
+In menu, you also have
+- sale Registration Form (available from both Profile menu and link in "Sell with us" page)
+- Account details - Sellers balance from sold products and a history with products,
+  where you have status of product, selling price and balance from sold items.
+
+![Account](static/images/Readme_img/account.png)
+
+- Withdrawal
+  It´s fom here you request for a withdrawal from sold products.
+  It is a check that there is sufficient credit for withdrawals.
+  You will see status of the request under the request button.
+  Balance updates when the request is send.
+  If user doesn´t have cover, they get a message with value of balance.
+
+  ![Withdrawal](static/images/Readme_img/withdrawal.png)
+
 </details>
 
 <details><summary>Sellers Products for sale</summary>
@@ -298,7 +339,7 @@ After that you get a sale confirmation with information how to proceed.
  
 ![sale_confirmation](static/images/Readme_img/sale_confirmation.png)
 
-The user can now follow the product in account detail
+The user can now follow the product in account detail, 
 
 ![accountdetail](static/images/Readme_img/accountdetail.png)
 
@@ -358,19 +399,46 @@ After process, you get a confirmation
 
 
 <details><summary>Admin</summary>
+
+
 As an admin you connect:
-Product model - Represent products users can sell.
+Product model - Represent products users can sell.<br>
   Fields for price, weight, categories, fabric, color, Sixe, Brand and condition.
+
 UserProfile model - from Django allauth with necessary userinformation.
-Account model - to view balance and transaction history fpr selling items.
-Sale model - for information of productsale
+
+Account model - to view balance and transaction history for selling items.
+
+Sale model - information of productsale
 
 Views are added for render function to htmls:s and interaction from users and forms for selling products and update profiles.
 
-As an admin, you pick up the product in database, complete the information anf image and list product in shop.
-Signals is created in checkout-app to update status and calculate revenue balance.
+Database it´the place for admin to manage products information, view order history and handle users account and withdrawal. 
+
+![Admin menu](static/images/Readme_img/admin_menu.png)
+
+As an admin, you pick up the product in database, complete the information and add image and list product in shop.
+Signals is created in checkout-app to update status and calculate revenue balance for sold products.
+
+#### Products
+
+In admin you have a menu to handle Products for easy administration.
+In addition to handle products, you can add or change Brands, Colors, Condition, Fabrics, Sizes and Categorise to more than 1 category.
+When you receive a registration form, the product pop up as created in List view. When you receive the product, you go in to product in admin and add unfilled fields, images and list in to the shop.
+When it get sold the status change and balance sheets to users account.
+The product are for sale as long as 90 days and after that they get expired.
+You can filter expired products to be returned.
 
 ![product_in_database](static/images/Readme_img/product_in_database.png)
+
+
+![Product in admin](static/images/Readme_img/product_in_admin.png)
+
+####  Users account
+
+Users have an account and as admin it´s ability to manual handle or add accounts and withdrawal request.
+
+![Admin Account](static/images/Readme_img/admin_account.png)
 
 </details>
 
@@ -382,7 +450,23 @@ Signals is created in checkout-app to update status and calculate revenue balanc
 
 #### [Future Features](#future_features)
 
-* change visual layout of  multiple img  to be clickable and navigation buttons
+* Product details
+Image of products will get a more visual layout for multiple images.
+There could be clickable and with navigation buttons.
+
+* Newsletters archive
+Store newsletter in an archive on the website 
+
+* More information and facts for sustainable thinking and responsible.
+ Visualize for the users the effect by shopping Second Hand.
+ Information of donations made.
+
+* Better account options. 
+Withdrawal to credit card through Stripe.
+That make it easier and faster handling for both users and admin.
+
+* Create the balance available for shopping credits in the Shop.
+
 
 
 ### [CRUD](#crud)

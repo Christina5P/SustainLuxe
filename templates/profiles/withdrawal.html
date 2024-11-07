@@ -31,7 +31,9 @@
 
             {% if messages %}
                 {% for message in messages %}
-                    <div class="{{ message.tags }}">{{ message }}</div>
+                      <div class="alert {{ message.tags }} mt-3" role="alert">
+                    {{ message }}</div>
+                   
                 {% endfor %}
             {% endif %}
 

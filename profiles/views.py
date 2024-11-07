@@ -163,14 +163,13 @@ def withdrawal_view(request):
             account.save()
 
             if account.request_payout(amount):
-                # Efter en uttagsbegäran, försök behandla uttaget
-                account.process_payout()  # Uppdaterar status om det finns pending requests
+              
+                account.process_payout() 
                 messages.success(request, 'Withdrawal requested successfully.')
             else:
-                messages.error(request, 'Error processing withdrawal.')
+                messages.error(request, 'Withdrawal failed: Insufficient balance or invalid bank account details. Please verify and try again.')
             return redirect('withdrawal')
 
-    # Förbered data för GET-begäran
     withdrawal_history = (
         json.loads(account.withdrawal_history)
         if isinstance(account.withdrawal_history, str)
