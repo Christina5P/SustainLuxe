@@ -68,7 +68,7 @@ def sale_product(request):
             product.save()
 
             earned_amount = product.price
-            sale.update_balance(earned_amount)
+            sale.update_balance_and_revenue(earned_amount)
             account.update_total_revenue(earned_amount)
 
             request.session['save_info'] = {

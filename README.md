@@ -6,7 +6,7 @@
 - [About](#about)
 - [Marketing research](#marketing-research) 
 - [Agile method](#agile-method) 
-  - [Concept Chart](#static/images/Readme_img/concept_chart_sustainLuxe.png)
+  - [Concept Chart](#concept_chart)
   - [Buisness Model](#buisness_model)
   - [ERD](#erd)
   - [User Stories](#user-stories) 
@@ -55,8 +55,11 @@ I also made a SEO research to get strong SEO keywords to use for high ranking in
 After research of other e-commerce and similar Second Hand Stores, I also brainstormed what I want to achieve and how to plan the project.
 I have used an agile method for this project.
 
-#### [Concept Chart](#static/images/Readme_img/concept_chart_sustainLuxe.png)
+#### [Concept Chart](#concept_chart)
+
 I created de a concept chartfor my idea.
+
+![Concept Chart](static/images/Readme_img/concept_chart_sustainLuxe.png)
 
 ### [Buisness Model](#buisness_model)
 The business operates on a C2C model (Consumer-to-Consumer) and revenue comes from administration fee and profit share of the selling price.
@@ -76,7 +79,7 @@ Then I changed Product model in Profiles app to Sale model to separate them.
 
 ![Product Model](static/images/Readme_img/Sustainluxe_productmodel.png)
 ![Order Model](static/images/Readme_img/Sustainluxe_ordermodel.png)
-![User Model](#tatic/images/Readme_img/sustainluxe_usermodel.png)
+![User Model](static/images/Readme_img/sustainluxe_usermodel.png)
 
 
 #### [User Stories](#user-stories)

@@ -19,6 +19,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css">
     <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% endblock %}
     
@@ -139,10 +140,10 @@
         <form action="https://herokuapp.us12.list-manage.com/subscribe/post?u=0ea3aca3ba4cc81abd966f9d5&amp;id=8eca880783&amp;f_id=00eba5e0f0" method="post" name="mc-embedded-subscribe-form" class="validate" target="_blank">
           <div id="mc_embed_signup_scroll">
             <h6 class="text-uppercase fw-bold mb-2">Sign up for our newsletter</h6>
-            <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+           
            
             <div class="mc-field-group">
-              <label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label>
+              <label for="mce-EMAIL">Email Address <spanclass="asterisk">*</span></label>
               <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value="">
             </div>
             <div id="mce-responses" class="clear foot">
@@ -152,8 +153,12 @@
           </div>
           <div aria-hidden="true" style="position: absolute; left: -5000px;">
             <input type="text" name="b_0ea3aca3ba4cc81abd966f9d5_8eca880783" tabindex="-1" value="">
+            
           </div>
           <div class="optionalParent">
+         <div class="indicates-required" style="text-align: left;">
+        <span class="asterisk">*</span> indicates required
+      </div>
             <div class="clear foot">
               <input class="btn btn-primary" type="submit" name="subscribe" id="mc-embedded-subscribe" value="Subscribe">
             </div>
@@ -223,7 +228,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
 
 
-<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'js/stripe.js' %}"></script>
+
+<script src="{% static 'js/countryfield.js' %}"></script>
 {% endblock %}
 
 {% block postloadjs %}

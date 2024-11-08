@@ -145,7 +145,6 @@ class SellerForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
-            'user',
             'full_name',
             'email',
             'phone_number',
