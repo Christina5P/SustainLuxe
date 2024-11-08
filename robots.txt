@@ -1,0 +1,3 @@
+User-agent:*
+Disallow: /profiles/
+sitemap: https://sustainluxe-b6e840083c68.herokuapp.com/sitemap.xml
