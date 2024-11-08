@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!--Title-->
+    <title>404 Page not found</title>
+   
+
+ 
+    {% block page_content %}
+
+  <main class="container">
+    <h1> 404 - Page not found</h1>
+    <img class="error-img" src="{% static 'images/error404.png' %}" alt="error404">
+    
+    <p>The page you have requested cannot be found. <a href="{% url 'home' %}">Please click to go back</a>
+      </p>
+      </main>
+
+      {% endblock page_content %}
+
+    

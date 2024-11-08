@@ -256,16 +256,23 @@ If you go to shop you view an extended navbar that also includes shopping bag an
 
 <details><summary>Home Page</summary>
 
+#### Home
+
 You will be inviting to action in the Homepage and view easy navigation of your interest.
 
-![Home Page](homepage.png)
+![Home Page](static/images/Readme_img/homepage.png)
+
+#### Sell with Us
 
 In "Sell with us" section, you find a visual and clear information for selling a product.
 
+#### Sustainable effect
+
 In "Read more" section, you find information and trigger to sustainable think.
 
-![Sustainable](sustainable.png)
+![Sustainable](static/images/Readme_img/sustainable.png)
 
+</details>
 
 <details><summary>Registration / Log In</summary>
 
@@ -443,9 +450,19 @@ Users have an account and as admin it´s ability to manual handle or add account
 </details>
 
 
-<details><summary>Footer</summary></details>
+<details><summary>Footer</summary>
 
-<details><summary>Error page</summary></details>
+
+</details>
+
+<details><summary>Error page</summary>
+
+I created an personalized 404 page
+
+![error404](static/images/Readme_img/error404.png)
+
+
+</details>
 
 
 #### [Future Features](#future_features)

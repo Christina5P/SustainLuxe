@@ -33,6 +33,44 @@ footer,
     color: #565656 !important;
 }
 
+/* Font Playfair*/
+.playfair-display-sc-regular {
+  font-family: "Playfair Display SC", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.playfair-display-sc-bold {
+  font-family: "Playfair Display SC", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.playfair-display-sc-black {
+  font-family: "Playfair Display SC", serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.playfair-display-sc-regular-italic {
+  font-family: "Playfair Display SC", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.playfair-display-sc-bold-italic {
+  font-family: "Playfair Display SC", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.playfair-display-sc-black-italic {
+  font-family: "Playfair Display SC", serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+
 .navbar {
      background-color:#c0cdd4;  
      margin-top: 20px;
@@ -49,6 +87,9 @@ footer,
     color: #000;
     font-weight: 300;
 }
+
+    
+
 .carousel-caption {
     margin-bottom: 50px; 
 }
@@ -163,3 +204,18 @@ footer,
 .arrow-dark {
     border-bottom-color: #343a40 !important;
 }
+
+
+    /* Height for devices larger than 576px */
+    @media (min-width: 992px) {
+      #introCarousel {
+        margin-top: 2rem;
+      }
+    
+    }
+
+     #mc_embed_signup
+        {background:#c0cdd4; 
+        clear:left;
+        font:14px Helvetica,Arial,sans-serif;
+        width: 600px;}

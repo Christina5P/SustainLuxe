@@ -60,31 +60,36 @@ These are for collecting the url and which ine shouldn´t be collected.
 For the competition market I added:
 ## Facebook page
 
+You can find this store as an facebook page for more marketing.
+You are linkt to the page from footer.
+
+![Facebook](static/images/Readme_img/facebook.png)
+
 ## Newsletter
 
 As a marketing action I provides users with a newsletter from SustainLuxe.
 Users are able to subscribe to the newsletter on the website.
 I use mailchimp to handle subscribers and newsletter.
 
-![mailschimp](mailchimp.png)
+![mailschimp](static/images/Readme_img/mailchimp.png)
 
 When you are logged in at https://us12.admin.mailchimp.com/ you have access to Audience, where you can follow contacts, growth and create segments for example.
 
-![contacts](contacts.png)
+![contacts](static/images/Readme_img/contacts.png)
 
 From this site, you create your newsletter and make your set ups.
 
-![Setup Mail](setup_mail.png)
+![Setup Mail](static/images/Readme_img/setup_mail.png)
 
 Here is an example of a newsletter to send
 
-![Example newsletter](example_newsletter.png)
+![Example newsletter]static/images/Readme_img/example_newsletter.png)
 
 Users can subscribe to newsletter in the footer and after submit, they get a confirmation.
 
-![Newsletter](newsletter.png)
+![Newsletter](static/images/Readme_img/newsletter.png)
 
-![Newslette subscribed](<newsletter_subscribed.png>)
+![Newslette subscribed](static/images/Readme_img/newsletter_subscribed.png)
 
 
 
