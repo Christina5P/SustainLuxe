@@ -69,4 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       console.error('One or more required elements are missing from the DOM');
     }
-  });
+});
+  
+    // Scroll to top
+     $(document).ready(function () {
+        $('.btt-link').click(function(e) {
+            e.preventDefault();  
+            window.scrollTo(0, 0);
+        });
+       }); 

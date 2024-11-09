@@ -13,18 +13,18 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '1234secretkey')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = 'DEVELOPMENT' in os.environ
-DEBUG = True  
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
     'sustainluxe-b6e840083c68.herokuapp.com',
-    'localhost'
+    'localhost',
 ]
 
 AUTHENTICATION_BACKENDS = [
-     'django.contrib.auth.backends.ModelBackend',
-     'allauth.account.auth_backends.AuthenticationBackend',
- ]
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
@@ -69,27 +69,6 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     'sustainluxe.middleware.LogImageRequestsMiddleware',
 ]
-
-# LOGGING = {
-#   'version': 1,
-#  'disable_existing_loggers': False,
-# 'handlers': {
-#    'console': {
-#       'class': 'logging.StreamHandler',
-#  },
-# },
-#'loggers': {
-#   'django': {
-#      'handlers': ['console'],
-#     'level': 'INFO',
-# },
-#'sustainluxe': {
-#   'handlers': ['console'],
-#  'level': 'INFO',
-# },
-# },
-# }
-
 
 ROOT_URLCONF = 'sustainluxe.urls'
 
@@ -201,8 +180,8 @@ if 'USE_AWS' in os.environ:
     # Bucket Config
     AWS_STORAGE_BUCKET_NAME = 'sustainluxe'
     AWS_S3_REGION_NAME = 'eu-north-1'
-    # AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    # AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
     # Static and media files
@@ -215,9 +194,6 @@ if 'USE_AWS' in os.environ:
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
 
-
-FREE_DELIVERY_THRESHOLD = 50
-STANDARD_DELIVERY_PERCENTAGE = 10
 
 # Stripe
 FREE_DELIVERY_THRESHOLD = 50

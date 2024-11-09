@@ -32,7 +32,7 @@ footer,
     background-color:#c0cdd4;   
     color: #565656 !important;
 }
-
+ 
 /* Font Playfair*/
 .playfair-display-sc-regular {
   font-family: "Playfair Display SC", serif;
@@ -70,7 +70,9 @@ footer,
   font-style: italic;
 }
 
-
+.text-green {
+    color: green; 
+  }
 .navbar {
      background-color:#c0cdd4;  
      margin-top: 20px;
@@ -88,13 +90,15 @@ footer,
     font-weight: 300;
 }
 
-    
-
 .carousel-caption {
     margin-bottom: 50px; 
 }
 .section-spacing {
     margin-bottom: 1rem; 
+}
+
+.carousel-control-next, .carousel-control-prev{ 
+  bottom: 70px; 
 }
 
 .custom-img {
@@ -214,6 +218,7 @@ footer,
     
     }
 
+    /* mailchimp subscribe */
      #mc_embed_signup
         {background:#c0cdd4; 
         clear:left;
