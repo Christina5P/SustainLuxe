@@ -14,5 +14,7 @@ urlpatterns = [
         views.cache_checkout_data,
         name='cache_checkout_data',
     ),
-    path('webhook/', webhook, name='webhook'),
+    path(
+        'checkout/webhook/', webhook, name='webhook'
+    ),  # Ändrad till 'checkout/webhook/'
 ]
