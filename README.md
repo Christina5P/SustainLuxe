@@ -477,6 +477,8 @@ There could be clickable and with navigation buttons.
 * Newsletters archive
 Store newsletter in an archive on the website 
 
+* Create maerketing site for Instagram and TikTok
+
 * More information and facts for sustainable thinking and responsible.
  Visualize for the users the effect by shopping Second Hand.
  Information of donations made.

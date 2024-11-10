@@ -13,18 +13,18 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '1234secretkey')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = 'DEVELOPMENT' in os.environ
-DEBUG = True
+DEBUG = True    
 
 ALLOWED_HOSTS = [
     '8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
     'sustainluxe-b6e840083c68.herokuapp.com',
-    'localhost',
+    'localhost'
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+     'django.contrib.auth.backends.ModelBackend',
+     'allauth.account.auth_backends.AuthenticationBackend',
+ ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
@@ -126,7 +126,7 @@ SITE_ID = 1
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -135,6 +135,23 @@ ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
+
+
+# Email Configuration
+if "DEVELOPMENT" in os.environ:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    DEFAULT_FROM_EMAIL = "sustainluxe@example.com"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_USE_TLS = True
+    EMAIL_PORT = 587
+    EMAIL_HOST = "smtp.gmail.com"
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")  # Heroku config var
+    EMAIL_HOST_PASSWORD = os.environ.get(
+        "EMAIL_HOST_PASS"
+    )  # Heroku config var
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Using the EMAIL_HOST_USER directly
+    ADMIN_EMAIL = "sustainluxen@gmail.com"
 
 
 AUTH_PASSWORD_VALIDATORS = [

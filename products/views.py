@@ -5,8 +5,8 @@ from django.db.models import Q
 from django.db.models.functions import Lower
 from .models import (
     Product,
-    Fabric,
     Category,
+    Fabric,
     Brand,
     Condition,
     Size,
@@ -14,6 +14,7 @@ from .models import (
 )
 from .forms import ProductForm, ProductFilterForm
 from decimal import Decimal, ROUND_DOWN
+from django.core.paginator import Paginator
 
 
 main_categories = Category.objects.filter(parent_categories=None)
@@ -25,7 +26,6 @@ def all_products(request):
     brands = Brand.objects.all()
     conditions = Condition.objects.all()
     sizes = Size.objects.all()
-    fabric = Fabric.objects.all()
 
     query = request.GET.get('q', '')
     category_id = request.GET.get('category')
@@ -62,10 +62,13 @@ def all_products(request):
     # list functionality
     if category_id:
         category = get_object_or_404(Category, id=category_id)
-        if category.parent_categories:
+        if category.parent_categories.exists():
             products = products.filter(categories=category)
         else:
-            products = products.filter(Q(categories=category) | Q(categories__parent_categories=category))
+            products = products.filter(
+                Q(categories=category)
+                | Q(categories__parent_categories=category)
+            )
 
     # Sorting functionality
     if sort == 'name':
@@ -83,6 +86,9 @@ def all_products(request):
 
     products = products.order_by(sortkey)
     main_categories = Category.objects.filter(parent_categories=None)
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
         'products': products,
@@ -97,8 +103,9 @@ def all_products(request):
         'selected_condition': condition_id,
         'selected_size': size_id,
         'form': form,
-        }
-
+        'page_obj': page_obj,
+    }
+    print(f"Antal objekt i page_obj: {len(page_obj)}")
     return render(request, 'products/products.html', context)
 
 
@@ -121,7 +128,7 @@ def product_detail(request, product_id):
     }
 
     return render(request, 'products/product_detail.html', context)
-   
+
 
 def calculate_carbon_saving(product):
     """
