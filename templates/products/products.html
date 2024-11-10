@@ -42,20 +42,19 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% for main_category in main_categories %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                         {{ main_category.get_friendly_name }}
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                        {{ main_category.friendly_name|default:main_category.name }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
                         <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
                         {% for subcategory in main_category.subcategories.all %}
-                            <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
                 {% endfor %}
             </ul>
-      
-                
+            
             <!-- Sorting products -->
             <div class="d-flex align-items-center">
                 <select id="sort-selector" class="form-select rounded-0 border">
@@ -97,17 +96,17 @@
                 <div class="col-md-9">
                     <h2 class="logo-font">Products</h2>
                     <div class="row">
-                        {% for product in page_obj %}
+                        {% for product in products %}
                         {% if product.is_listed and not product.is_sold %}
                         <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
                             <div class="card h-100 border-0 shadow-sm">
                             <a href="{% url 'product_detail' product.id %}">
                                 {% if product.image %}
-                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-                                {% else %}
-                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-                                {% endif %}
-                            </a>
+                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
+                            {% else %}
+                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
+                            {% endif %}
+                                                    </a>
                             <div class="card-body pb-0">
                                 <h5 class="card-title">{{ product.name }}</h5>
                             </div>
@@ -138,35 +137,6 @@
     </a>
 </div>
 
-
-    <!-- Pagination -->
-    <nav class="my-4">
-        <ul class="pagination pagination-circle justify-content-center">
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1" tabindex="-1">First</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
-                </li>
-            {% endif %}
-
-            <li class="page-item active">
-                <a class="page-link" href="#">{{ page_obj.number }} <span class="sr-only">(current)</span></a>
-            </li>
-
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-    
-
 {% endblock %}
 
 
@@ -178,7 +148,6 @@
             e.preventDefault();  
             window.scrollTo(0, 0);
         });
-      
 
          // Sort by function
         $('#sort-selector').change(function () {
