@@ -42,19 +42,20 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% for main_category in main_categories %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                        {{ main_category.friendly_name|default:main_category.name }}
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                         {{ main_category.get_friendly_name }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
                         <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
                         {% for subcategory in main_category.subcategories.all %}
-                        <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
                 {% endfor %}
             </ul>
-            
+      
+                
             <!-- Sorting products -->
             <div class="d-flex align-items-center">
                 <select id="sort-selector" class="form-select rounded-0 border">

@@ -17,9 +17,6 @@ from decimal import Decimal, ROUND_DOWN
 from django.core.paginator import Paginator
 
 
-main_categories = Category.objects.filter(parent_categories=None)
-
-
 def all_products(request):
     products = Product.objects.filter(is_listed=True, sold=False)
     main_categories = Category.objects.filter(parent_categories=None)
@@ -59,16 +56,18 @@ def all_products(request):
             | Q(brand__name__icontains=query)
         )
 
-    # list functionality
+    # Filter functionality
     if category_id:
         category = get_object_or_404(Category, id=category_id)
+
         if category.parent_categories.exists():
-            products = products.filter(categories=category)
-        else:
+            descendant_ids = category.subcategories.all().values_list('id', flat=True)
             products = products.filter(
-                Q(categories=category)
-                | Q(categories__parent_categories=category)
-            )
+                Q(categories=category) | Q(categories__in=descendant_ids)
+            ).distinct()
+        else:
+            products = products.filter(categories=category)
+
 
     # Sorting functionality
     if sort == 'name':
@@ -105,7 +104,7 @@ def all_products(request):
         'form': form,
         'page_obj': page_obj,
     }
-    print(f"Antal objekt i page_obj: {len(page_obj)}")
+
     return render(request, 'products/products.html', context)
 
 
