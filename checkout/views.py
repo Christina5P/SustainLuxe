@@ -17,7 +17,7 @@ from bag.contexts import bag_contents
 import stripe
 import json
 from decimal import Decimal
-
+from django.core.mail import send_mail
 
 @require_POST
 def cache_checkout_data(request):
@@ -113,6 +113,7 @@ def checkout(request):
                     return redirect(reverse('view_bag'))
 
             request.session['save_info'] = 'save-info' in request.POST
+
             return redirect(
                 reverse('checkout_success', args=[order.order_number])
             )
@@ -141,6 +142,8 @@ def checkout(request):
 
         order_form = OrderForm()
 
+        send_order_confirmation_email(order)
+
     if not stripe_public_key:
         messages.warning(
             request,
@@ -156,6 +159,29 @@ def checkout(request):
     }
 
     return render(request, template, context)
+
+
+def send_order_confirmation_email(order):
+    subject = f"Order Confirmation - {order.order_number}"
+    message = (
+        f"Thank you for your order, {order.full_name}!\n\n"
+        f"Your order number is {order.order_number}.\n"
+        "We'll send you another email when your items have been shipped.\n\n"
+        "Thank you for shopping with us!"
+    )
+    recipient = order.email
+    sender = (
+        settings.DEFAULT_FROM_EMAIL
+    )  # Kontrollera att den är definierad i settings
+
+    # Skicka e-postmeddelandet
+    send_mail(
+        subject,
+        message,
+        sender,
+        [recipient],
+        fail_silently=False,
+    )
 
 
 def checkout_success(request, order_number):
@@ -184,7 +210,7 @@ def checkout_success(request, order_number):
             if user_profile_form.is_valid():
                 user_profile_form.save()
 
-    messages.success(
+        messages.success(
         request,
         f'Order successfully processed! \
         Your order number is {order_number}. A confirmation \
