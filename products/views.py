@@ -15,15 +15,22 @@ from .models import (
 from .forms import ProductForm, ProductFilterForm
 from decimal import Decimal, ROUND_DOWN
 from django.core.paginator import Paginator
+from django.db.models import Prefetch
 
 
 def all_products(request):
     products = Product.objects.filter(is_listed=True, sold=False)
-    main_categories = Category.objects.filter(parent_categories=None)
+    main_categories = Category.objects.filter(
+        parent_categories=None
+    ).prefetch_related(
+        Prefetch('subcategories', queryset=Category.objects.all())
+    )
+
+    form = ProductFilterForm(request.GET)
+
     brands = Brand.objects.all()
     conditions = Condition.objects.all()
     sizes = Size.objects.all()
-
     query = request.GET.get('q', '')
     category_id = request.GET.get('category')
     brand_id = request.GET.get('brand')
@@ -32,21 +39,28 @@ def all_products(request):
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
 
-    form = ProductFilterForm(request.GET)
-
     if form.is_valid():
-        if form.cleaned_data.get('categories'):
-            products = products.filter(
-                categories__in=form.cleaned_data['categories']
-            )
-        if form.cleaned_data.get('brands'):
-            products = products.filter(brand__in=form.cleaned_data['brands'])
-        if form.cleaned_data.get('conditions'):
-            products = products.filter(
-                condition__in=form.cleaned_data['conditions']
-            )
-        if form.cleaned_data.get('sizes'):
-            products = products.filter(size__in=form.cleaned_data['sizes'])
+        categories = form.cleaned_data.get('categories')
+        brands = form.cleaned_data.get('brands')
+        conditions = form.cleaned_data.get('conditions')
+        sizes = form.cleaned_data.get('sizes')
+
+        if categories:
+            category_filters = Q()
+            for category in categories:
+                if category.parent_categories.exists():
+                    descendant_ids = category.subcategories.all().values_list('id', flat=True)
+                    category_filters |= Q(categories=category) | Q(categories__in=descendant_ids)
+                else:
+                    category_filters |= Q(categories=category)
+            products = products.filter(category_filters).distinct()
+
+        if brands:
+            products = products.filter(brand__in=brands)
+        if conditions:
+            products = products.filter(condition__in=conditions)
+        if sizes:
+            products = products.filter(size__in=sizes)
 
     # Search functionality
     if query:
@@ -55,19 +69,6 @@ def all_products(request):
             | Q(description__icontains=query)
             | Q(brand__name__icontains=query)
         )
-
-    # Filter functionality
-    if category_id:
-        category = get_object_or_404(Category, id=category_id)
-
-        if category.parent_categories.exists():
-            descendant_ids = category.subcategories.all().values_list('id', flat=True)
-            products = products.filter(
-                Q(categories=category) | Q(categories__in=descendant_ids)
-            ).distinct()
-        else:
-            products = products.filter(categories=category)
-
 
     # Sorting functionality
     if sort == 'name':

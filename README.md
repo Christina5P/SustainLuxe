@@ -489,6 +489,7 @@ That make it easier and faster handling for both users and admin.
 
 * Create the balance available for shopping credits in the Shop.
 
+* Implement an FAQ and Customer Service menu
 
 
 ### [CRUD](#crud)

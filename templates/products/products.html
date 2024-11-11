@@ -5,174 +5,224 @@
 <div class="container header-container">
 
     <!-- search field in navbar-->
-    {% block extra_navbar_content %}
-    <div class="row">
-        <div class="col-md-6 d-flex justify-content-end align-items-center">
-            <form class="d-none d-md-flex input-group w-75 my-auto me-4" method="GET" action="{% url 'all_products' %}">
-                <input id="search" autocomplete="off" type="text" name="q" class="form-control rounded" placeholder="Search" style="width: 400px; font-size: 16px;">
-                <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
-            </form>
-        </div>
-    </div>
-
-    <!-- Cart icon -->
-    <a class="nav-link me-3 {% if grand_total %} fw-bold {% else %} text-black {% endif %}" href="{% url 'view_bag' %}">
-        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-        <span class="ms-2">
-            {% if grand_total %}
-                EUR{{ grand_total|floatformat:2 }}
-            {% else %}
-                EUR 0.00
-            {% endif %}
-        </span>
-    </a>
-    {% endblock %}
-
-    {% block content %}
-
-    <!-- Categories Navbar -->
-    
-        <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B;">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Categories:</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCategories" aria-controls="navbarCategories" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCategories">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        {% for main_category in main_categories %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ main_category.friendly_name|default:main_category.name }}
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
-                                <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
-                                {% for subcategory in main_category.subcategories.all %}
-                                <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-   
-
- 
-        <!-- Sorting products -->
-        <div class="d-flex align-items-center">
-            <select id="sort-selector" class="form-select rounded-0 border">
-                <option value="reset">Sort by...</option>
-                <option value="price_asc">Price (low to high)</option>
-                <option value="price_desc">Price (high to low)</option>
-                <option value="name_asc">Name (A-Z)</option>
-                <option value="name_desc">Name (Z-A)</option>
-                <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
-                <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
-            </select>
-        </div>
-    
-
-    <!-- Product Filter--> 
-
-    
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-3">
-                        <h4 class="mb-0">Product Filter</h4>
-                        <div class="p-3 bg-white border rounded shadow-sm mb-3">
-                            <form id="filterForm" method="GET" action="{% url 'all_products' %}">
-                                <button type="submit" class="btn btn-primary me-2">Filter</button>
-                                <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
-                                <hr>
-                                <div class="mb-3">
-                                    {{ form.as_p }}
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-<!-- Product cards -->
-<div class="col-md-9">
-    <h2 class="logo-font">Products</h2>
-    <div class="row">
-        {% for product in products %}
-        {% if product.is_listed and not product.is_sold %}
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <a href="{% url 'product_detail' product.id %}">
-                    {% if product.image %}
-                    <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
-                    {% else %}
-                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
-                    {% endif %}
-                </a>
-                <div class="card-body pb-0">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                </div>
-                <div class="card-footer bg-white pt-0 border-0 text-left">
-                    <p class="lead mb-0 fw-bold">EUR {{ product.price }}</p>
-                    {% if request.user.is_superuser %}
-                    <small class="ms-3">
-                        <a href="{% url 'edit_product' product.id %}" >Edit</a>
-                        <a class="text-danger" href="{% url 'delete_product' product.id %}">Delete</a>
-                    </small>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
+{% block extra_navbar_content %}
+<div class="row">
+    <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <form class="d-none d-md-flex input-group w-75 my-auto me-4" method="GET" action="{% url 'all_products' %}">
+            <input id="search" autocomplete="off" type="text" name="q" class="form-control rounded" placeholder="Search" style="width: 400px; font-size: 16px;">
+            <span class="input-group-text border-0"><i class="fas fa-search" id="mdb-5-search-icon"></i></span>
+        </form>
     </div>
 </div>
 
+ <!-- Cart icon -->
+            <a class="nav-link me-3{% if grand_total %} font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                <span class="ms-2">
+                    {% if grand_total %}
+                        EUR{{ grand_total|floatformat:2 }}
+                    {% else %}
+                        EUR 0.00
+                    {% endif %}
+                </span>
+            </a>
+{% endblock %}
+
+{% block content %}
+
+<!-- Categories Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Categories:</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCategories" aria-controls="navbarCategories" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCategories">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% for main_category in main_categories %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                        {{ main_category.friendly_name|default:main_category.name }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
+                        <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
+                        {% for subcategory in main_category.subcategories.all %}
+                        <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+                </div>
+            </div>
+       
+      
+                
+            <!-- Sorting products -->
+            <div class="d-flex align-items-center">
+                <select id="sort-selector" class="form-select rounded-0 border">
+                    <option value="reset">Sort by...</option>
+                    <option value="price_asc">Price (low to high)</option>
+                    <option value="price_desc">Price (high to low)</option>
+                    <option value="name_asc">Name (A-Z)</option>
+                    <option value="name_desc">Name (Z-A)</option>
+                    <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
+                    <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
+                </select>
+            </div>
+    
+ </nav>
+   <!-- Product Filter -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="mb-0">Product Filter</h4>
+            <div class="p-3 bg-white border rounded shadow-sm mb-3">
+             
+                                   <form id="filterForm" method="GET" action="{% url 'all_products' %}">
+                    <button type="submit" class="btn btn-primary me-2">Filter</button>
+                    <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
+                    <hr>
+                    <div class="mb-3">
+                    
+                        {% for main_category in main_categories %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="categories" value="{{ main_category.id }}" 
+                                       id="category_{{ main_category.id }}"
+                                       {% if main_category.id|stringformat:"i" in request.GET.getlist.categories %}checked{% endif %}>
+                                <label class="form-check-label" for="category_{{ main_category.id }}">
+                                    <strong>{{ main_category.friendly_name|default:main_category.name }}</strong>
+                                </label>
+                            </div>
+                            {% for subcategory in main_category.subcategories.all %}
+                                <div class="form-check ms-3">
+                                    <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}"
+                                           id="category_{{ subcategory.id }}"
+                                           {% if subcategory.id|stringformat:"i" in request.GET.getlist.categories %}checked{% endif %}>
+                                    <label class="form-check-label" for="category_{{ subcategory.id }}">
+                                        {{ subcategory.friendly_name|default:subcategory.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Other filter options -->
+                    {{ form.as_p }}
+                </form>
+            </div>
+        </div>
+                <!-- Product cards -->
+                <div class="col-md-9">
+                    <h2 class="logo-font">Products</h2>
+                    <div class="row">
+        {% for product in products %}
+                        {% if product.is_listed and not product.is_sold %}
+                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                            <a href="{% url 'product_detail' product.id %}">
+                                {% if product.image %}
+                    <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
+                                {% else %}
+                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
+                                {% endif %}
+                            </a>
+                            <div class="card-body pb-0">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                            </div>
+                            <div class="card-footer bg-white pt-0 border-0 text-left">
+                    <p class="lead mb-0 fw-bold">EUR {{ product.price }}</p>
+                                {% if request.user.is_superuser %}
+                    <small class="ms-3">
+                                    <a href="{% url 'edit_product' product.id %}" >Edit</a>
+                                    <a class="text-danger" href="{% url 'delete_product' product.id %}">Delete</a>
+                                </small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
      
-  
 
-    <div class="btt-button shadow-sm rounded-0 border border-black">
+
+<div class="btt-button shadow-sm rounded-0 border border-black">
         <a class="btt-link d-flex h-100 justify-content-end align-items-center" aria-label="Scroll to top">
-            <i class="fa-solid fa-circle-chevron-up"></i>
-        </a>
-    </div>
+        <i class="fa-solid fa-circle-chevron-up"></i>
+    </a>
+</div>
 
-    {% endblock %}
 
-    {% block postloadjs %}
+    <!-- Pagination -->
+    <nav class="my-4">
+        <ul class="pagination pagination-circle justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" tabindex="-1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <a class="page-link" href="#">{{ page_obj.number }} <span class="sr-only">(current)</span></a>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+
+{% endblock %}
+
+
+{% block postloadjs %}
     <script>
-        $(document).ready(function () {
-            $('.btt-link').click(function(e) {
-                e.preventDefault();  
-                window.scrollTo(0, 0);
-            });
-
-            // Sort by function
-            $('#sort-selector').change(function () {
-                var selector = $(this);
-                var currentUrl = new URL(window.location.href);  
-
-                var selectedVal = selector.val();
-                if (selectedVal != "reset") {
-                    var sort = selectedVal.split("_")[0];
-                    var direction = selectedVal.split("_")[1];
-
-                    currentUrl.searchParams.set("sort", sort);
-                    currentUrl.searchParams.set("direction", direction);
-
-                    window.location.replace(currentUrl);
-                } else {
-                    currentUrl.searchParams.delete("sort");
-                    currentUrl.searchParams.delete("direction");
-
-                    window.location.replace(currentUrl);
-                }
-            });
-
-            // Clear Filters button
-            $('#clearButton').click(function (e) {
-                e.preventDefault(); 
-                $('input[type="checkbox"]').prop('checked', false);
-                $('#filterForm').submit();
-            }); 
+    $(document).ready(function () {
+        $('.btt-link').click(function(e) {
+            e.preventDefault();  
+            window.scrollTo(0, 0);
         });
-    </script>
-    {% endblock %}
+
+         // Sort by function
+        $('#sort-selector').change(function () {
+            var selector = $(this);
+            var currentUrl = new URL(window.location.href);  
+
+            var selectedVal = selector.val();
+            if (selectedVal != "reset") {
+                var sort = selectedVal.split("_")[0];
+                var direction = selectedVal.split("_")[1];
+
+                currentUrl.searchParams.set("sort", sort);
+                currentUrl.searchParams.set("direction", direction);
+
+                window.location.replace(currentUrl);
+            } else {
+                currentUrl.searchParams.delete("sort");
+                currentUrl.searchParams.delete("direction");
+
+                window.location.replace(currentUrl);
+            }
+        });
+
+        // Clear Filters button
+        $('#clearButton').click(function (e) {
+            e.preventDefault(); 
+            $('input[type="checkbox"]').prop('checked', false);
+            $('#filterForm').submit();
+        }); 
+    });
+</script>
+{% endblock %}
