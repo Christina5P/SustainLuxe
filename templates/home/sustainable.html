@@ -1,42 +1,39 @@
 {% extends "base.html" %}
 {% load static %}
 
- {% block extra_css %}
+{% block extra_css %}
 <style>
-   /* Carousel styling */
-    #introCarousel,
-    .carousel-inner,
-    .carousel-item,
-    .carousel-item.active {
-      height: 100vh;
-    }
+  /* Carousel styling */
+  #introCarousel, .carousel-inner, .carousel-item, .carousel-item.active {
+    height: 100vh;
+  }
 
-    .carousel-item:nth-child(1) {
-      background-image: url('https://mdbootstrap.com/img/Photos/Others/images/77.jpg');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
+  .carousel-item:nth-child(1) {
+    background-image: url('https://mdbootstrap.com/img/Photos/Others/images/77.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
 
-    .carousel-item:nth-child(2) {
-      background-image: url('https://sustainluxe.s3.eu-north-1.amazonaws.com/media/sustainable3.png');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
+  .carousel-item:nth-child(2) {
+    background-image: url('https://sustainluxe.s3.eu-north-1.amazonaws.com/media/sustainable3.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
 
-    .carousel-item:nth-child(3) {
-      background-image: url("https://sustainluxe.s3.eu-north-1.amazonaws.com/media/responsibility.png"); 
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
-    }
+  .carousel-item:nth-child(3) {
+    background-image: url("https://sustainluxe.s3.eu-north-1.amazonaws.com/media/responsibility.png"); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<main class="mt-5">
+
   <div class="container-fluid">
     <div id="introCarousel" class="carousel slide carousel-fade shadow-2-strong" >
 
@@ -65,7 +62,6 @@
           <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
             <div class="d-flex justify-content-center align-items-center h-100">
               <div class="text-white text-center">
-            
               </div>
             </div>
           </div>
@@ -77,8 +73,6 @@
             <div class="d-flex justify-content-center align-items-center h-100">
               <div class="text-white text-center">
                 <h2>What is our responsibility?</h2>
-              
-            </div>
               </div>
             </div>
           </div>
@@ -95,41 +89,45 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-<!-- Text box below carousel -->
+  </div>
+
+  <!-- Text box below carousel -->
   <div class="col-12 mt-4">
-     <div class="card">
+    <div class="card">
       <div class="card-body">
         <h2 id="slideTitle">SHE Second Hand Effect</h2>
         <h3 id="slideSubtitle" class="card-subtitle mb-2 text-muted">Definition of Carbon Savings</h3>
         <div id="slideContent">
-           <p>By "carbon savings," we refer to the amount of greenhouse gases, measured in carbon dioxide equivalents (CO₂e) in kilograms,
-              required to produce a similar new item. By choosing second-hand products, you can make a positive impact by reducing the emissions
-              associated with manufacturing new items.
-                <h3>Assumptions Used in Our Carbon Savings Calculation</h3>
-              <p>
-                To estimate carbon savings, we have made a few assumptions based on various sources. We collect data on the materials used in the clothing we handle.
-                Based on this, we make assumptions about the material composition of each garment to calculate an average carbon savings figure per item.
-              </p>
-              <h3>Sources Used</h3>
-              <ul>
-                <li>The HIGG MSI, Materials Sustainability Index</li>
-                <li>Charitable Reuse</li>
-                <li>Textile Exchange</li>
-              </ul>
-              </p>
+          <p>
+            By "carbon savings," we refer to the amount of greenhouse gases, measured in carbon dioxide equivalents (CO₂e) in kilograms,
+            required to produce a similar new item. By choosing second-hand products, you can make a positive impact by reducing the emissions
+            associated with manufacturing new items.
+          </p>
+          <h3>Assumptions Used in Our Carbon Savings Calculation</h3>
+          <p>
+            To estimate carbon savings, we have made a few assumptions based on various sources. We collect data on the materials used in the clothing we handle.
+            Based on this, we make assumptions about the material composition of each garment to calculate an average carbon savings figure per item.
+          </p>
+          <h3>Sources Used</h3>
+          <ul>
+            <li>The HIGG MSI, Materials Sustainability Index</li>
+            <li>Charitable Reuse</li>
+            <li>Textile Exchange</li>
+          </ul>
         </div>
       </div>
     </div>
-
+  </div>
 <div class="btt-button shadow-sm rounded-0 border border-black">
-    <a class="btt-link d-flex h-100  justify-content-end align-items-center" aria-label="Scroll to top">
-        <i class="fa-solid fa-circle-chevron-up"></i>
-    </a>
+  <a class="btt-link d-flex h-100 justify-content-end align-items-center" aria-label="Scroll to top">
+    <i class="fa-solid fa-circle-chevron-up"></i>
+  </a>
 </div>
 
+
 {% block postloadjs %}
-   {{ block.super }}
-<script src="{% static 'js/sustainable.js' %}"></script>
+  {{ block.super }}
+  <script src="{% static 'js/sustainable.js' %}"></script>
 {% endblock %}
 
 {% endblock %}
