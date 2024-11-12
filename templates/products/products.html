@@ -30,35 +30,55 @@
 
 {% block content %}
 
+<!-- Categories Navbar 
+<nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Categories:</a>
+        <div class="collapse navbar-collapse" id="navbarCategories">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            
+                {% for category in all_categories %}
+                    <li class="nav-item mb-3">
+                        <a href="{% url 'all_products' %}?categories={{ category.id }}" class="nav-link text-white">
+                            {{ category.friendly_name|default:category.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+
+                               {% for main_category in main_categories %}
+                    <li class="nav-item mb-3">
+                        <a href="{% url 'all_products' %}?categories={{ main_category.id }}" class="nav-link text-white">
+                            <strong>{{ main_category.friendly_name|default:main_category.name }}</strong>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>-->
+        
 <!-- Categories Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark mt-3 mb-5 shadow p-2" style="background-color: #607D8B;">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Categories:</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCategories" aria-controls="navbarCategories" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCategories">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% for main_category in main_categories %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ main_category.id }}" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                        {{ main_category.friendly_name|default:main_category.name }}
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- All Categories Link -->
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'all_products' %}">
+                    <strong>All</strong>
+                </a>
+            </li>
+
+            <!-- Main Categories (no dropdown) -->
+            {% for main_category in main_categories %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'all_products' %}?categories={{ main_category.id }}">
+                        <strong>{{ main_category.friendly_name|default:main_category.name }}</strong>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ main_category.id }}">
-                        <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ main_category.id }}">All {{ main_category.friendly_name|default:main_category.name }}</a></li>
-                        {% for subcategory in main_category.subcategories.all %}
-                        <li><a class="dropdown-item" href="{% url 'all_products' %}?category={{ subcategory.id }}">{{ subcategory.friendly_name|default:subcategory.name }}</a></li>
-                        {% endfor %}
-                    </ul>
                 </li>
-                {% endfor %}
-            </ul>
-                </div>
-            </div>
-       
-      
-                
-            <!-- Sorting products -->
+            {% endfor %}
+        </ul>
+          
+
+             <!-- Sorting products -->
             <div class="d-flex align-items-center">
                 <select id="sort-selector" class="form-select rounded-0 border">
                     <option value="reset">Sort by...</option>
@@ -68,55 +88,88 @@
                     <option value="name_desc">Name (Z-A)</option>
                     <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
                     <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
-                </select>
-            </div>
-    
- </nav>
-   <!-- Product Filter -->
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3">
-            <h4 class="mb-0">Product Filter</h4>
-            <div class="p-3 bg-white border rounded shadow-sm mb-3">
-             
-                                   <form id="filterForm" method="GET" action="{% url 'all_products' %}">
-                    <button type="submit" class="btn btn-primary me-2">Filter</button>
-                    <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
-                    <hr>
-                    <div class="mb-3">
-                    
-                        {% for main_category in main_categories %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="categories" value="{{ main_category.id }}" 
-                                       id="category_{{ main_category.id }}"
-                                       {% if main_category.id|stringformat:"i" in request.GET.getlist.categories %}checked{% endif %}>
-                                <label class="form-check-label" for="category_{{ main_category.id }}">
-                                    <strong>{{ main_category.friendly_name|default:main_category.name }}</strong>
-                                </label>
+                </select> 
+        </div>
+
+    </div>
+</div>
+</nav>
+
+</div>
+</nav>
+
+</div> 
+ 
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <h4 class="mb-0">Product Filter</h4>
+                <div class="p-3 bg-white border rounded shadow-sm mb-3">
+                    <form id="filterForm" method="GET" action="{% url 'all_products' %}">
+                        <button type="submit" class="btn btn-primary me-2">Filter</button>
+                        <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
+                        <hr>
+
+                        <!-- Categories Filter: Visar subkategorier -->
+                        <div class="mb-3">
+                            {% for main_category in main_categories %}
+                                <h5>{{ main_category.friendly_name|default:main_category.name }}</h5>
+                                {% for subcategory in main_category.subcategories.all %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}" id="cat_{{ subcategory.id }}"
+                                        {% if subcategory.id in selected_category %}checked{% endif %}>
+                                        <label class="form-check-label" for="cat_{{ subcategory.id }}">
+                                            {{ subcategory.name }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
                             </div>
-                            {% for subcategory in main_category.subcategories.all %}
-                                <div class="form-check ms-3">
-                                    <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}"
-                                           id="category_{{ subcategory.id }}"
-                                           {% if subcategory.id|stringformat:"i" in request.GET.getlist.categories %}checked{% endif %}>
-                                    <label class="form-check-label" for="category_{{ subcategory.id }}">
-                                        {{ subcategory.friendly_name|default:subcategory.name }}
-                                    </label>
+
+                        <!-- Brands -->
+                        <div class="mb-4">
+                            <h6>Brands</h6>
+                            {% for field in form.brands %}
+                                <div class="form-check">
+                                    {{ field }}
                                 </div>
                             {% endfor %}
-                        {% endfor %}
+                        </div>
+
+                        <!-- Conditions -->
+                        <div class="mb-4">
+                            <h6>Conditions</h6>
+                            {% for field in form.conditions %}
+                                <div class="form-check">
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Sizes -->
+                        <div class="mb-4">
+                            <h6>Sizes</h6>
+                            {% for field in form.sizes %}
+                                <div class="form-check">
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                           </form>
+
                     </div>
-                    
-                    <!-- Other filter options -->
-                    {{ form.as_p }}
-                </form>
-            </div>
-        </div>
-                <!-- Product cards -->
+
+                </div>
+
+                     <!-- Product cards -->
                 <div class="col-md-9">
                     <h2 class="logo-font">Products</h2>
                     <div class="row">
-        {% for product in products %}
+                    <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+
+                    {% for product in page_obj %}
                         {% if product.is_listed and not product.is_sold %}
                         <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
                             <div class="card h-100 border-0 shadow-sm">
@@ -132,6 +185,15 @@
                             </div>
                             <div class="card-footer bg-white pt-0 border-0 text-left">
                     <p class="lead mb-0 fw-bold">EUR {{ product.price }}</p>
+                                <p class="card-text">
+                                    {% if product.brand %}
+                                        <span class="badge bg-secondary">{{ product.brand }}</span>
+                                    {% endif %}
+                                    {% if product.condition %}
+                                        <span class="badge bg-info">{{ product.condition }}</span>
+                                    {% endif %}
+                                    <br>
+
                                 {% if request.user.is_superuser %}
                     <small class="ms-3">
                                     <a href="{% url 'edit_product' product.id %}" >Edit</a>
@@ -145,9 +207,11 @@
                     {% endfor %}
                 </div>
             </div>
+               </div>
 
-     
-
+    </div>
+</section>
+          
 
 <div class="btt-button shadow-sm rounded-0 border border-black">
         <a class="btt-link d-flex h-100 justify-content-end align-items-center" aria-label="Scroll to top">
@@ -155,8 +219,7 @@
     </a>
 </div>
 
-
-    <!-- Pagination -->
+ <!-- Pagination -->
     <nav class="my-4">
         <ul class="pagination pagination-circle justify-content-center">
             {% if page_obj.has_previous %}
@@ -182,20 +245,23 @@
             {% endif %}
         </ul>
     </nav>
-    
+
 
 {% endblock %}
 
-
 {% block postloadjs %}
-    <script>
+<script>
+   
     $(document).ready(function () {
+               
+        // scroll to top
+
         $('.btt-link').click(function(e) {
             e.preventDefault();  
             window.scrollTo(0, 0);
         });
 
-         // Sort by function
+        // Sort by function
         $('#sort-selector').change(function () {
             var selector = $(this);
             var currentUrl = new URL(window.location.href);  
@@ -217,12 +283,17 @@
             }
         });
 
-        // Clear Filters button
+         // Clear Filters button
         $('#clearButton').click(function (e) {
             e.preventDefault(); 
             $('input[type="checkbox"]').prop('checked', false);
             $('#filterForm').submit();
         }); 
-    });
+        
+       
+        });
+        
+    
 </script>
+
 {% endblock %}

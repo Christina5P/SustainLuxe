@@ -20,55 +20,58 @@ from django.db.models import Prefetch
 
 def all_products(request):
     products = Product.objects.filter(is_listed=True, sold=False)
-    main_categories = Category.objects.filter(
-        parent_categories=None
-    ).prefetch_related(
-        Prefetch('subcategories', queryset=Category.objects.all())
-    )
 
-    form = ProductFilterForm(request.GET)
-
+    # Hämta alla tillgängliga filteralternativ
     brands = Brand.objects.all()
     conditions = Condition.objects.all()
     sizes = Size.objects.all()
-    query = request.GET.get('q', '')
-    category_id = request.GET.get('category')
+    main_categories = Category.objects.filter(
+        parent_categories=None
+    )  # Hämta bara parentkategorier
+
+    # Hämta filter från GET-parametrar
     brand_id = request.GET.get('brand')
     condition_id = request.GET.get('condition')
     size_id = request.GET.get('size')
+    category_ids = request.GET.getlist(
+        'categories'
+    )  # Få alla valda subkategorier
+    query = request.GET.get('q', '')
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
 
-    if form.is_valid():
-        categories = form.cleaned_data.get('categories')
-        brands = form.cleaned_data.get('brands')
-        conditions = form.cleaned_data.get('conditions')
-        sizes = form.cleaned_data.get('sizes')
+    form = ProductFilterForm(request.GET)
 
-        if categories:
-            category_filters = Q()
-            for category in categories:
-                if category.parent_categories.exists():
-                    descendant_ids = category.subcategories.all().values_list('id', flat=True)
-                    category_filters |= Q(categories=category) | Q(categories__in=descendant_ids)
-                else:
-                    category_filters |= Q(categories=category)
-            products = products.filter(category_filters).distinct()
-
-        if brands:
-            products = products.filter(brand__in=brands)
-        if conditions:
-            products = products.filter(condition__in=conditions)
-        if sizes:
-            products = products.filter(size__in=sizes)
-
-    # Search functionality
+    # Filtrera baserat på sökfrågan
     if query:
         products = products.filter(
             Q(name__icontains=query)
             | Q(description__icontains=query)
             | Q(brand__name__icontains=query)
         )
+
+    # Filtrering baserat på formdata
+    if form.is_valid():
+        if form.cleaned_data.get('brands'):
+            products = products.filter(brand__in=form.cleaned_data['brands'])
+        if form.cleaned_data.get('conditions'):
+            products = products.filter(
+                condition__in=form.cleaned_data['conditions']
+            )
+        if form.cleaned_data.get('sizes'):
+            products = products.filter(size__in=form.cleaned_data['sizes'])
+
+        # Filtrering baserat på subkategorier (parentkategorier tas bort)
+        if category_ids:
+            category_filters = Q()
+            for category_id in category_ids:
+                try:
+                    category = Category.objects.get(id=category_id)
+                    # Filtrera produkterna med subkategorier
+                    category_filters |= Q(categories=category)
+                except Category.DoesNotExist:
+                    pass
+            products = products.filter(category_filters).distinct()
 
     # Sorting functionality
     if sort == 'name':
@@ -85,20 +88,21 @@ def all_products(request):
         sortkey = f'-{sortkey}'
 
     products = products.order_by(sortkey)
-    main_categories = Category.objects.filter(parent_categories=None)
+
+    # Paginator
     paginator = Paginator(products, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {
         'products': products,
-        'main_categories': main_categories,
         'brands': brands,
         'conditions': conditions,
         'sizes': sizes,
+        'main_categories': main_categories,
         'search_term': query,
         'current_sorting': f'{sort}_{direction}',
-        'selected_category': category_id,
+        'selected_category': category_ids,  # Skicka de valda subkategorierna till mallen
         'selected_brand': brand_id,
         'selected_condition': condition_id,
         'selected_size': size_id,
