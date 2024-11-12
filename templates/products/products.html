@@ -111,56 +111,51 @@
                         <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
                         <hr>
 
-                        <!-- Categories Filter: Visar subkategorier -->
-                        <div class="mb-3">
-                            {% for main_category in main_categories %}
-                                <h5>{{ main_category.friendly_name|default:main_category.name }}</h5>
-                                {% for subcategory in main_category.subcategories.all %}
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}" id="cat_{{ subcategory.id }}"
-                                        {% if subcategory.id in selected_category %}checked{% endif %}>
-                                        <label class="form-check-label" for="cat_{{ subcategory.id }}">
-                                            {{ subcategory.name }}
-                                        </label>
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-                            </div>
+    <!-- Categories Filter: Visar subkategorier -->
+<div class="mb-3">
+    {% for subcategory in all_subcategories %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}" id="cat_{{ subcategory.id }}"
+            {% if subcategory.id in selected_category %}checked{% endif %}>
+            <label class="form-check-label" for="cat_{{ subcategory.id }}">
+                {{ subcategory.name }}
+            </label>
+        </div>
+    {% endfor %}
+</div>
 
-                        <!-- Brands -->
-                        <div class="mb-4">
-                            <h6>Brands</h6>
-                            {% for field in form.brands %}
-                                <div class="form-check">
-                                    {{ field }}
-                                </div>
-                            {% endfor %}
-                        </div>
+<!-- Brands -->
+<div class="mb-4">
+    <h6>Brands</h6>
+    {% for field in form.brands %}
+        <div class="form-check">
+            {{ field }}
+        </div>
+    {% endfor %}
+</div>
 
-                        <!-- Conditions -->
-                        <div class="mb-4">
-                            <h6>Conditions</h6>
-                            {% for field in form.conditions %}
-                                <div class="form-check">
-                                    {{ field }}
-                                </div>
-                            {% endfor %}
-                        </div>
+<!-- Conditions -->
+<div class="mb-4">
+    <h6>Conditions</h6>
+    {% for field in form.conditions %}
+        <div class="form-check">
+            {{ field }}
+        </div>
+    {% endfor %}
+</div>
 
-                        <!-- Sizes -->
-                        <div class="mb-4">
-                            <h6>Sizes</h6>
-                            {% for field in form.sizes %}
-                                <div class="form-check">
-                                    {{ field }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                           </form>
-
-                    </div>
-
-                </div>
+<!-- Sizes -->
+<div class="mb-4">
+    <h6>Sizes</h6>
+    {% for field in form.sizes %}
+        <div class="form-check">
+            {{ field }}
+        </div>
+    {% endfor %}
+</div>
+</form>
+</div>
+</div>
 
                      <!-- Product cards -->
                 <div class="col-md-9">

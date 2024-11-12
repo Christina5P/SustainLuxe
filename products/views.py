@@ -18,16 +18,25 @@ from django.core.paginator import Paginator
 from django.db.models import Prefetch
 
 
+from django.db.models import Q
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.db.models.functions import Lower
+from .forms import ProductFilterForm
+from .models import Category, Brand, Condition, Size, Product
+
+
 def all_products(request):
-    products = Product.objects.filter(is_listed=True, sold=False)
+    # Hämta alla subkategorier (där parent_categories finns)
+    all_subcategories = Category.objects.filter(parent_categories__isnull=False).distinct()
 
     # Hämta alla tillgängliga filteralternativ
     brands = Brand.objects.all()
     conditions = Condition.objects.all()
     sizes = Size.objects.all()
-    main_categories = Category.objects.filter(
-        parent_categories=None
-    )  # Hämta bara parentkategorier
+
+    # Hämta bara huvudkategorier (main categories)
+    main_categories = Category.objects.filter(parent_categories=None)
 
     # Hämta filter från GET-parametrar
     brand_id = request.GET.get('brand')
@@ -40,9 +49,12 @@ def all_products(request):
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
 
+    # Hämta filterformulär
     form = ProductFilterForm(request.GET)
 
-    # Filtrera baserat på sökfrågan
+    # Filtrering av produkter baserat på sökfrågan
+    products = Product.objects.all()  # Starta med alla produkter
+
     if query:
         products = products.filter(
             Q(name__icontains=query)
@@ -50,7 +62,7 @@ def all_products(request):
             | Q(brand__name__icontains=query)
         )
 
-    # Filtrering baserat på formdata
+    # Filtrering baserat på formdata (brands, conditions, sizes)
     if form.is_valid():
         if form.cleaned_data.get('brands'):
             products = products.filter(brand__in=form.cleaned_data['brands'])
@@ -61,19 +73,19 @@ def all_products(request):
         if form.cleaned_data.get('sizes'):
             products = products.filter(size__in=form.cleaned_data['sizes'])
 
-        # Filtrering baserat på subkategorier (parentkategorier tas bort)
+        # Filtrering baserat på subkategorier
         if category_ids:
             category_filters = Q()
             for category_id in category_ids:
                 try:
                     category = Category.objects.get(id=category_id)
-                    # Filtrera produkterna med subkategorier
+                    # Lägg till subkategorier i filter
                     category_filters |= Q(categories=category)
                 except Category.DoesNotExist:
                     pass
             products = products.filter(category_filters).distinct()
 
-    # Sorting functionality
+    # Sortering av produkterna
     if sort == 'name':
         sortkey = 'lower_name'
         products = products.annotate(lower_name=Lower('name'))
@@ -89,23 +101,21 @@ def all_products(request):
 
     products = products.order_by(sortkey)
 
-    # Paginator
+    # Paginering
     paginator = Paginator(products, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {
         'products': products,
+        'main_categories': main_categories,
+        'all_subcategories': all_subcategories,  # Subkategorier
         'brands': brands,
         'conditions': conditions,
         'sizes': sizes,
-        'main_categories': main_categories,
         'search_term': query,
         'current_sorting': f'{sort}_{direction}',
-        'selected_category': category_ids,  # Skicka de valda subkategorierna till mallen
-        'selected_brand': brand_id,
-        'selected_condition': condition_id,
-        'selected_size': size_id,
+        'selected_category': category_ids,  # Här sparas de valda kategorierna
         'form': form,
         'page_obj': page_obj,
     }
