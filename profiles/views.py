@@ -16,6 +16,7 @@ from .utils import get_total_balance
 from django.core.paginator import Paginator
 import json
 
+
 @login_required
 def profile(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -52,30 +53,41 @@ def profile(request):
 
     return render(request, template, context)
 
+
 @login_required
 def sale_product(request):
-    """Form for selling product"""
+    """Form for selling a product"""
     template = 'profiles/sale_product.html'
-    sale, created = Sale.objects.get_or_create(user=request.user)
-    account, created = Account.objects.get_or_create(user=request.user)
+
+    sale, created_sale = Sale.objects.get_or_create(user=request.user)
+    account, created_account = Account.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         form = SellerForm(request.POST)
         if form.is_valid():
             product = form.save(commit=False)
-            product.sku = str(uuid.uuid4())
+            product.sku = str(uuid.uuid4()) 
             product.user = request.user
-            product.save()
+            product.save() 
 
+            # Calculate earned amount and update balances
             earned_amount = product.price
             sale.update_balance_and_revenue(earned_amount)
             account.update_total_revenue(earned_amount)
 
             request.session['save_info'] = {
                 'sku': product.sku,
-                'earned_amount': float(earned_amount * Decimal('0.7')),
+                'price': float(earned_amount),
+                'earned_amount': float(earned_amount * Decimal('0.7'))
             }
-            messages.success(request, 'Your product has been listed for sale!')
+
+            messages.success(
+                request,
+                f'Your product has been listed for sale! '
+                f'Product SKU: {product.sku}. '
+                f'Sale price: EUR {product.price}.'
+            )
+
             return redirect('saleorder_success')
     else:
         form = SellerForm()
@@ -83,30 +95,30 @@ def sale_product(request):
     return render(request, template, {'form': form})
 
 
-def saleorder_success(request,):
+@login_required
+def saleorder_success(request):
     """
     Handle successful Sale Registration
     """
     save_info = request.session.get('save_info')
 
-    # Context to use for success confirmation
     if save_info:
-
-        sku = save_info.get('sku', None)  
-        price = save_info.get('price', None)  
-
-        del request.session['save_info']
+        sku = save_info.get('sku')
+        price = save_info.get('price')
+        earned_amount = save_info.get('earned_amount')
 
         return render(
             request,
             'profiles/saleorder_success.html',
-            {'sku': sku, 'price': price},
+            {
+                'sku': sku,
+                'price': price,
+                'earned_amount': earned_amount,
+            }
         )
     else:
         messages.warning(request, 'No sale information confirmed.')
-        form = SellerForm()
-
-    return redirect('sale_product')
+        return redirect('sale_product')
 
 
 @login_required
@@ -119,7 +131,6 @@ def account_details(request, user_id):
     sold_products = Product.objects.filter(user=user, sold=True)
     template = 'profiles/account_details.html'
 
-    # Calculate and display available balance
     available_balance = account.calculate_balance()
 
     withdrawal_history = (
