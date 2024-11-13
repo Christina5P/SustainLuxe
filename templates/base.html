@@ -198,39 +198,44 @@
 {% if messages %}
 
 <div class="message-container">
-    {% for message in messages %}
-        {% with message.level as level %}
+{% for message in messages %}
+    {% with message.level as level %}
             {% if level == 40 %}
-                {% include 'includes/toast_notification/toast_error.html' %}
-            {% elif level == 30 %}
-                {% include 'includes/toast_notification/toast_warning.html' %}
-            {% elif level == 25 %}
-                {% include 'includes/toast_notification/toast_success.html' %}
-            {% else %}
-                {% include 'includes/toast_notification/toast_info.html' %}
-            {% endif %}
-        {% endwith %}
-    {% endfor %}
+            {% include 'includes/toast_notification/toast_error.html' %}
+
+        {% elif level == 30 %}
+            {% include 'includes/toast_notification/toast_warning.html' %}
+
+        {% elif level == 25 %}
+            {% include 'includes/toast_notification/toast_success.html' %}
+
+        {% else %}
+            {% include 'includes/toast_notification/toast_info.html' %}
+        
+        {% endif %}
+
+    {% endwith %}
+{% endfor %}
 </div>
 {% endif %}
 
 
 {% block corejs %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
+<script src="https://s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
 <script src="https://kit.fontawesome.com/3090a0f319.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
 
     <script src="https://js.stripe.com/v3/"></script> 
-
-<script src="{% static 'js/countryfield.js' %}"></script>
+    <script src="{% static 'js/countryfield.js' %}"></script>
 {% endblock %}
 
 {% block postloadjs %}
 
 
     <script>
+      
         document.addEventListener('DOMContentLoaded', function () {
             // Mailchimp form submit and validation initialization here
             (function($) {
@@ -250,7 +255,7 @@
 
 <script>
 
-    // toast function
+    // toast Function
   document.addEventListener('DOMContentLoaded', function () {
     var toastElList = [].slice.call(document.querySelectorAll('.toast'));
     var toastList = toastElList.map(function (toastEl) {

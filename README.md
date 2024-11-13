@@ -607,6 +607,6 @@ You can read the report with this link: https://docs.google.com/document/d/1Q_Qk
 - https://stackoverflow.com/questions/49366010/how-to-set-an-expiry-date-for-an-object-in-django 
 - https://django-simple-history.readthedocs.io/en/latest/ 
 - https://medium.com/django-unleashed/mastering-the-art-of-django-simple-history-a-tutorial-for-medium-with-examples-c25196339130
-
+- https://learn.jquery.com/using-jquery-core/document-ready/ - jquery
 
 [Go to Top](#sustainluxe---e-commerce-site)

@@ -174,11 +174,15 @@ def withdrawal_view(request):
             account.save()
 
             if account.request_payout(amount):
-              
                 account.process_payout() 
-                messages.success(request, 'Withdrawal requested successfully.')
-            else:
-                messages.error(request, 'Withdrawal failed: Insufficient balance or invalid bank account details. Please verify and try again.')
+
+                new_balance = account.calculate_balance()
+                messages.success(
+                    request,
+                    f'Your withdrawal have been sent'
+                    f'New balance: EUR {new_balance:}.'
+                )
+
             return redirect('withdrawal')
 
     withdrawal_history = (
