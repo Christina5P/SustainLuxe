@@ -11,9 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '1234secretkey')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = 'DEVELOPMENT' in os.environ
-DEBUG = False 
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
@@ -22,9 +21,9 @@ ALLOWED_HOSTS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-     'django.contrib.auth.backends.ModelBackend',
-     'allauth.account.auth_backends.AuthenticationBackend',
- ]
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
@@ -112,9 +111,6 @@ else:
     }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -125,8 +121,6 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
-
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -146,11 +140,11 @@ else:
     EMAIL_USE_TLS = True
     EMAIL_PORT = 587
     EMAIL_HOST = "smtp.gmail.com"
-    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")  # Heroku config var
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = os.environ.get(
         "EMAIL_HOST_PASS"
-    )  # Heroku config var
-    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Using the EMAIL_HOST_USER directly
+    )
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
     ADMIN_EMAIL = "sustainluxen@gmail.com"
 
 
@@ -179,7 +173,6 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
@@ -188,7 +181,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 if 'USE_AWS' in os.environ:
-    # Cache control
     AWS_S3_OBJECT_PARAMETERS = {
         'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
         'CacheControl': 'max-age=94608000',
@@ -198,8 +190,8 @@ if 'USE_AWS' in os.environ:
     AWS_STORAGE_BUCKET_NAME = 'sustainluxe'
     AWS_S3_REGION_NAME = 'eu-north-1'
     AWS_S3_SIGNATURE_VERSION = 's3v4'
-    # AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    # AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
     # Static and media files
@@ -208,7 +200,6 @@ if 'USE_AWS' in os.environ:
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     MEDIAFILES_LOCATION = 'media'
 
-    # Override static and media URLs in production
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
 

@@ -3,7 +3,6 @@
 {% load crispy_forms_filters %}
 
 <div class="container header-container">
-
     <!-- search field in navbar-->
 {% block extra_navbar_content %}
 <div class="row">
@@ -16,16 +15,16 @@
 </div>
 
  <!-- Cart icon -->
-            <a class="nav-link me-3{% if grand_total %} font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
-                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-                <span class="ms-2">
-                    {% if grand_total %}
-                        EUR{{ grand_total|floatformat:2 }}
-                    {% else %}
-                        EUR 0.00
-                    {% endif %}
-                </span>
-            </a>
+    <a class="nav-link me-3{% if grand_total %} font-weight-bold{% else %} text-black{% endif %}" href="{% url 'view_bag' %}">
+        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+        <span class="ms-2">
+            {% if grand_total %}
+                EUR{{ grand_total|floatformat:2 }}
+            {% else %}
+                EUR 0.00
+            {% endif %}
+        </span>
+    </a>
 {% endblock %}
 
 {% block content %}
@@ -35,14 +34,9 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Categories:</a>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- All Categories Link -->
             <li class="nav-item">
-                <a class="nav-link text-white" href="{% url 'all_products' %}">
-                    <strong>All</strong>
-                </a>
+                <a class="nav-link text-white" href="{% url 'all_products' %}"><strong>All</strong></a>
             </li>
-
-            <!-- Main Categories (no dropdown) -->
             {% for main_category in main_categories %}
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{% url 'all_products' %}?categories={{ main_category.id }}">
@@ -51,84 +45,83 @@
                 </li>
             {% endfor %}
         </ul>
-          
 
-             <!-- Sorting products -->
-            <div class="d-flex align-items-center">
-                <select id="sort-selector" class="form-select rounded-0 border">
-                    <option value="reset">Sort by...</option>
-                    <option value="price_asc">Price (low to high)</option>
-                    <option value="price_desc">Price (high to low)</option>
-                    <option value="name_asc">Name (A-Z)</option>
-                    <option value="name_desc">Name (Z-A)</option>
-                    <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
-                    <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
-                </select> 
+        <!-- Sorting products -->
+        <div class="d-flex align-items-center">
+            <select id="sort-selector" class="form-select rounded-0 border">
+                <option value="reset">Sort by...</option>
+                <option value="price_asc">Price (low to high)</option>
+                <option value="price_desc">Price (high to low)</option>
+                <option value="name_asc">Name (A-Z)</option>
+                <option value="name_desc">Name (Z-A)</option>
+                <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
+                <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
+            </select>
         </div>
-
     </div>
-</div>
 </nav>
 
-</div>
-</nav>
-
-</div> 
- <section>
+<!-- Filter section above product grid -->
+<section>
     <div class="container-fluid">
         <div class="row">
-
-            <!-- Filterbar Left sside -->
-            <div class="col-md-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0">Product Filter</h4>
-                    <button class="btn btn-secondary btn-sm" id="toggle-filter-btn">Hide</button>
+            <div class="col-12">
+                <div class="mb-3">
+                    <h4 class="mb-0  d-inline-block">Product Filter</h4>
+                    <button class="btn btn-secondary btn-sm ms-3" id="toggle-filter-btn">Hide</button>
                 </div>
 
+                  <!-- Filter  -->
                 <div id="filter-content" class="p-3 bg-white border rounded shadow-sm mb-3">
                     <form id="filterForm" method="GET" action="{% url 'all_products' %}">
-                        <hr>
+                        <div class="row">
+                            <!-- Subcategory Column -->
+                            <div class="col-md-3 mb-3">
+                                <h6>Subcategory</h6>
+                                {% for subcategory in all_subcategories %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}" id="cat_{{ subcategory.id }}"
+                                        {% if subcategory.id in selected_category %}checked{% endif %}>
+                                        <label class="form-check-label" for="cat_{{ subcategory.id }}">
+                                            {{ subcategory.name }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
 
-                     
-                            {% for subcategory in all_subcategories %}
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}" id="cat_{{ subcategory.id }}"
-                                    {% if subcategory.id in selected_category %}checked{% endif %}>
-                                    <label class="form-check-label" for="cat_{{ subcategory.id }}">
-                                        {{ subcategory.name }}
-                                    </label>
-                                </div>
-                            {% endfor %}
-                        </div>
+                             <div class="col-md-3 mb-3">
+                                <h6>Brand</h6>
+                                {% for field in form.brands %}
+                                    <div class="form-check">{{ field }}</div>
+                                {% endfor %}
+                            </div>
 
-                        <div class="mb-3">
-                            <h6>Brands</h6>
-                            {% for field in form.brands %}
-                                <div class="form-check">{{ field }}</div>
-                            {% endfor %}
+                            <div class="col-md-3 mb-3">
+                                <h6>Size</h6>
+                                {% for field in form.sizes %}
+                                    <div class="form-check">{{ field }}</div>
+                                {% endfor %}
+                            </div>
+                           
+                            <div class="col-md-3 mb-3">
+                                <h6>Condition</h6>
+                                {% for field in form.conditions %}
+                                    <div class="form-check">{{ field }}</div>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <h6>Conditions</h6>
-                            {% for field in form.conditions %}
-                                <div class="form-check">{{ field }}</div>
-                            {% endfor %}
-                        </div>
-                        <div class="mb-3">
-                            <h6>Sizes</h6>
-                            {% for field in form.sizes %}
-                                <div class="form-check">{{ field }}</div>
-                            {% endfor %}
-                        </div>
-
+                        
                         <button type="submit" class="btn btn-primary me-2">Filter</button>
                         <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
                     </form>
                 </div>
             </div>
-
-            <!-- Product cards  -->
-            <div class="col-md-9">
-                <h2 class="logo-font">Products</h2>
+        </div>
+        
+        <!-- Product grid -->
+        <div class="row">
+            <div class="col-12">
+                <h1 class="logo-font text-center py-3">Products</h1>
                 <div class="row">
                     {% for product in page_obj %}
                         {% if product.is_listed and not product.is_sold %}
@@ -171,57 +164,53 @@
         </div>
     </div>
 </section>
-          
 
 <div class="btt-button shadow-sm rounded-0 border border-black">
-        <a class="btt-link d-flex h-100 justify-content-end align-items-center" aria-label="Scroll to top">
+    <a class="btt-link d-flex h-100 justify-content-end align-items-center" aria-label="Scroll to top">
         <i class="fa-solid fa-circle-chevron-up"></i>
     </a>
 </div>
 
- <!-- Pagination -->
-    <nav class="my-4">
-        <ul class="pagination pagination-circle justify-content-center">
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1" tabindex="-1">First</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
-                </li>
-            {% endif %}
-
-            <li class="page-item active">
-                <a class="page-link" href="#">{{ page_obj.number }} <span class="sr-only">(current)</span></a>
+<!-- Pagination -->
+<nav class="my-4">
+    <ul class="pagination pagination-circle justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" tabindex="-1">First</a>
             </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+            </li>
+        {% endif %}
 
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
+        <li class="page-item active">
+            <a class="page-link" href="#">{{ page_obj.number }} <span class="sr-only">(current)</span></a>
+        </li>
 
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
 
 {% endblock %}
 
 {% block postloadjs %}
 <script>
-   
-    $(document).ready(function () {
-               
-        // scroll to top
+    // scroll to top
 
+    $(document).ready(function () {
         $('.btt-link').click(function(e) {
             e.preventDefault();  
             window.scrollTo(0, 0);
         });
 
-        // Sort by function
+    // Hide Filter
         $('#sort-selector').change(function () {
             var selector = $(this);
             var currentUrl = new URL(window.location.href);  
@@ -243,33 +232,25 @@
             }
         });
 
-         // Clear Filters button
+    // Clear Filter
         $('#clearButton').click(function (e) {
             e.preventDefault(); 
             $('input[type="checkbox"]').prop('checked', false);
             $('#filterForm').submit();
         }); 
 
-       
-    // Toggle filter view
-    $(document).ready(function () {
-    // Filter toggle funktion
-    const toggleBtn = $('#toggle-filter-btn');
-    const filterContent = $('#filter-content');
+        const toggleBtn = $('#toggle-filter-btn');
+        const filterContent = $('#filter-content');
 
-    toggleBtn.click(function() {
-        filterContent.toggleClass('hidden'); 
+        toggleBtn.click(function() {
+            filterContent.toggleClass('hidden'); 
 
-        if (filterContent.hasClass('hidden')) {
-            toggleBtn.text('View'); 
-        } else {
-            toggleBtn.text('Hide'); 
-        }
+            if (filterContent.hasClass('hidden')) {
+                toggleBtn.text('View'); 
+            } else {
+                toggleBtn.text('Hide'); 
+            }
+        });
     });
-});
-});
-
-    
 </script>
-
 {% endblock %}
