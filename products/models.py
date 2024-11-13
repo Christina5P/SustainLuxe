@@ -2,14 +2,14 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.models import User
-from django_countries.fields import CountryField
-from django.core.validators import MinValueValidator, MaxValueValidator
+# from django_countries.fields import CountryField
+# from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from django.conf import settings
 from django.utils.text import slugify
 import uuid
-from profiles.models import UserProfile, Sale, Account 
-from django.apps import apps
+from profiles.models import Sale, #UserProfile, Account 
+# from django.apps import apps
 
 
 class Category(models.Model):
@@ -33,10 +33,6 @@ class Category(models.Model):
 
 class Meta:
     verbose_name_plural = 'Categories'
-
-
-# def get_friendly_name(self):
-#    return self.friendly_name or self.name or "Unnamed Category"
 
 
 class Product(models.Model):
@@ -125,15 +121,14 @@ class Product(models.Model):
             self.sold_at = timezone.now()
             self.is_listed = False
             self.save()
-            print('sold item')
-
+            
             try:
                 sale = Sale.objects.get(user=self.user)
             except Sale.DoesNotExist:
                 sale = Sale.objects.create(user=self.user)
 
             sale.update_balance_and_revenue(self.price)
-            print('update balance', sale.balance)
+            
 
 
 class Size(models.Model):
@@ -171,7 +166,7 @@ class Condition(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=100, unique=True)  
     description = models.TextField(max_length=254, null=True, blank=True) 
-    logo = models.ImageField(upload_to='brands/logos/', null=True, blank=True) 
+    logo = models.ImageField(upload_to='media', null=True, blank=True) 
 
     def __str__(self):
         return self.name
@@ -181,7 +176,7 @@ class ProductImage(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='images'
     )
-    image = models.ImageField(upload_to='product_images/')
+    image = models.ImageField(upload_to='media')
 
 
 def __str__(self):

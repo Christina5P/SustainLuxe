@@ -15,46 +15,27 @@ from .models import (
 from .forms import ProductForm, ProductFilterForm
 from decimal import Decimal, ROUND_DOWN
 from django.core.paginator import Paginator
-from django.db.models import Prefetch
-
-
-from django.db.models import Q
-from django.core.paginator import Paginator
-from django.shortcuts import render
-from django.db.models.functions import Lower
-from .forms import ProductFilterForm
-from .models import Category, Brand, Condition, Size, Product
+# from django.db.models import Prefetch
 
 
 def all_products(request):
-    # Hämta alla subkategorier (där parent_categories finns)
-    all_subcategories = Category.objects.filter(parent_categories__isnull=False).distinct()
-
-    # Hämta alla tillgängliga filteralternativ
+    all_subcategories = Category.objects.filter(
+        parent_categories__isnull=False).distinct()
     brands = Brand.objects.all()
     conditions = Condition.objects.all()
     sizes = Size.objects.all()
 
-    # Hämta bara huvudkategorier (main categories)
     main_categories = Category.objects.filter(parent_categories=None)
 
-    # Hämta filter från GET-parametrar
-    brand_id = request.GET.get('brand')
-    condition_id = request.GET.get('condition')
-    size_id = request.GET.get('size')
-    category_ids = request.GET.getlist(
-        'categories'
-    )  # Få alla valda subkategorier
     query = request.GET.get('q', '')
     sort = request.GET.get('sort', 'name')
     direction = request.GET.get('direction', 'asc')
 
-    # Hämta filterformulär
     form = ProductFilterForm(request.GET)
 
-    # Filtrering av produkter baserat på sökfrågan
-    products = Product.objects.all()  # Starta med alla produkter
+    products = Product.objects.all()
 
+    # Search Function
     if query:
         products = products.filter(
             Q(name__icontains=query)
@@ -62,7 +43,13 @@ def all_products(request):
             | Q(brand__name__icontains=query)
         )
 
-    # Filtrering baserat på formdata (brands, conditions, sizes)
+    # Filter Function
+    brand_id = request.GET.get('brand')
+    condition_id = request.GET.get('condition')
+    size_id = request.GET.get('size')
+    category_ids = request.GET.getlist(
+        'categories')
+
     if form.is_valid():
         if form.cleaned_data.get('brands'):
             products = products.filter(brand__in=form.cleaned_data['brands'])
@@ -73,19 +60,17 @@ def all_products(request):
         if form.cleaned_data.get('sizes'):
             products = products.filter(size__in=form.cleaned_data['sizes'])
 
-        # Filtrering baserat på subkategorier
         if category_ids:
             category_filters = Q()
             for category_id in category_ids:
                 try:
                     category = Category.objects.get(id=category_id)
-                    # Lägg till subkategorier i filter
                     category_filters |= Q(categories=category)
                 except Category.DoesNotExist:
                     pass
             products = products.filter(category_filters).distinct()
 
-    # Sortering av produkterna
+    # Sortering Function
     if sort == 'name':
         sortkey = 'lower_name'
         products = products.annotate(lower_name=Lower('name'))
@@ -109,13 +94,13 @@ def all_products(request):
     context = {
         'products': products,
         'main_categories': main_categories,
-        'all_subcategories': all_subcategories,  # Subkategorier
+        'all_subcategories': all_subcategories,
         'brands': brands,
         'conditions': conditions,
         'sizes': sizes,
         'search_term': query,
         'current_sorting': f'{sort}_{direction}',
-        'selected_category': category_ids,  # Här sparas de valda kategorierna
+        'selected_category': category_ids,
         'form': form,
         'page_obj': page_obj,
     }
@@ -149,10 +134,11 @@ def calculate_carbon_saving(product):
     Calculate carbon emission of the given product's fabric and weight.
     """
     if product.fabric:
-        carbon_per_kg = product.fabric.carbon_emission_per_kg  
+        carbon_per_kg = product.fabric.carbon_emission_per_kg
         total_saving = carbon_per_kg * product.weight_in_kg
-      
-        total_saving = total_saving.quantize(Decimal('0.01'), rounding=ROUND_DOWN)
+
+        total_saving = total_saving.quantize(
+            Decimal('0.01'), rounding=ROUND_DOWN)
         return total_saving
 
     return Decimal(0).quantize(Decimal('0.01'), rounding=ROUND_DOWN)
