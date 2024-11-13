@@ -2,14 +2,16 @@ from django import forms
 from .models import UserProfile
 from products.models import Product, Size, Condition, Fabric
 from decimal import Decimal
-from django.utils.safestring import mark_safe
-from .models import Account, Sale 
+# from django.utils.safestring import mark_safe
+from .models import Account
+# from .models import Sale
 
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['full_name', 'email', 'phone_number', 'street_address1', 'postcode', 'town_or_city', 'country']
+        fields = ['full_name', 'email', 'phone_number',
+                  'street_address1', 'postcode', 'town_or_city', 'country']
         exclude = ('user', 'total_revenue')
 
     def __init__(self, *args, **kwargs):
@@ -22,10 +24,11 @@ class UserProfileForm(forms.ModelForm):
             'postcode': 'Postal Code',
             'town_or_city': 'Town or City',
         }
-        
+
         for field in self.fields:
             if field != 'country':
-                self.fields[field].widget.attrs['placeholder'] = placeholders.get(field, '')
+                self.fields[field].widget.attrs['placeholder'] = placeholders.get(
+                    field, '')
             self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
             self.fields[field].label = False
 
@@ -39,7 +42,7 @@ class SellerForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'placeholder': 'Enter your name'}),
     )
 
-    email = forms.EmailField( 
+    email = forms.EmailField(
         max_length=255,
         required=True,
         label="Email",
@@ -95,7 +98,7 @@ class SellerForm(forms.ModelForm):
         ('M', 'M'),
         ('L', 'L'),
         ('XL', 'XL'),
-      
+
     ]
 
     size = forms.ModelChoiceField(
@@ -166,7 +169,7 @@ def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     if user_profile:
         self.fields['seller'].initial = user_profile.id
-    
+
     self.fields['return_option'].widget = forms.RadioSelect(choices=[
         (True, 'Pay for a return shipping label'),
         (False, 'Donate unsold items')
@@ -198,16 +201,17 @@ class WithdrawalForm(forms.ModelForm):
         min_value=Decimal('0.01'),
         max_digits=10,
         decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '0.01', 'class': 'form-control'}),
+        widget=forms.NumberInput(
+            attrs={'step': '0.01', 'class': 'form-control'}),
     )
 
     class Meta:
-        model = Account  
+        model = Account
         fields = ['amount', 'bank_account_number']
 
     def __init__(self, *args, **kwargs):
         self.account = kwargs.pop('account', None)
-        super().__init__(*args, **kwargs)    
+        super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -224,8 +228,7 @@ class WithdrawalForm(forms.ModelForm):
     def save(self, commit=True):
         account = super().save(commit=False)
         account.user = self.account.user
-        account.bank_account_number = self.cleaned_data['bank_account_number'] 
-        print(f"Bank account number: {account.bank_account_number}")
+        account.bank_account_number = self.cleaned_data['bank_account_number']
 
         if commit:
             account.save()

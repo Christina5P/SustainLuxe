@@ -2,7 +2,7 @@ from django.shortcuts import (
     render,
     redirect,
     reverse,
-    HttpResponse,
+    # HttpResponse,
     get_object_or_404,
 )
 from django.contrib import messages
@@ -46,7 +46,7 @@ def adjust_bag(request, item_id):
         if size:
             bag[item_id]['size'] = size
             messages.success(request, f'Updated {product.name} size to {size}')
-        
+
         else:
             messages.error(request, f'{product.name} is not in your bag')
 
@@ -59,7 +59,7 @@ def remove_from_bag(request, item_id):
 
     product = get_object_or_404(Product, pk=item_id)
     bag = request.session.get('bag', {})
-   
+
     if item_id in bag:
         del bag[item_id]
         messages.success(request, f'Removed {product.name} from your bag')

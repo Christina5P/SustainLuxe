@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from .models import Account
 from simple_history.admin import SimpleHistoryAdmin
 import json
-from products.models import Product
+# from products.models import Product
 
 
 class PayoutStatusFilter(admin.SimpleListFilter):
@@ -21,7 +21,7 @@ class PayoutStatusFilter(admin.SimpleListFilter):
             return queryset.filter(payout_status='pending')
         if self.value() == 'completed':
             return queryset.filter(payout_status='completed')
-        return queryset 
+        return queryset
 
 
 @admin.register(Account)
@@ -71,9 +71,7 @@ class AccountAdmin(SimpleHistoryAdmin):
     )
 
     def current_balance(self, obj):
-        print(f'Calling calculate_balance for {obj.user.username}')  # Lägg till print här för att säkerställa att metoden anropas
         balance = obj.calculate_balance()
-        print(f"Calculated balance for {obj.user.username}: {balance}")  # Utskrift av beräknat saldo
         return balance
 
     def payout_status_display(self, obj):
@@ -102,17 +100,14 @@ class AccountAdmin(SimpleHistoryAdmin):
 
     def formatted_withdrawal_history(self, obj):
         """Return formatted withdrawal history for display in Django admin."""
-        # Kontrollera om withdrawal_history redan är en lista
         if isinstance(obj.withdrawal_history, str):
             try:
                 withdrawal_history = json.loads(obj.withdrawal_history)
             except json.JSONDecodeError:
                 withdrawal_history = []
-                print(f"Error decoding withdrawal_history for {obj.user.username}")
-        else:
-            withdrawal_history = obj.withdrawal_history  # Använd den direkt om det redan är en lista
+            else:
+                withdrawal_history = obj.withdrawal_history
 
-        # Generera en läsbar sträng från withdrawal_history
         formatted_history = "\n".join(
             [
                 f"Date: {entry.get('date')}, Amount: {entry.get('amount')}, Status: {entry.get('status')}"

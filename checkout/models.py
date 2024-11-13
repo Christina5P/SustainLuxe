@@ -1,5 +1,5 @@
-import uuid  # generate ordernumber
-from decimal import Decimal
+import uuid
+# from decimal import Decimal
 from django.db import models
 from django.db.models import Sum
 from django.conf import settings
@@ -13,12 +13,12 @@ from django.db.models.signals import post_save
 class Order(models.Model):
     order_number = models.CharField(max_length=32, null=False, editable=False)
     user_profile = models.ForeignKey(
-         UserProfile,
-         on_delete=models.SET_NULL,
-         null=True,
-         blank=True,
-         related_name='orders',
-     )
+        UserProfile,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='orders',
+    )
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
     phone_number = models.CharField(max_length=20, null=False, blank=False)
@@ -56,10 +56,10 @@ class Order(models.Model):
         """
         self.order_total = (
             self.lineitems.aggregate(Sum('lineitem_total'))[
-                 'lineitem_total__sum'
-            ] 
+                'lineitem_total__sum'
+            ]
             or 0
-        )               
+        )
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = (
                 self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
@@ -78,18 +78,21 @@ class Order(models.Model):
             self.order_number = self._generate_order_number()
         super().save(*args, **kwargs)
 
-        print(f"Order saved: {self.order_number}") 
+        print(f"Order saved: {self.order_number}")
 
     def __str__(self):
         return self.order_number
 
 
 class OrderLineItem(models.Model):
-    order = models.ForeignKey(Order, null=False, blank=False, on_delete=models.CASCADE, related_name='lineitems')
-    product = models.ForeignKey(Product, null=False, blank=False, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, null=False, blank=False,
+                              on_delete=models.CASCADE, related_name='lineitems')
+    product = models.ForeignKey(
+        Product, null=False, blank=False, on_delete=models.CASCADE)
     product_size = models.CharField(max_length=50, null=True, blank=True)
     quantity = models.IntegerField(null=False, blank=False, default=1)
-    lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
+    lineitem_total = models.DecimalField(
+        max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
 
     def save(self, *args, **kwargs):
         """
@@ -111,7 +114,7 @@ class OrderLineItem(models.Model):
 
     @receiver(post_save, sender=Order)
     def update_product_sold_at(sender, instance, created, **kwargs):
-        if created:  
+        if created:
             for line_item in instance.lineitems.all():
                 product = line_item.product
                 product.sold = True

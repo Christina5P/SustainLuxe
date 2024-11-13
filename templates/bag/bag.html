@@ -53,7 +53,6 @@
 
                            {% for item in bag_items %}
 <tr>
-    <!-- Produktbild -->
     <td class="p-3 w-25">
         {% if item.product.image %}
        
@@ -63,7 +62,6 @@
         {% endif %}
     </td>
     
-    <!-- Produktnamn, storlek och SKU -->
     <td class="py-3">
         <p class="my-0"><strong>{{ item.product.name }}</strong></p>
 
@@ -72,7 +70,6 @@
     <p class="my-0 small">SKU: {{ item.product.sku|upper }}</p>
 </td>
     
-    <!-- Produktpris -->
     <td class="py-3">
         <p class="my-0">EUR {{ item.product.price }}</p>
     </td>
@@ -81,85 +78,61 @@
         <p class="my-0" >{{ item.quantity }}</p> 
     </td>
            
-    <!-- Subtotal och Remove-länk -->
     <td class="py-3 ">
-        <!-- Subtotal -->
         <p class="my-0">EUR{{ item.product.price | calc_subtotal:item.quantity }}</p>
         
-        <!-- Remove-länk -->
         <a class="remove-item text-danger" id="remove_{{ item.item_id }}" data-product_size="{{ item.size }}" href="{% url 'remove_from_bag' item.item_id %}">
             <small>Remove</small>
         </a>
     </td>
 </tr>
-{% endfor %}
-                            <tr>
-                                <td colspan="5" class="pt-5 text-end">
-                                    <h6><strong>Bag Total: EUR {{ total|floatformat:2 }}</strong></h6>
-                                    <h6>Delivery: EUR {{ delivery|floatformat:2 }}</h6>
-                                    <h4 class="mt-4"><strong>Grand Total: EUR {{ grand_total|floatformat:2 }}</strong></h4>
-                                    {% if free_delivery_delta > 0 %}
-                                        <p class="mb-1 text-danger">
-                                            You could get free delivery by spending just <strong>EUR {{ free_delivery_delta }}</strong> more!
-                                        </p>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="text-right">
-                                    <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
-                                        <span class="icon">
-                                            <i class="fas fa-chevron-left"></i>
-                                        </span>
-                                        <span class="text-uppercase">Keep Shopping</span>
-                                    </a>
-                                    <a href="{% url 'checkout' %}" class="btn btn-outline-black rounded-0 btn-lg">
-                                        <span class="text-uppercase">Secure Checkout</span>
-                                        <span class="icon">
-                                            <i class="fas fa-lock"></i>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                {% else %}
-                    <p class="lead mb-5">Your bag is empty.</p>
+    {% endfor %}
+            <tr>
+                <td colspan="5" class="pt-5 text-end">
+                    <h6><strong>Bag Total: EUR {{ total|floatformat:2 }}</strong></h6>
+                    <h6>Delivery: EUR {{ delivery|floatformat:2 }}</h6>
+                    <h4 class="mt-4"><strong>Grand Total: EUR {{ grand_total|floatformat:2 }}</strong></h4>
+                    {% if free_delivery_delta > 0 %}
+                        <p class="mb-1 text-danger">
+                            You could get free delivery by spending just <strong>EUR {{ free_delivery_delta }}</strong> more!
+                        </p>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-right">
                     <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
                         <span class="icon">
                             <i class="fas fa-chevron-left"></i>
                         </span>
                         <span class="text-uppercase">Keep Shopping</span>
                     </a>
-                {% endif %}
-            </div>
+                    <a href="{% url 'checkout' %}" class="btn btn-outline-black rounded-0 btn-lg">
+                        <span class="text-uppercase">Secure Checkout</span>
+                        <span class="icon">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+        {% else %}
+            <p class="lead mb-5">Your bag is empty.</p>
+            <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
+                <span class="icon">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                <span class="text-uppercase">Keep Shopping</span>
+            </a>
+        {% endif %}
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block postloadjs %}
 {{ block.super }}
 {% include 'includes/quantity_input_script.html' %}
-
-<!--
-<script type="text/javascript">
-   $(document).ready(function() {
-    
-       // Remove item and reload on click
-       $('.remove-item').click(function(e) {
-          e.preventDefault();
-           var csrfToken = "{{ csrf_token }}";
-           var itemId = $(this).attr('id').split('remove_')[1];
-           var size = $(this).data('product_size');
-           var url = `/bag/remove/${itemId}/`; 
-           var data = {'csrfmiddlewaretoken': csrfToken, 'product_size': size};
-
-           $.post(url, data)
-           .done(function() {
-               location.reload();
-           });
-       });
-   });
-</script> -->
 
 {% endblock %}

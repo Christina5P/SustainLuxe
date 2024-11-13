@@ -96,7 +96,6 @@ def checkout(request):
                     order_line_item.save()
                     print(f"Saved order line item: {order_line_item}")
 
-                    # Set the product for the order
                     if not order.product:
                         order.product = product
                         order.save()
@@ -141,7 +140,7 @@ def checkout(request):
         )
 
         order_form = OrderForm()
-        
+
     if not stripe_public_key:
         messages.warning(
             request,
@@ -182,7 +181,7 @@ def checkout_success(request, order_number):
                 'default_street_address1': order.street_address1,
             }
             user_profile_form = UserProfileForm(profile_data, instance=profile)
-            
+
             if user_profile_form.is_valid():
                 user_profile_form.save()
 

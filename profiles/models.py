@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 from django_countries.fields import CountryField
 from django.utils import timezone
 from decimal import Decimal
@@ -28,6 +28,7 @@ class UserProfile(models.Model):
 
 
 class Sale(models.Model):
+    """  For user selling products """
     user = models.OneToOneField(
         User,
         on_delete=models.SET_NULL,
@@ -51,33 +52,30 @@ class Sale(models.Model):
     )
     balance = models.DecimalField(
         max_digits=10, decimal_places=2, default=0
-    ) 
+    )
 
     def update_balance_and_revenue(self, earned_amount):
         """Update both balance in Sale and total_revenue in Account."""
 
         earned_amount = Decimal(earned_amount) * Decimal('0.7')
         self.balance += earned_amount
-        self.save()  
-       
+        self.save()
+
         if hasattr(
             self.user, 'account'
-        ): 
+        ):
             account = self.user.account
             account.total_revenue += earned_amount
             account.save()
-            print(
-                f"Updated total_revenue for {self.user.username}: {account.total_revenue}"
-            )
-        else:
-            print(f"Account not found for user: {self.user.username}")
 
 
 class Account(models.Model):
+    """ Users account for revenue and product status"""
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     total_revenue = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00
-    ) 
+    )
     withdrawal_history = models.JSONField(default=list, blank=True)
     history = HistoricalRecords(
         history_id_field=models.AutoField(primary_key=True)
@@ -96,7 +94,7 @@ class Account(models.Model):
     )
 
     def calculate_balance(self):
-        """Calculate the available balance by subtracting completed withdrawals from total revenue."""
+        """Calculate the available balance by subtracting completed withdrawals """
         if isinstance(self.withdrawal_history, str):
             try:
                 self.withdrawal_history = json.loads(self.withdrawal_history)
@@ -113,7 +111,6 @@ class Account(models.Model):
         )
 
         balance = self.total_revenue - total_withdrawals
-        print(f'Calculated balance for {self.user.username}: {balance}')
         return balance
 
     def update_total_revenue(self, earned_amount):
@@ -129,7 +126,6 @@ class Account(models.Model):
             except json.JSONDecodeError:
                 self.withdrawal_history = []
 
-        # Skapa och lägg till ett nytt uttag om beloppet finns tillgängligt
         if amount <= self.calculate_balance():
             withdrawal_entry = {
                 'amount': float(amount),
@@ -140,11 +136,11 @@ class Account(models.Model):
             self.pending_payout += Decimal(amount)
             self.withdrawal_history = json.dumps(
                 self.withdrawal_history
-            )  # Omvandla till JSON-sträng innan sparning
+            )
             self.save()
             return True
         return (
-            False  # Returnera False om beloppet överstiger tillgängligt saldo
+            False
         )
 
     def get_pending_requests(self):
@@ -158,7 +154,7 @@ class Account(models.Model):
                 )
                 self.withdrawal_history = []
 
-        # Hämta alla uttag som är "pending"
+        # Get pending withdrawal request
         pending_requests = [
             w for w in self.withdrawal_history if w.get('status') == 'pending'
         ]
@@ -166,29 +162,26 @@ class Account(models.Model):
 
     def process_payout(self):
         """Process the pending payout and update the withdrawal status."""
-        
-        # Kontrollera att withdrawal_history är JSON-deserialiserad till en lista
+
         if isinstance(self.withdrawal_history, str):
             try:
                 self.withdrawal_history = json.loads(self.withdrawal_history)
             except json.JSONDecodeError:
-                print(f"Error decoding withdrawal_history for user {self.user.username}")
+                print(
+                    f"Error decoding withdrawal_history for user {self.user.username}")
                 self.withdrawal_history = []
-        
+
         if self.pending_payout > 0:
-            # Ändra första uttaget med "pending" till "completed"
             for withdrawal in reversed(self.withdrawal_history):
                 if withdrawal.get('status') == 'pending':
                     withdrawal['status'] = 'completed'
                     withdrawal['processed_date'] = timezone.now().isoformat()
                     break
 
-            # Återställ pending_payout och nollställ begäran
             self.pending_payout = 0
             self.payout_requested_at = None
 
-            # Spara tillbaka withdrawal_history som en JSON-sträng
             self.withdrawal_history = json.dumps(self.withdrawal_history)
-            self.save()  # Sparar ändringarna i modellen
+            self.save()
             return True
         return False

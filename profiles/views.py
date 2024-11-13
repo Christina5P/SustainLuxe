@@ -1,6 +1,6 @@
-from django.db import models
-from django.urls import reverse
-from django.contrib.auth import authenticate, login
+# from django.db import models
+# from django.urls import reverse
+from django.contrib.auth import login  # authenticate
 from .models import UserProfile, User, Account, Sale
 from .forms import UserProfileForm, SellerForm, WithdrawalForm
 from checkout.models import Order
@@ -11,14 +11,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from decimal import Decimal
 from django.db import transaction
-from django.utils import timezone
-from .utils import get_total_balance
+# from django.utils import timezone
+# from .utils import get_total_balance
 from django.core.paginator import Paginator
 import json
 
 
 @login_required
 def profile(request):
+    """ Update users profile settings"""
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     account, account_created = Account.objects.get_or_create(user=request.user)
 
@@ -66,11 +67,10 @@ def sale_product(request):
         form = SellerForm(request.POST)
         if form.is_valid():
             product = form.save(commit=False)
-            product.sku = str(uuid.uuid4()) 
+            product.sku = str(uuid.uuid4())
             product.user = request.user
-            product.save() 
+            product.save()
 
-            # Calculate earned amount and update balances
             earned_amount = product.price
             sale.update_balance_and_revenue(earned_amount)
             account.update_total_revenue(earned_amount)
@@ -123,6 +123,7 @@ def saleorder_success(request):
 
 @login_required
 def account_details(request, user_id):
+    """Account views balance and products for sale"""
     user = get_object_or_404(User, id=user_id)
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     account, account_created = Account.objects.get_or_create(user=request.user)
@@ -174,7 +175,7 @@ def withdrawal_view(request):
             account.save()
 
             if account.request_payout(amount):
-                account.process_payout() 
+                account.process_payout()
 
                 new_balance = account.calculate_balance()
                 messages.success(

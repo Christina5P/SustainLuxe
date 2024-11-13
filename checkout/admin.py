@@ -57,7 +57,6 @@ class OrderAdmin(admin.ModelAdmin):
     get_user_profile.short_description = 'User Profile'
 
 
-# Registrera OrderLineItem-modellen separat
 @admin.register(OrderLineItem)
 class OrderLineItemAdmin(admin.ModelAdmin):
     list_display = (
