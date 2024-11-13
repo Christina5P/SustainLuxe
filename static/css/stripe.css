@@ -51,8 +51,8 @@ color: #aab7c4 !important;
 #loading-overlay{
          display: none;
          position: fixed;
-  top: 50%;
-  left: 50%;
+  top: -50%;
+  left: -50%;
   width: 25%;
   height: 25%;
   background: rgba(23,162,184, .85);  

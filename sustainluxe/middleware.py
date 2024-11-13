@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 
 # teminal answer from request
 
+
 class LogImageRequestsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response

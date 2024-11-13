@@ -141,6 +141,10 @@ footer,
     color: #fff; 
 }
 
+  #filter-content.hidden {
+        display: none;
+    }
+
 /*  toasts */
 
 .message-container {

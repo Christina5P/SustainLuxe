@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '1234secretkey')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = 'DEVELOPMENT' in os.environ
-DEBUG = True    
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
@@ -199,7 +199,7 @@ if 'USE_AWS' in os.environ:
     AWS_S3_REGION_NAME = 'eu-north-1'
     AWS_S3_SIGNATURE_VERSION = 's3v4'
     # AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-   #  AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    # AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
     # Static and media files
