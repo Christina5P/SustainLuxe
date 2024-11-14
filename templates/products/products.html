@@ -63,13 +63,17 @@
 
 <!-- Filter section above product grid -->
 <section>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="mb-3">
-                    <h4 class="mb-0  d-inline-block">Product Filter</h4>
-                    <button class="btn btn-secondary btn-sm ms-3" id="toggle-filter-btn">Hide</button>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div>
+                            <h4 class="d-inline-block">Product Filter</h4>
+                            <button class="btn btn-secondary btn-sm ms-3" id="toggle-filter-btn">Hide</button>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
 
                   <!-- Filter  -->
                 <div id="filter-content" class="p-3 bg-white border rounded shadow-sm mb-3">
@@ -110,14 +114,13 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary me-2">Filter</button>
-                        <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
                     </form>
                 </div>
             </div>
         </div>
-        
+          <button type="submit" class="btn btn-primary me-2">Filter</button>
+          <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
+
         <!-- Product grid -->
         <div class="row">
             <div class="col-12">

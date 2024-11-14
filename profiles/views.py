@@ -180,8 +180,7 @@ def withdrawal_view(request):
                 new_balance = account.calculate_balance()
                 messages.success(
                     request,
-                    f'Your withdrawal have been sent'
-                    f'New balance: EUR {new_balance:}.'
+                    f'Your withdrawal have been requested. <br>New balance: EUR {new_balance:}.'
                 )
 
             return redirect('withdrawal')

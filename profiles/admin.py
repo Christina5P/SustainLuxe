@@ -3,7 +3,6 @@ from django.utils.html import format_html
 from .models import Account
 from simple_history.admin import SimpleHistoryAdmin
 import json
-# from products.models import Product
 
 
 class PayoutStatusFilter(admin.SimpleListFilter):
@@ -40,6 +39,7 @@ class AccountAdmin(SimpleHistoryAdmin):
     list_filter = (
         'pending_payout',
         'payout_status',
+        PayoutStatusFilter,
     )
     actions = ['process_payouts']
 
@@ -75,6 +75,7 @@ class AccountAdmin(SimpleHistoryAdmin):
         return balance
 
     def payout_status_display(self, obj):
+        """Display 'Pending' if there's a pending payout, otherwise 'Completed'."""
         return format_html(
             '<span style="color: {};">{}</span>',
             'red' if obj.pending_payout > 0 else 'green',
@@ -105,8 +106,8 @@ class AccountAdmin(SimpleHistoryAdmin):
                 withdrawal_history = json.loads(obj.withdrawal_history)
             except json.JSONDecodeError:
                 withdrawal_history = []
-            else:
-                withdrawal_history = obj.withdrawal_history
+        else:
+            withdrawal_history = obj.withdrawal_history or []
 
         formatted_history = "\n".join(
             [
@@ -114,6 +115,10 @@ class AccountAdmin(SimpleHistoryAdmin):
                 for entry in withdrawal_history
             ]
         )
-        return formatted_history if formatted_history else "No withdrawal history"
+        return (
+            formatted_history if formatted_history else "No withdrawal history"
+        )
 
-    formatted_withdrawal_history.short_description = "Formatted Withdrawal History"
+    formatted_withdrawal_history.short_description = (
+        "Formatted Withdrawal History"
+    )

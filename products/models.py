@@ -3,13 +3,15 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.models import User
 # from django_countries.fields import CountryField
-# from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from django.conf import settings
 from django.utils.text import slugify
 import uuid
-from profiles.models import Sale, #UserProfile, Account 
-# from django.apps import apps
+from profiles.models import Sale
+# from profiles.models import UserProfile
+# from profiles.models import Account
+from django.apps import apps
 
 
 class Category(models.Model):
@@ -76,7 +78,7 @@ class Product(models.Model):
         related_name='products',
     )
     created_at = models.DateTimeField(auto_now_add=True) 
-    listed_at = models.DateTimeField(auto_now_add=True)
+    listed_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True) 
     is_listed = models.BooleanField(default=False)
     return_option = models.BooleanField(
@@ -121,14 +123,13 @@ class Product(models.Model):
             self.sold_at = timezone.now()
             self.is_listed = False
             self.save()
-            
+
             try:
                 sale = Sale.objects.get(user=self.user)
             except Sale.DoesNotExist:
                 sale = Sale.objects.create(user=self.user)
 
             sale.update_balance_and_revenue(self.price)
-            
 
 
 class Size(models.Model):
