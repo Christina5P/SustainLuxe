@@ -63,15 +63,13 @@ def checkout(request):
             'country': request.POST['country'],
         }
         order_form = OrderForm(form_data)
-
+      
         if order_form.is_valid():
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             order.save()
-
-            print(f"Order information: {order_form.cleaned_data}")
 
             for item_id, item_data in bag.items():
                 try:
@@ -94,7 +92,7 @@ def checkout(request):
                         quantity=quantity,
                     )
                     order_line_item.save()
-                    print(f"Saved order line item: {order_line_item}")
+                    
 
                     if not order.product:
                         order.product = product
@@ -112,7 +110,7 @@ def checkout(request):
                     return redirect(reverse('view_bag'))
 
             request.session['save_info'] = 'save-info' in request.POST
-
+            
             return redirect(
                 reverse('checkout_success', args=[order.order_number])
             )

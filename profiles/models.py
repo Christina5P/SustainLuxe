@@ -15,13 +15,21 @@ class UserProfile(models.Model):
     delivery information and order history, account and status
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=50, null=True, blank=True)
-    email = models.EmailField(max_length=254, null=False, blank=False)
-    phone_number = models.CharField(max_length=20, null=True, blank=True)
-    street_address1 = models.CharField(max_length=80, null=True, blank=True)
-    postcode = models.CharField(max_length=20, null=True, blank=True)
-    town_or_city = models.CharField(max_length=40, null=True, blank=True)
-    country = CountryField(blank_label='Country', null=True, blank=True)
+    default_full_name = models.CharField(max_length=50, null=True, blank=True)
+    default_email = models.EmailField(max_length=254, null=False, blank=False)
+    default_phone_number = models.CharField(
+        max_length=20, null=True, blank=True
+    )
+    default_street_address1 = models.CharField(
+        max_length=80, null=True, blank=True
+    )
+    default_postcode = models.CharField(max_length=20, null=True, blank=True)
+    default_town_or_city = models.CharField(
+        max_length=40, null=True, blank=True
+    )
+    default_country = CountryField(
+        blank_label='Country', null=True, blank=True
+    )
 
     def __str__(self):
         return self.user.username
@@ -99,9 +107,7 @@ class Account(models.Model):
             try:
                 self.withdrawal_history = json.loads(self.withdrawal_history)
             except json.JSONDecodeError:
-                print(
-                    f"Error decoding withdrawal_history for user {self.user.username}"
-                )
+            
                 self.withdrawal_history = []
 
         total_withdrawals = sum(
@@ -117,19 +123,7 @@ class Account(models.Model):
         """Update total revenue after a sale."""
         self.total_revenue += earned_amount
         self.save()
-    """
-    def request_payout(self, amount):
-        
-        balance = self.calculate_balance()
-        if balance >= amount:
-            self.pending_payout = amount
-            self.payout_status = 'pending'
-            self.payout_requested_at = timezone.now()
-            self.save()
-            return True
-        return False
-
-    """
+    
     def request_payout(self, amount):
 
         if isinstance(self.withdrawal_history, str):
@@ -166,7 +160,6 @@ class Account(models.Model):
                 )
                 self.withdrawal_history = []
 
-        # Get pending withdrawal request
         pending_requests = [
             w for w in self.withdrawal_history if w.get('status') == 'pending'
         ]

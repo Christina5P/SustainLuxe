@@ -13,23 +13,24 @@ from .models import Account
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['full_name', 'email', 'phone_number',
-                  'street_address1', 'postcode', 'town_or_city', 'country']
+        fields = ['default_full_name', 'default_email', 'default_phone_number',
+                  'default_street_address1', 'default_postcode', 
+                  'default_town_or_city', 'default_country']
         exclude = ('user', 'total_revenue')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         placeholders = {
-            'full_name': 'Full Name',
-            'email': 'Email Address',
-            'phone_number': 'Phone Number',
-            'street_address1': 'Street Address 1',
-            'postcode': 'Postal Code',
-            'town_or_city': 'Town or City',
+            'default_full_name': 'Full Name',
+            'default_email': 'Email Address',
+            'default_phone_number': 'Phone Number',
+            'default_street_address1': 'Street Address 1',
+            'default_postcode': 'Postal Code',
+            'default_town_or_city': 'Town or City',
         }
 
         for field in self.fields:
-            if field != 'country':
+            if field != 'default_country':
                 self.fields[field].widget.attrs['placeholder'] = placeholders.get(
                     field, '')
             self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
@@ -222,9 +223,7 @@ class WithdrawalForm(forms.ModelForm):
         amount = self.cleaned_data['amount']
         if self.account:
             available_balance = self.account.calculate_balance()
-            print(
-                f"Validating amount: {amount} against balance: {available_balance}"
-            )
+          
             if amount > available_balance:
                 raise forms.ValidationError(
                     f"Insufficient funds. Available balance: {available_balance}"
@@ -242,7 +241,6 @@ class WithdrawalForm(forms.ModelForm):
                 "amount": str(self.cleaned_data['amount']),
                 "status": "pending",
             }
-            print(f"Adding withdrawal entry: {withdrawal_entry}")
             if isinstance(self.account.withdrawal_history, str):
                 try:
                     withdrawal_history = json.loads(self.account.withdrawal_history)

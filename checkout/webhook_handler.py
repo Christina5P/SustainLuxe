@@ -48,33 +48,42 @@ class StripeWH_Handler:
             pid = intent.id
             bag = intent.metadata.bag
             save_info = intent.metadata.save_info
+            print("save_info: ", save_info)
 
             stripe_charge = stripe.Charge.retrieve(intent.latest_charge)
             billing_details = stripe_charge.billing_details
             shipping_details = intent.shipping
+            print("shipping_details:", shipping_details)
             grand_total = Decimal(stripe_charge.amount) / Decimal('100')
 
             for field, value in shipping_details.address.items():
+                print("field, value: ", field, value)
                 if value == "":
+                    print("field is empty: ", field)
                     shipping_details.address[field] = None
 
             profile = None
             username = intent.metadata.username
+            print("username: ", username)
             if username != 'AnonymousUser':
+
                 profile = UserProfile.objects.get(user__username=username)
+                print('profile', profile.username)
                 if save_info:
-                    profile.default_phone_number = shipping_details.phone
-                    profile.default_street_address1 = (
-                        shipping_details.address.line1
-                    )
-                    profile.default_postcode = (
-                        shipping_details.address.postal_code
-                    )
-                    profile.default_town_or_city = (
-                        shipping_details.address.city
-                    )
-                    profile.default_country = shipping_details.address.country
+                    profile.default_phone_number = shipping_details.phone or None
+                    profile.default_street_address1 = shipping_details.address.get('line1', None)
+                    profile.default_postcode = shipping_details.address.get('postal_code', None)
+                    profile.default_town_or_city = shipping_details.address.get('city', None)
+                    profile.default_country = shipping_details.address.get('country', None)
+
+                    print("Updating profile with:")
+                    print("Phone:", shipping_details.phone)
+                    print("Address Line 1:", shipping_details.address.get('line1', None))
+                    print("Postal Code:", shipping_details.address.get('postal_code', None))
+                    print("City:", shipping_details.address.get('city', None))
+                    print("Country:", shipping_details.address.get('country', None))
                     profile.save()
+                    print("Profile updated successfully!")
 
             order_exists = False
             attempt = 1

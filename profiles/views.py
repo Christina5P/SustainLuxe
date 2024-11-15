@@ -1,6 +1,6 @@
 # from django.db import models
 # from django.urls import reverse
-from django.contrib.auth import login  # authenticate
+# from django.contrib.auth import login  # authenticate
 from .models import UserProfile, User, Account, Sale
 from .forms import UserProfileForm, SellerForm, WithdrawalForm
 from checkout.models import Order
@@ -11,8 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from decimal import Decimal
 from django.db import transaction
-from .forms import WithdrawalForm
-
 # from django.utils import timezone
 # from .utils import get_total_balance
 from django.core.paginator import Paginator
@@ -165,7 +163,7 @@ def withdrawal_view(request):
 
     account = get_object_or_404(Account, user=request.user)
     available_balance = account.calculate_balance()
-    
+
     withdrawal_history = account.withdrawal_history
 
     if request.method == 'POST':
@@ -178,9 +176,9 @@ def withdrawal_view(request):
 
             account.bank_account_number = bank_account_number
             account.save()
-
+        
             if account.request_payout(amount):
-                
+
                 messages.success(
                     request,
                     f'Your withdrawal of {amount} EUR has been requested. Remaining balance: {available_balance - amount:.2f} EUR.',
@@ -202,7 +200,7 @@ def withdrawal_view(request):
         {
             'form': form,
             'available_balance': available_balance,
-            'withdrawal_history': withdrawal_history,  # Skicka historiken direkt till template
+            'withdrawal_history': withdrawal_history, 
         },
     )
 
@@ -218,3 +216,5 @@ def order_history(request, order_number):
         Order, order_number=order_number, user_profile=request.user.userprofile
     )
     return render(request, 'checkout/checkout_success.html', {'order': order})
+
+   

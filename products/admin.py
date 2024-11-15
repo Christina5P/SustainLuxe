@@ -78,10 +78,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_products.short_description = "List selected products"
 
     def unlist_products(self, request, queryset):
-        print("Unlisting selected products")
-        """
-        Clear the 'listed_at' field to unlist products.
-        """
+       
         updated_count = 0
         for product in queryset:
             if product.listed_at:

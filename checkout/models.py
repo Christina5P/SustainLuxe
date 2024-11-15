@@ -70,10 +70,7 @@ class Order(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
-        """
-        Override the original save method to set the order number
-        if it hasn't been set already.
-        """
+        
         if not self.order_number:
             self.order_number = self._generate_order_number()
         super().save(*args, **kwargs)
