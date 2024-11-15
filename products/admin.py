@@ -31,6 +31,38 @@ class ListedAtFilter(admin.SimpleListFilter):
             return queryset.filter(listed_at__isnull=True)
         return queryset
 
+
+class ProductAdmin(admin.ModelAdmin):
+    readonly_fields = ('sku',)
+
+    list_display = (
+        'name',
+        'get_user',
+        'created_at',
+        'listed_at',
+        'sold',
+        'return_option',
+        'expired',
+        'sku',
+        'price',
+        'condition',
+    )
+
+    list_filter = (
+        'created_at',
+        'sold',
+        'return_option',
+        'listed_at',
+        'sku',
+        'brand',
+        'condition',
+        ListedAtFilter,
+    )
+
+    actions = ['list_products', 'unlist_products', 'mark_for_return']
+    search_fields = ['name', 'user__username']
+    inlines = [ProductImageInline]
+
     def list_products(self, request, queryset):
         updated_count = 0
         for product in queryset:
@@ -66,44 +98,12 @@ class ListedAtFilter(admin.SimpleListFilter):
     def mark_for_return(self, request, queryset):
         updated_count = 0
         for product in queryset:
-            if not product.return_option: 
+            if not product.return_option:
                 product.return_option = True
                 product.save()
                 updated_count += 1
 
     mark_for_return.short_description = "Mark selected products for return"
-
-
-class ProductAdmin(admin.ModelAdmin):
-    readonly_fields = ('sku',)
-
-    list_display = (
-        'get_user',
-        'name',
-        'created_at',
-        'listed_at',
-        'sold',
-        'return_option',
-        'expired',
-        'sku',
-        'price',
-        'condition',
-    )
-
-    list_filter = (
-        'created_at',
-        'sold',
-        'return_option',
-        'listed_at',
-        'sku',
-        'brand',
-        'condition',
-        ListedAtFilter,
-    )
-
-    actions = ['list_products', 'mark_for_return']
-    search_fields = ['name', 'user__username']
-    inlines = [ProductImageInline]
 
     def get_user(self, obj):
         if obj.user:

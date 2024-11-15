@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.contrib.auth.models import User
 # from django_countries.fields import CountryField
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -11,7 +11,7 @@ import uuid
 from profiles.models import Sale
 # from profiles.models import UserProfile
 # from profiles.models import Account
-from django.apps import apps
+# from django.apps import apps
 
 
 class Category(models.Model):
@@ -98,9 +98,10 @@ class Product(models.Model):
 
     def time_until_expiration(self):
         if self.sold_at:
-            return None 
-        expiration_date = self.listed_at + timedelta(days=90)
-        remaining_time = expiration_date - timezone.now()
+            return None
+        if self.listed_at:
+            expiration_date = self.listed_at + timedelta(days=90)
+            remaining_time = expiration_date - timezone.now()
         if remaining_time.total_seconds() <= 0:
             return None 
         return remaining_time
@@ -115,7 +116,7 @@ class Product(models.Model):
         if not self.is_listed:
             self.is_listed = True
             self.listed_at = timezone.now()
-            self.save()  
+            self.save()
 
     def mark_as_sold(self):
         if not self.sold:

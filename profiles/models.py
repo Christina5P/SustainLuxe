@@ -117,9 +117,21 @@ class Account(models.Model):
         """Update total revenue after a sale."""
         self.total_revenue += earned_amount
         self.save()
-
+    """
     def request_payout(self, amount):
-        """Request a payout if the balance allows for it."""
+        
+        balance = self.calculate_balance()
+        if balance >= amount:
+            self.pending_payout = amount
+            self.payout_status = 'pending'
+            self.payout_requested_at = timezone.now()
+            self.save()
+            return True
+        return False
+
+    """
+    def request_payout(self, amount):
+
         if isinstance(self.withdrawal_history, str):
             try:
                 self.withdrawal_history = json.loads(self.withdrawal_history)
@@ -131,7 +143,9 @@ class Account(models.Model):
                 'amount': float(amount),
                 'date': timezone.now().isoformat(),
                 'status': 'pending',
+                'bank_account_number': self.bank_account_number,
             }
+
             self.withdrawal_history.append(withdrawal_entry)
             self.pending_payout += Decimal(amount)
             self.withdrawal_history = json.dumps(
@@ -139,12 +153,10 @@ class Account(models.Model):
             )
             self.save()
             return True
-        return (
-            False
-        )
-
+        return False
+        
     def get_pending_requests(self):
-        """Retrieve pending withdrawal requests."""
+
         if isinstance(self.withdrawal_history, str):
             try:
                 self.withdrawal_history = json.loads(self.withdrawal_history)
@@ -161,7 +173,6 @@ class Account(models.Model):
         return pending_requests
 
     def process_payout(self):
-        """Process the pending payout and update the withdrawal status."""
 
         if isinstance(self.withdrawal_history, str):
             try:
@@ -180,8 +191,7 @@ class Account(models.Model):
 
             self.pending_payout = 0
             self.payout_requested_at = None
-
             self.withdrawal_history = json.dumps(self.withdrawal_history)
             self.save()
-            return True
-        return False
+
+        return self.withdrawal_history

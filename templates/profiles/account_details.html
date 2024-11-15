@@ -38,7 +38,7 @@
         <tr>
             <th>Product Name</th>
             <th>Price</th>
-            <th>Status</th>
+            <th>Status</th> 
             <th>Date</th>
             <th>Time Left / Sold Date</th>
         </tr>
@@ -74,7 +74,7 @@
                 {% if product.sold %}
                     Sold on: {{ product.sold_at|date:"F d, Y" }}
                 {% elif product.is_listed %}
-                    {% with time_left=product.time_until_expiration %}
+                   {% with time_left=product.time_until_expiration %}
                         {% if time_left %}
                             {{ time_left.days }} days left
                         {% else %}

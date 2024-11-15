@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from decimal import Decimal
 from django.db import transaction
+from .forms import WithdrawalForm
+
 # from django.utils import timezone
 # from .utils import get_total_balance
 from django.core.paginator import Paginator
@@ -160,47 +162,49 @@ def account_details(request, user_id):
 
 @transaction.atomic
 def withdrawal_view(request):
+
     account = get_object_or_404(Account, user=request.user)
     available_balance = account.calculate_balance()
-
-    form = WithdrawalForm(account=account)
+    
+    withdrawal_history = account.withdrawal_history
 
     if request.method == 'POST':
-        form = WithdrawalForm(request.POST, account=account)
+        form = WithdrawalForm(request.POST, account=request.user.account)
+
         if form.is_valid():
+
             amount = form.cleaned_data['amount']
-            account.bank_account_number = form.cleaned_data[
-                'bank_account_number'
-            ]
+            bank_account_number = form.cleaned_data['bank_account_number']
+
+            account.bank_account_number = bank_account_number
             account.save()
 
             if account.request_payout(amount):
-                account.process_payout()
-
-                new_balance = account.calculate_balance()
+                
                 messages.success(
                     request,
-                    f'Your withdrawal have been requested. <br>New balance: EUR {new_balance:}.'
+                    f'Your withdrawal of {amount} EUR has been requested. Remaining balance: {available_balance - amount:.2f} EUR.',
                 )
+                return redirect('withdrawal')
+            else:
+                messages.error(
+                    request,
+                    'Withdrawal failed: Insufficient balance or invalid details.',
+                )
+        else:
+            messages.error(request, "Invalid withdrawal request. Please check your input.")
+    else:
+        form = WithdrawalForm(account=account)
 
-            return redirect('withdrawal')
-
-    withdrawal_history = (
-        json.loads(account.withdrawal_history)
-        if isinstance(account.withdrawal_history, str)
-        else account.withdrawal_history
+    return render(
+        request,
+        'profiles/withdrawal.html',
+        {
+            'form': form,
+            'available_balance': available_balance,
+            'withdrawal_history': withdrawal_history,  # Skicka historiken direkt till template
+        },
     )
-    pending_requests = account.get_pending_requests()
-
-    context = {
-        'form': form,
-        'available_balance': available_balance,
-        'user': request.user,
-        'withdrawal_history': withdrawal_history,
-        'pending_requests': pending_requests,
-    }
-
-    return render(request, 'profiles/withdrawal.html', context)
 
 
 def order_list(request):

@@ -2,6 +2,9 @@ from django import forms
 from .models import UserProfile
 from products.models import Product, Size, Condition, Fabric
 from decimal import Decimal
+from django.utils import timezone
+import json
+
 # from django.utils.safestring import mark_safe
 from .models import Account
 # from .models import Sale
@@ -219,6 +222,9 @@ class WithdrawalForm(forms.ModelForm):
         amount = self.cleaned_data['amount']
         if self.account:
             available_balance = self.account.calculate_balance()
+            print(
+                f"Validating amount: {amount} against balance: {available_balance}"
+            )
             if amount > available_balance:
                 raise forms.ValidationError(
                     f"Insufficient funds. Available balance: {available_balance}"
@@ -226,10 +232,33 @@ class WithdrawalForm(forms.ModelForm):
         return amount
 
     def save(self, commit=True):
+        print("Entering save method")
         account = super().save(commit=False)
-        account.user = self.account.user
         account.bank_account_number = self.cleaned_data['bank_account_number']
 
-        if commit:
-            account.save()
+        if self.account:
+            withdrawal_entry = {
+                "date": timezone.now().isoformat(),
+                "amount": str(self.cleaned_data['amount']),
+                "status": "pending",
+            }
+            print(f"Adding withdrawal entry: {withdrawal_entry}")
+            if isinstance(self.account.withdrawal_history, str):
+                try:
+                    withdrawal_history = json.loads(self.account.withdrawal_history)
+                except json.JSONDecodeError:
+                    withdrawal_history = []
+            else:
+                withdrawal_history = self.account.withdrawal_history or []
+
+            withdrawal_history.append(withdrawal_entry)
+            self.account.withdrawal_history = json.dumps(withdrawal_history)
+            print(
+                f"Updated withdrawal history: {self.account.withdrawal_history}"
+            )
+            self.account.pending_payout += self.cleaned_data['amount']
+
+            if commit:
+                self.account.save()
+
         return account
