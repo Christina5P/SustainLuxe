@@ -75,10 +75,9 @@ class Order(models.Model):
             self.order_number = self._generate_order_number()
         super().save(*args, **kwargs)
 
-        print(f"Order saved: {self.order_number}")
 
-    def __str__(self):
-        return self.order_number
+def __str__(self):
+    return self.order_number
 
 
 class OrderLineItem(models.Model):

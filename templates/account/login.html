@@ -23,12 +23,15 @@
 <div class="text-center mb-3">
 
 </div>
+</div>
 <form class="login" method="POST" action="{% url 'account_login' %}">
 {% csrf_token %}  
   {{ form|crispy }}
    <button class="btn btn-primary" type="submit">{% trans "Log In" %}</button>
     <a class="btn btn-outline-black rounded-0" href="{% url 'home' %}">Home</a>
 </form>
+</div>
+</div>
 </div>
 </div>
 
