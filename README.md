@@ -501,21 +501,31 @@ I created an personalized 404 page
 ##### Product details
 Image of products will get a more visual layout for multiple images.
 There could be clickable and with navigation buttons.
+<hr>
 
 ##### Newsletters archive
 Store newsletter in an archive on the website 
+<hr>
 
 ##### Create marketing site for Instagram and TikTok
+
+<hr>
 
 ##### More information and facts for sustainable thinking and responsible.
 Visualize for the users the effect by shopping Second Hand.
 Information of donations made.
 
+<hr>
+
 ##### Better account options. 
 Connect Withdrawal options to credit card through Stripe.
 That make it easier and faster handling for both users and admin.
 
+<hr>
+
 ##### Create Sellers balance available for shopping credits in the Shop.
+
+<hr>
 
 ##### Implement an FAQ and Customer Service menu
 
@@ -590,13 +600,18 @@ Read about setups in this document: [Deployment](deployment.md)
 
 - W3C Validator: was used to validate HTML5 code for the website.
 Result:
+[Validation HTML](validation_html.md)
 
 - W3C CSS validator: was used to validate CSS code for the website.
 Result:
+[Validation css](validation_css.md)
+
 - JShint: was used to validate JS code for the website.
 Result:
-- PEP8: was used to validate Python code for the
+
+- PEP8 was used to validate Python code anda validation in PY Linther:
 Result:
+[PY Linther](validation_pylinter.md)
 
 #### [Responsiveness](#responsiveness)
 
