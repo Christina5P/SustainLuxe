@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
 from django_countries.fields import CountryField
 from django.utils import timezone
 from decimal import Decimal
@@ -107,7 +105,7 @@ class Account(models.Model):
             try:
                 self.withdrawal_history = json.loads(self.withdrawal_history)
             except json.JSONDecodeError:
-            
+
                 self.withdrawal_history = []
 
         total_withdrawals = sum(
@@ -123,7 +121,7 @@ class Account(models.Model):
         """Update total revenue after a sale."""
         self.total_revenue += earned_amount
         self.save()
-    
+
     def request_payout(self, amount):
 
         if isinstance(self.withdrawal_history, str):
@@ -148,7 +146,7 @@ class Account(models.Model):
             self.save()
             return True
         return False
-        
+
     def get_pending_requests(self):
 
         if isinstance(self.withdrawal_history, str):

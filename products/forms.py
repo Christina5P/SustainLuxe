@@ -45,15 +45,15 @@ class ProductFilterForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         required=False,
     )
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
- 
+
         main_categories = Category.objects.filter(parent_categories=None)
         choices = []
         for main_cat in main_categories:
             choices.append((main_cat.id, main_cat.name))
             for sub_cat in main_cat.subcategories.all():
                 choices.append((sub_cat.id, f"- {sub_cat.name}"))
-    
+
         self.fields['categories'].choices = choices

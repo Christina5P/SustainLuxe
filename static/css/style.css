@@ -33,7 +33,6 @@ footer,
     color: #565656 !important;
 }
  
-/* Font Playfair*/
 .playfair-display-sc-regular {
   font-family: "Playfair Display SC", serif;
   font-weight: 400;
@@ -78,7 +77,7 @@ footer,
      margin-top: 20px;
 }
 
-/* Separator CSS */
+/* Separator of item  */
 .navbar-nav .nav-item {
     display: flex; 
     align-items: center; 
@@ -232,6 +231,14 @@ footer,
   .relax-text {
     font-size: 1.2rem; 
   }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    img {
+        object-fit: cover;
+        width: 100%;
+        height: auto;
+    }
 }
     /* Height for devices larger than 576px */
     @media (min-width: 992px) {

@@ -1,6 +1,3 @@
-# from django.db import models
-# from django.urls import reverse
-# from django.contrib.auth import login  # authenticate
 from .models import UserProfile, User, Account, Sale
 from .forms import UserProfileForm, SellerForm, WithdrawalForm
 from checkout.models import Order
@@ -11,8 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from decimal import Decimal
 from django.db import transaction
-# from django.utils import timezone
-# from .utils import get_total_balance
 from django.core.paginator import Paginator
 import json
 
@@ -128,7 +123,8 @@ def account_details(request, user_id):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     account, account_created = Account.objects.get_or_create(user=request.user)
     orders = Order.objects.filter(user_profile=profile)
-    products = Product.objects.filter(user=request.user).order_by('-created_at')
+    products = Product.objects.filter(
+        user=request.user).order_by('-created_at')
     sold_products = Product.objects.filter(user=user, sold=True)
     template = 'profiles/account_details.html'
 
@@ -176,7 +172,7 @@ def withdrawal_view(request):
 
             account.bank_account_number = bank_account_number
             account.save()
-        
+
             if account.request_payout(amount):
 
                 messages.success(
@@ -190,7 +186,8 @@ def withdrawal_view(request):
                     'Withdrawal failed: Insufficient balance or invalid details.',
                 )
         else:
-            messages.error(request, "Invalid withdrawal request. Please check your input.")
+            messages.error(
+                request, "Invalid withdrawal request. Please check your input.")
     else:
         form = WithdrawalForm(account=account)
 
@@ -200,7 +197,7 @@ def withdrawal_view(request):
         {
             'form': form,
             'available_balance': available_balance,
-            'withdrawal_history': withdrawal_history, 
+            'withdrawal_history': withdrawal_history,
         },
     )
 
@@ -216,5 +213,3 @@ def order_history(request, order_number):
         Order, order_number=order_number, user_profile=request.user.userprofile
     )
     return render(request, 'checkout/checkout_success.html', {'order': order})
-
-   

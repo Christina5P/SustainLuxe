@@ -4,17 +4,14 @@ from products.models import Product, Size, Condition, Fabric
 from decimal import Decimal
 from django.utils import timezone
 import json
-
-# from django.utils.safestring import mark_safe
 from .models import Account
-# from .models import Sale
 
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['default_full_name', 'default_email', 'default_phone_number',
-                  'default_street_address1', 'default_postcode', 
+                  'default_street_address1', 'default_postcode',
                   'default_town_or_city', 'default_country']
         exclude = ('user', 'total_revenue')
 
@@ -223,7 +220,7 @@ class WithdrawalForm(forms.ModelForm):
         amount = self.cleaned_data['amount']
         if self.account:
             available_balance = self.account.calculate_balance()
-          
+
             if amount > available_balance:
                 raise forms.ValidationError(
                     f"Insufficient funds. Available balance: {available_balance}"
@@ -243,7 +240,8 @@ class WithdrawalForm(forms.ModelForm):
             }
             if isinstance(self.account.withdrawal_history, str):
                 try:
-                    withdrawal_history = json.loads(self.account.withdrawal_history)
+                    withdrawal_history = json.loads(
+                        self.account.withdrawal_history)
                 except json.JSONDecodeError:
                     withdrawal_history = []
             else:

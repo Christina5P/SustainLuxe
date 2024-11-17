@@ -2,16 +2,12 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta, datetime
 from django.contrib.auth.models import User
-# from django_countries.fields import CountryField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from django.conf import settings
 from django.utils.text import slugify
 import uuid
 from profiles.models import Sale
-# from profiles.models import UserProfile
-# from profiles.models import Account
-# from django.apps import apps
 
 
 class Category(models.Model):
@@ -42,7 +38,7 @@ class Product(models.Model):
     sku = models.CharField(max_length=100, unique=True,)
     size = models.ForeignKey(
         'Size', on_delete=models.CASCADE
-    )  
+    )
     image_url = models.URLField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
     price = models.DecimalField(
@@ -52,17 +48,18 @@ class Product(models.Model):
     )
     brand = models.ForeignKey(
         'Brand', null=True, blank=True, on_delete=models.SET_NULL
-    )  
+    )
     sustainable = models.TextField(max_length=25, null=True, blank=True)
     condition = models.ForeignKey(
         'Condition', on_delete=models.CASCADE
-    )  
+    )
     fabric = models.ForeignKey('Fabric',
-        max_length=254, null=True, blank=True, on_delete=models.SET_NULL
-    )
+                               max_length=254, null=True, blank=True, on_delete=models.SET_NULL
+                               )
+
     color = models.ForeignKey('Color',
-        max_length=254, null=True, blank=True, on_delete=models.SET_NULL
-    )
+                              max_length=254, null=True, blank=True, on_delete=models.SET_NULL
+                              )
     weight_in_kg = models.DecimalField(
         max_digits=5, decimal_places=2, null=True, blank=True
     )
@@ -77,15 +74,15 @@ class Product(models.Model):
         null=True,
         related_name='products',
     )
-    created_at = models.DateTimeField(auto_now_add=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
     listed_at = models.DateTimeField(null=True, blank=True)
-    updated_at = models.DateTimeField(auto_now=True) 
+    updated_at = models.DateTimeField(auto_now=True)
     is_listed = models.BooleanField(default=False)
     return_option = models.BooleanField(
         default=False,
         verbose_name="Return unsold product?",
         help_text="Check this if you want to pay for return shipping. If unchecked, unsold items will be donated.")
-    sold_at = models.DateTimeField(null=True, blank=True)  
+    sold_at = models.DateTimeField(null=True, blank=True)
     sold = models.BooleanField(default=False)
 
     def __str__(self):
@@ -103,14 +100,14 @@ class Product(models.Model):
             expiration_date = self.listed_at + timedelta(days=90)
             remaining_time = expiration_date - timezone.now()
         if remaining_time.total_seconds() <= 0:
-            return None 
+            return None
         return remaining_time
 
     def expired(self):
         if self.listed_at and not self.sold:
             expiration_date = self.listed_at + timedelta(days=90)
             return timezone.now() > expiration_date
-        return False 
+        return False
 
     def list_product(self):
         if not self.is_listed:
@@ -166,9 +163,9 @@ class Condition(models.Model):
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=100, unique=True)  
-    description = models.TextField(max_length=254, null=True, blank=True) 
-    logo = models.ImageField(upload_to='media', null=True, blank=True) 
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(max_length=254, null=True, blank=True)
+    logo = models.ImageField(upload_to='media', null=True, blank=True)
 
     def __str__(self):
         return self.name

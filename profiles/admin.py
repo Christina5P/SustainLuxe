@@ -81,16 +81,16 @@ class AccountAdmin(SimpleHistoryAdmin):
     def current_balance(self, obj):
         balance = obj.calculate_balance()
         return balance
-        
+
     def request_payout_action(self, request, queryset):
-        
+
         if 'apply' in request.POST:
             form = WithdrawalForm(request.POST)
             if form.is_valid():
-               
+
                 amount = form.cleaned_data['amount']
                 bank_account_number = form.cleaned_data['bank_account_number']
-                
+
                 for account in queryset:
 
                     account.bank_account_number = bank_account_number
@@ -98,7 +98,7 @@ class AccountAdmin(SimpleHistoryAdmin):
                     account.pending_payout = amount
 
                     account.payout_status = 'pending'
-                    account.payout_requested_at = timezone.now()  
+                    account.payout_requested_at = timezone.now()
 
                     # Spara kontot
                     account.save()
@@ -106,7 +106,7 @@ class AccountAdmin(SimpleHistoryAdmin):
                 self.message_user(
                     request,
                     f"Payout request created for {account.user.username}.",
-                   )
+                )
             return HttpResponseRedirect(request.get_full_path())
         else:
             form = WithdrawalForm()
@@ -124,13 +124,13 @@ class AccountAdmin(SimpleHistoryAdmin):
             try:
                 self.withdrawal_history = json.loads(self.withdrawal_history)
             except json.JSONDecodeError:
-               
+
                 self.withdrawal_history = []
 
         if self.pending_payout > 0:
             for withdrawal in reversed(self.withdrawal_history):
                 if withdrawal.get('status') == 'pending':
-                   
+
                     withdrawal['status'] = 'completed'
                     withdrawal['processed_date'] = timezone.now().isoformat()
                     break
@@ -148,16 +148,18 @@ class AccountAdmin(SimpleHistoryAdmin):
         """Process for payout to several accounts"""
         updated_count = 0
         for account in queryset:
-            
+
             if account.process_payout():
-                
+
                 updated_count += 1
             else:
-                self.message_user(request, f"Processed {updated_count} payouts.")
+                self.message_user(
+                    request, f"Processed {updated_count} payouts.")
         if updated_count == 0:
             self.message_user(request, "No payouts were processed.")
         else:
-            self.message_user(request, f"Processed payout for {updated_count} account(s).")
+            self.message_user(
+                request, f"Processed payout for {updated_count} account(s).")
 
     def payout_status_display(self, obj):
         """Display 'Pending' if there's a pending payout, otherwise 'Completed'"""
@@ -170,7 +172,7 @@ class AccountAdmin(SimpleHistoryAdmin):
     payout_status_display.short_description = 'Payout Status'
 
     def formatted_withdrawal_history(self, obj):
-       
+
         if isinstance(obj.withdrawal_history, str):
             try:
                 withdrawal_history = json.loads(obj.withdrawal_history)
@@ -178,12 +180,12 @@ class AccountAdmin(SimpleHistoryAdmin):
                 withdrawal_history = []
         else:
             withdrawal_history = obj.withdrawal_history or []
-            
+
         formatted_history = "\n".join(
             [
                 f"Date: {entry.get('date')}, Amount: {entry.get('amount')}, Status: {entry.get('status')}"
                 for entry in withdrawal_history
             ]
         )
-       
+
         return formatted_history if formatted_history else "No withdrawal history"
