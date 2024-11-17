@@ -39,7 +39,7 @@ I think a lot of people is to busy to take their time for selling unused clothes
 
 You are welcome to visit my store and get to know more!
 
-![Shop](shop.png)
+![Shop]((static/images/Readme_img/shop.png)
 
 
 I have thinking of this idea for some years and in the meantime, the buissness of Second Hand is growing, so I´m happy to present this fictive busisness.
@@ -638,4 +638,5 @@ You can read the report with this link: https://docs.google.com/document/d/1Q_Qk
 - https://medium.com/django-unleashed/mastering-the-art-of-django-simple-history-a-tutorial-for-medium-with-examples-c25196339130
 - https://learn.jquery.com/using-jquery-core/document-ready/ - jquery
 
-[Go to Top](#sustainluxe---e-commerce-site)
+
+ `[Go to Top](#sustainluxe---e-commerce-site)`
