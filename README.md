@@ -1,5 +1,11 @@
 # SustainLuxe - Shop luxurios and Sustainable
 
+Live web site: https://sustainluxe-b6e840083c68.herokuapp.com/
+
+
+![Sustainluxe](static/images/Readme_img/sustainluxe.png)
+
+
 ## Table of Contents
 
 
@@ -16,12 +22,7 @@
 - [Media](#media)
 - [Features](#features) 
   - [Existing Features](#existing_featuers)
-  - 
-
-
-
-
-
+  
 
 ### [About](#about)
 
@@ -38,7 +39,8 @@ I think a lot of people is to busy to take their time for selling unused clothes
 
 You are welcome to visit my store and get to know more!
 
-Live web site: https://sustainluxe-b6e840083c68.herokuapp.com/
+![Shop](shop.png)
+
 
 I have thinking of this idea for some years and in the meantime, the buissness of Second Hand is growing, so I´m happy to present this fictive busisness.
 This is a Full-Stack project with Django.
@@ -268,6 +270,15 @@ You will be inviting to action in the Homepage and view easy navigation of your 
 #### Sell with Us
 
 In "Sell with us" section, you find a visual and clear information for selling a product.
+In the explaining cards, there is a information-icon to get more details.
+
+![Sell second Hand](static/images/Readme_img/sell.png)
+
+You click on that for a pop up window with a clear close button.
+This is the way too kepp any sellers without fatigue then by all text.
+
+![Pop up ](static/images/Readme_img/pop_up.png)
+
 
 #### Sustainable effect
 
@@ -313,20 +324,23 @@ You have your settings and account in Profile Page, including:
 You can change your e-mail or adress.
 
 - Order History
-All orders from shopping and pop up for more details.
+All orders from shopping and pop up window for more details.
 
 ![Order History](static/images/Readme_img/orderhistory.png)
 
 In menu, you also have
 - sale Registration Form (available from both Profile menu and link in "Sell with us" page)
+
 - Account details - Sellers balance from sold products and a history with products,
   where you have status of product, selling price and balance from sold items.
 
 ![Account](static/images/Readme_img/account.png)
 
 - Withdrawal
-  It´s fom here you request for a withdrawal from sold products.
+  It´s fom where you request for a withdrawal from sold products.
   It is a check that there is sufficient credit for withdrawals.
+  You get a message with confirmation after submitted request with new balance.
+  Accounts balance will update after request is confirmed.
   You will see status of the request under the request button.
   Balance updates when the request is send.
   If user doesn´t have cover, they get a message with value of balance.
@@ -362,19 +376,22 @@ The user can now follow the product in account detail,
 
 There is a navbar with the categories, where you can choose from
 
-![category](static/images/Readme_img/category.png)
+
+![Category](istatic/images/Readme_img/category.png)
 
 
 You can also sort from diffrent choices
+
 
 ![sortby](static/images/Readme_img/sortby.png)
 
 #### Filter
 
 
-If you like to filter from multiple choices, you can use the filter form
+If you like to filter from multiple choices, you can use the filter form.
+This filter has a "View" or "Hide" button, which gives a better responsive.
 
-![filter](static/images/Readme_img/filter.png)
+![Filter](static/images/Readme_img/filter.png)
 
 
 #### Product details
@@ -411,9 +428,10 @@ After process, you get a confirmation
 <details><summary>Admin</summary>
 
 
-As an admin you connect:
+As an admin you connect with different models to work with.
+
 Product model - Represent products users can sell.<br>
-  Fields for price, weight, categories, fabric, color, Sixe, Brand and condition.
+Fields for price, weight, categories, fabric, color, Sixe, Brand and condition.
 
 UserProfile model - from Django allauth with necessary userinformation.
 
@@ -423,7 +441,7 @@ Sale model - information of productsale
 
 Views are added for render function to htmls:s and interaction from users and forms for selling products and update profiles.
 
-Database it´the place for admin to manage products information, view order history and handle users account and withdrawal. 
+Database is the place for admin to manage products information, view order history and handle users account and withdrawal. 
 
 ![Admin menu](static/images/Readme_img/admin_menu.png)
 
@@ -448,13 +466,23 @@ You can filter expired products to be returned.
 
 Users have an account and as admin it´s ability to manual handle or add accounts and withdrawal request.
 
+
 ![Admin Account](static/images/Readme_img/admin_account.png)
+
+You can see in account list withdrawal requst and have an action bar to handle request as confirmed.
+The action will also send beck information to users account of confirmed withdrawal. 
+
+![Payout](static/images/Readme_img/payout.png)
 
 </details>
 
 
 <details><summary>Footer</summary>
 
+In the footer you can view icons of acceptable payment, sign up for newsletter and links to social media.
+There is also contacts.
+
+![Footer](static/images/Readme_img/footer.png)
 
 </details>
 
@@ -470,38 +498,39 @@ I created an personalized 404 page
 
 #### [Future Features](#future_features)
 
-* Product details
+##### Product details
 Image of products will get a more visual layout for multiple images.
 There could be clickable and with navigation buttons.
 
-* Newsletters archive
+##### Newsletters archive
 Store newsletter in an archive on the website 
 
-* Create maerketing site for Instagram and TikTok
+##### Create marketing site for Instagram and TikTok
 
-* More information and facts for sustainable thinking and responsible.
- Visualize for the users the effect by shopping Second Hand.
- Information of donations made.
+##### More information and facts for sustainable thinking and responsible.
+Visualize for the users the effect by shopping Second Hand.
+Information of donations made.
 
-* Better account options. 
-Withdrawal to credit card through Stripe.
+##### Better account options. 
+Connect Withdrawal options to credit card through Stripe.
 That make it easier and faster handling for both users and admin.
 
-* Create the balance available for shopping credits in the Shop.
+##### Create Sellers balance available for shopping credits in the Shop.
 
-* Implement an FAQ and Customer Service menu
+##### Implement an FAQ and Customer Service menu
 
 
 ### [CRUD](#crud)
 
 -Create
-User can create a selling order, and create an order in shop
+Create an order in shop can be done from all visitors and users.
+User can create a selling order
 Authorized users can create a withdrawal request.
 Superuser can add an product in Product Management view.
 
 -Read 
-Users van view homepage, sell page, sustainpage and shop.
-Authorized users can view order history, products for sale, withdrawal history
+Visitors can view homepage, sell page, sustainpage and shop.
+Authorized users can view order history, products for sale,account info, withdrawal history
 
 -Update
 Authorized users can update profil settings

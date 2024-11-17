@@ -78,98 +78,108 @@
             </div>
 
 
-                  <!-- Filter  -->
-                <div id="filter-content" class="p-3 bg-white border rounded shadow-sm mb-3">
-                    <form id="filterForm" method="GET" action="{% url 'all_products' %}">
-                        <div class="row">
-                            <!-- Subcategory Column -->
-                            <div class="col-md-3 mb-3">
-                                <h6>Subcategory</h6>
-                                {% for subcategory in all_subcategories %}
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}" id="cat_{{ subcategory.id }}"
-                                        {% if subcategory.id in selected_category %}checked{% endif %}>
-                                        <label class="form-check-label" for="cat_{{ subcategory.id }}">
-                                            {{ subcategory.name }}
-                                        </label>
-                                    </div>
-                                {% endfor %}
-                            </div>
-
-                             <div class="col-md-3 mb-3">
-                                <h6>Brand</h6>
-                                {% for field in form.brands %}
-                                    <div class="form-check">{{ field }}</div>
-                                {% endfor %}
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <h6>Size</h6>
-                                {% for field in form.sizes %}
-                                    <div class="form-check">{{ field }}</div>
-                                {% endfor %}
-                            </div>
-                           
-                            <div class="col-md-3 mb-3">
-                                <h6>Condition</h6>
-                                {% for field in form.conditions %}
-                                    <div class="form-check">{{ field }}</div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </form>
+                <!-- Filter -->
+<div id="filter-content" class="p-3 bg-white border rounded shadow-sm mb-3">
+    <form id="filterForm" method="GET" action="{% url 'all_products' %}">
+        <div class="container">
+            <!-- Row for buttons -->
+            <div class="row mb-3 align-items-center">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
                 </div>
-          
-          <button type="submit" class="btn btn-primary me-2">Filter</button>
-          <button type="button" class="btn btn-secondary" id="clearButton">Clear Filters</button>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-secondary btn-sm" id="clearButton">Clear Filters</button>
+                </div>
+            </div>
 
-        <!-- Product grid -->
-        <div class="row">
-            <div class="col-12">
-                <h1 class="logo-font text-center py-3">Products</h1>
-                <div class="row">
-                    {% for product in page_obj %}
-                         {% if product.is_listed and not product.is_sold %}
-                            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                                <div class="card h-100 border-0 shadow-sm">
-                                    <a href="{% url 'product_detail' product.id %}">
-                                        {% if product.image %}
-                                            <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
-                                        {% else %}
-                                            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
-                                        {% endif %}
-                                    </a>
-                                    <div class="card-body pb-0">
-                                        <h5 class="card-title">{{ product.name }}</h5>
-                                    </div>
-                                    <div class="card-footer bg-white pt-0 border-0 text-left">
-                                        <p class="lead mb-0 fw-bold">EUR {{ product.price }}</p>
-                                        <p class="card-text">
-                                            {% if product.brand %}
-                                                <span class="badge bg-secondary">{{ product.brand }}</span>
-                                            {% endif %}
-                                            {% if product.condition %}
-                                                <span class="badge bg-info">{{ product.condition }}</span>
-                                            {% endif %}
-                                            <br>
-                                            {% if request.user.is_superuser %}
-                                                <small class="ms-3">
-                                                    <a href="{% url 'edit_product' product.id %}">Edit</a>
-                                                    <a class="text-danger" href="{% url 'delete_product' product.id %}">Delete</a>
-                                                </small>
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
+            <!-- Row for filter options -->
+            <div class="row">
+                <!-- Subcategory Column -->
+                <div class="col-md-3 mb-3">
+                    <h6>Subcategory</h6>
+                    {% for subcategory in all_subcategories %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="categories" value="{{ subcategory.id }}" id="cat_{{ subcategory.id }}"
+                                {% if subcategory.id in selected_category %}checked{% endif %}>
+                            <label class="form-check-label" for="cat_{{ subcategory.id }}">
+                                {{ subcategory.name }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Brand Column -->
+                <div class="col-md-3 mb-3">
+                    <h6>Brand</h6>
+                    {% for field in form.brands %}
+                        <div class="form-check">{{ field }}</div>
+                    {% endfor %}
+                </div>
+
+                <!-- Size Column -->
+                <div class="col-md-3 mb-3">
+                    <h6>Size</h6>
+                    {% for field in form.sizes %}
+                        <div class="form-check">{{ field }}</div>
+                    {% endfor %}
+                </div>
+
+                <!-- Condition Column -->
+                <div class="col-md-3 mb-3">
+                    <h6>Condition</h6>
+                    {% for field in form.conditions %}
+                        <div class="form-check">{{ field }}</div>
                     {% endfor %}
                 </div>
             </div>
         </div>
-   
-</section>
+    </form>
+</div>
 
+<!-- Product grid -->
+<div class="row">
+    <div class="col-12">
+        <h1 class="logo-font text-center py-3">Products</h1>
+        <div class="row">
+            {% for product in page_obj %}
+                {% if product.is_listed and not product.is_sold %}
+                    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <a href="{% url 'product_detail' product.id %}">
+                                {% if product.image %}
+                                    <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
+                                {% else %}
+                                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}" style="max-height: 100%; object-fit: contain;">
+                                {% endif %}
+                            </a>
+                            <div class="card-body pb-0">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                            </div>
+                            <div class="card-footer bg-white pt-0 border-0 text-left">
+                                <p class="lead mb-0 fw-bold">EUR {{ product.price }}</p>
+                                <p class="card-text">
+                                    {% if product.brand %}
+                                        <span class="badge bg-secondary">{{ product.brand }}</span>
+                                    {% endif %}
+                                    {% if product.condition %}
+                                        <span class="badge bg-info">{{ product.condition }}</span>
+                                    {% endif %}
+                                    <br>
+                                    {% if request.user.is_superuser %}
+                                        <small class="ms-3">
+                                            <a href="{% url 'edit_product' product.id %}">Edit</a>
+                                            <a class="text-danger" href="{% url 'delete_product' product.id %}">Delete</a>
+                                        </small>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
 <div class="btt-button shadow-sm rounded-0 border border-black">
     <a class="btt-link d-flex h-100 justify-content-end align-items-center" aria-label="Scroll to top">
         <i class="fa-solid fa-circle-chevron-up"></i>

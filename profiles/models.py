@@ -82,14 +82,14 @@ class Account(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     total_revenue = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0.00
+        max_digits=10, decimal_places=0, default=0.00
     )
     withdrawal_history = models.JSONField(default=list, blank=True)
     history = HistoricalRecords(
         history_id_field=models.AutoField(primary_key=True)
     )
     pending_payout = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0
+        max_digits=10, decimal_places=0, default=0
     )
     payout_requested_at = models.DateTimeField(null=True, blank=True)
     payout_status = models.CharField(

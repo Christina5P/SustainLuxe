@@ -214,6 +214,25 @@ footer,
 }
 
 
+@media (max-width: 842px) {
+  .custom-img {
+    height: auto; 
+  }
+
+  .carousel-caption {
+    font-size: 0.9rem; 
+    margin-bottom: 1rem;
+  }
+
+  .shop-now-button {
+    font-size: 0.8rem; 
+    padding: 0.5rem 1rem;
+  }
+
+  .relax-text {
+    font-size: 1.2rem; 
+  }
+}
     /* Height for devices larger than 576px */
     @media (min-width: 992px) {
       #introCarousel {
