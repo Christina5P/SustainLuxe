@@ -1,7 +1,6 @@
 from django import forms
 from .widgets import CustomClearableFileInput
 from .models import Product, Category, Brand, Condition, Size
-# from crispy_forms.layout import Layout, Div, Submit
 
 
 class ProductForm(forms.ModelForm):

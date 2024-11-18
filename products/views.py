@@ -15,7 +15,6 @@ from .models import (
 from .forms import ProductForm, ProductFilterForm
 from decimal import Decimal, ROUND_DOWN
 from django.core.paginator import Paginator
-# from django.db.models import Prefetch
 
 
 def all_products(request):
@@ -33,7 +32,7 @@ def all_products(request):
 
     form = ProductFilterForm(request.GET)
 
-    products = Product.objects.all()
+    products = Product.objects.filter(sold=False)
 
     # Search Function
     if query:
@@ -86,16 +85,16 @@ def all_products(request):
 
     products = products.order_by(sortkey)
 
-    # Paginering
+    # Paginator
     paginator = Paginator(products, 12)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
-    if page_number and int(page_number) > 1 and page_obj.has_other_pages() and not page_obj.object_list:
-        return redirect(f'?page={page_obj.paginator.num_pages}')
+    if not page_obj.object_list and page_obj.has_next():
+        return redirect(f'?page={page_obj.next_page_number()}')
 
     context = {
-        'products': products,
+        'products': page_obj,
         'main_categories': main_categories,
         'all_subcategories': all_subcategories,
         'brands': brands,
@@ -106,6 +105,8 @@ def all_products(request):
         'selected_category': category_ids,
         'form': form,
         'page_obj': page_obj,
+        'direction': direction,
+        'total_pages': paginator.num_pages,
     }
 
     return render(request, 'products/products.html', context)

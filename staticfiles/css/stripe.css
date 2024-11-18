@@ -47,10 +47,6 @@ select option[value=""]{
 color: #aab7c4 !important;
 }
 
-img {
-  width: 640px; 
-  height: 360px;
-}
 
 /* stripe pop-up after submitted payment*/
 #loading-overlay{
