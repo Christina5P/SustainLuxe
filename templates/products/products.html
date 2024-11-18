@@ -54,9 +54,7 @@
                 <option value="price_desc">Price (high to low)</option>
                 <option value="name_asc">Name (A-Z)</option>
                 <option value="name_desc">Name (Z-A)</option>
-                <option value="condition_asc">Condition (New with Tags-Acceptable)</option>
-                <option value="conditions_desc">Conditions (Acceptable-New with Tags)</option>
-            </select>
+              </select>
         </div>
     </div>
 </nav>
@@ -216,6 +214,7 @@
 
 {% endblock %}
 
+
 {% block postloadjs %}
 <script>
     // scroll to top
@@ -225,6 +224,23 @@
             e.preventDefault();  
             window.scrollTo(0, 0);
         });
+
+        // Sorting by
+  document.getElementById('sort-selector').addEventListener('change', function() {
+    const selectedValue = this.value;
+    let [sort, direction] = selectedValue.split('_');
+
+    const currentUrl = new URL(window.location);
+    if (sort === 'reset') {
+        currentUrl.searchParams.delete('sort');
+        currentUrl.searchParams.delete('direction');
+    } else {
+        currentUrl.searchParams.set('sort', sort);
+        currentUrl.searchParams.set('direction', direction);
+    }
+
+    window.location = currentUrl; 
+})
 
     // Hide Filter
         $('#sort-selector').change(function () {

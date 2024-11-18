@@ -1,13 +1,13 @@
 from django.db import models
 from django.utils import timezone
-from datetime import timedelta, datetime  # needed for products in admin
+from datetime import timedelta, datetime  # need for products in admin
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from django.conf import settings
 from django.utils.text import slugify
 import uuid
-from profiles.models import Sale
+from profiles.models import UserProfile, Sale, Account
 
 
 class Category(models.Model):

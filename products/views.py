@@ -94,7 +94,7 @@ def all_products(request):
         return redirect(f'?page={page_obj.next_page_number()}')
 
     context = {
-        'products': page_obj,
+        'products': products,
         'main_categories': main_categories,
         'all_subcategories': all_subcategories,
         'brands': brands,
