@@ -91,6 +91,9 @@ def all_products(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    if page_number and int(page_number) > 1 and page_obj.has_other_pages() and not page_obj.object_list:
+        return redirect(f'?page={page_obj.paginator.num_pages}')
+
     context = {
         'products': products,
         'main_categories': main_categories,
