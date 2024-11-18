@@ -1,4 +1,4 @@
-# SustainLuxe - Shop luxurios and Sustainable
+# [SustainLuxe - Shop luxurios and Sustainable](#shop-luxurios-and-sustanable)
 
 Live web site: https://sustainluxe-b6e840083c68.herokuapp.com/
 
@@ -21,8 +21,18 @@ Live web site: https://sustainluxe-b6e840083c68.herokuapp.com/
 - [Design](#design)
 - [Media](#media)
 - [Features](#features) 
-  - [Existing Features](#existing_featuers)
-  
+  - [Existing Features](#existing-features)
+  - [Future Features](#future-features)
+- [CRUD](#crud)
+- [Technologies Used](#technologies_used)
+- [Setup](#setup)
+- [Deployment](#deployment) 
+- [Testing](#testing)
+  - [Validation](#validation)
+  - [Manual Testing](#manual_testing)
+- [Bug Report](#bugreport)
+- [Acknowledgements](#acknowledgements)
+
 
 ### [About](#about)
 
@@ -39,7 +49,7 @@ I think a lot of people is to busy to take their time for selling unused clothes
 
 You are welcome to visit my store and get to know more!
 
-![Shop]((static/images/Readme_img/shop.png)
+![Shop](static/images/Readme_img/shop.png)
 
 
 I have thinking of this idea for some years and in the meantime, the buissness of Second Hand is growing, so I´m happy to present this fictive busisness.
@@ -596,28 +606,24 @@ Read about setups in this document: [Deployment](deployment.md)
 
 ### [Testing](#testing)
 
+
 #### [Validators](#validators)
 
+You find all validation tests (in different tabs) in this link:
+https://docs.google.com/document/d/1O_yEfak2_B22PT4V87hmL7dd51HkqUMe5qj38wnjv9U/edit?usp=sharing
+
 - W3C Validator: was used to validate HTML5 code for the website.
-Result:
-[Validation HTML](#alidation_html.md)
 
 - W3C CSS validator: was used to validate CSS code for the website.
-Result:
-[Validation css](validation_css.md)
 
 - JShint: was used to validate JS code for the website.
-Result:
 
-- PEP8 was used to validate Python code anda validation in PY Linther:
-Result:
-[PY Linther] (#vlidation_pylinter.md)
+- PEP8 was used to validate Python code and validation in PY Linther.
 
-#### [Responsiveness](#responsiveness)
+ - Responsiveness and SEO in Lighthouse
 
-#### [Lighthouse](#lighthouse)
 
-#### [Manual Testing](#manual_testing) 
+#### [Manual Testing](manual_testing) 
 
 I need to test continously and before submitting the project I made manual testing of the project.
 I had a separate test dokumnent for reporting
@@ -663,4 +669,5 @@ Other important resourses has been
 I have also found good help from GPTchat and Perplexity to get me understand my codes with good explanation and troubleshooting.
 
 
-[Go to Top](#sustainluxe---shop-luxurious-and-sustainable)
+
+# [Go to Top](#shop-luxurious-and-sustainable)
