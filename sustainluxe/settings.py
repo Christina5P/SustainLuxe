@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '1234secretkey')
 
 # DEBUG = 'DEVELOPMENT' in os.environ
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',

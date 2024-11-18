@@ -5,8 +5,6 @@ from django.conf import settings
 from django_countries.fields import CountryField
 from products.models import Product
 from profiles.models import UserProfile
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 
 
 class Order(models.Model):
@@ -106,11 +104,3 @@ class OrderLineItem(models.Model):
 
     def __str__(self):
         return f'SKU {self.product.sku} on order {self.order.order_number}'
-
-    @receiver(post_save, sender=Order)
-    def update_product_sold_at(sender, instance, created, **kwargs):
-        if created:
-            for line_item in instance.lineitems.all():
-                product = line_item.product
-                product.sold = True
-                product.save()

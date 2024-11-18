@@ -1,4 +1,14 @@
-document.addEventListener('DOMContentLoaded', function() {
+// scroll to top
+
+    $(document).ready(function () {
+        $('.btt-link').click(function(e) {
+            e.preventDefault();  
+            window.scrollTo(0, 0);
+        });
+        });
+        
+// Rolling text to carousel-image
+document.addEventListener('DOMContentLoaded', function () {
     var carousel = document.getElementById('introCarousel');
     var slideTitle = document.getElementById('slideTitle');
     var slideSubtitle = document.getElementById('slideSubtitle');
@@ -70,11 +80,4 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('One or more required elements are missing from the DOM');
     }
 });
-  
-    // Scroll to top
-     $(document).ready(function () {
-        $('.btt-link').click(function(e) {
-            e.preventDefault();  
-            window.scrollTo(0, 0);
-        });
-       }); 
+ 

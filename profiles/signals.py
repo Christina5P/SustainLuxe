@@ -7,7 +7,11 @@ from .models import Sale
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-    UserProfile.objects.get_or_create(user=instance)
+    """Create or update user profile"""
+    if created:
+        UserProfile.objects.create(user=instance)
+
+    instance.userprofile.save()
 
 
 @receiver(post_save, sender=User)

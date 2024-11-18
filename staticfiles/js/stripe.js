@@ -1,10 +1,3 @@
-/*
-    Core logic/payment flow for this comes from here:
-    https://stripe.com/docs/payments/accept-a-payment
-
-    CSS from here: 
-    https://stripe.com/docs/stripe-js
-*/
 
 var stripePublicKey = $('#id_stripe_public_key').text().slice(1, -1);
 var clientSecret = $('#id_client_secret').text().slice(1, -1);
@@ -55,13 +48,13 @@ form.addEventListener('submit', function(ev) {
     $('#loading-overlay').fadeToggle(100);
 
     var saveInfo = Boolean($('#id-save-info').attr('checked'));
-    // From using {% csrf_token %} in the form
     var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
     var postData = {
         'csrfmiddlewaretoken': csrfToken,
         'client_secret': clientSecret,
         'save_info': saveInfo,
     };
+    
       var url = '/checkout/cache_checkout_data/';
     $.post(url, postData).done(function () {
         stripe.confirmCardPayment(clientSecret, {
@@ -71,7 +64,7 @@ form.addEventListener('submit', function(ev) {
                     name: $.trim(form.full_name.value),
                     phone: $.trim(form.phone_number.value),
                     email: $.trim(form.email.value),
-                    address:{
+                    address: {
                         line1: $.trim(form.street_address1.value),
                         city: $.trim(form.town_or_city.value),
                         country: $.trim(form.country.value),
@@ -86,9 +79,9 @@ form.addEventListener('submit', function(ev) {
                     city: $.trim(form.town_or_city.value),
                     country: $.trim(form.country.value),
                     postal_code: $.trim(form.postcode.value),
-                    }
+                }
             },
-        }).then(function(result) {
+        }).then(function (result) {
             if (result.error) {
                 var errorDiv = document.getElementById('card-errors');
                 var html = `
@@ -99,7 +92,7 @@ form.addEventListener('submit', function(ev) {
                 $(errorDiv).html(html);
                 $('#payment-form').fadeToggle(100);
                 $('#loading-overlay').fadeToggle(100);
-                card.update({ 'disabled': false});
+                card.update({ 'disabled': false });
                 $('#submit-button').attr('disabled', false);
             } else {
                 if (result.paymentIntent.status === 'succeeded') {
@@ -110,5 +103,5 @@ form.addEventListener('submit', function(ev) {
     }).fail(function () {
         // just reload the page, the error will be in django messages
         location.reload();
-    })
+    });
 });
