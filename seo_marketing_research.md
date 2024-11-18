@@ -87,7 +87,7 @@ Here is an example of a newsletter to send
 
 Users can subscribe to newsletter in the footer and after submit, they get a confirmation.
 
-![Newsletter](static/images/Readme_img/newsletter.png)
+![Newsletter](static/images/Readme_img/example_newsletter.png)
 
 ![Newslette subscribed](static/images/Readme_img/newsletter_subscribed.png)
 

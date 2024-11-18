@@ -1,4 +1,4 @@
-# [SustainLuxe - Shop luxurios and Sustainable](#shop-luxurios-and-sustanable)
+# SustainLuxe - Shop luxurios and Sustainable
 
 Live web site: https://sustainluxe-b6e840083c68.herokuapp.com/
 
@@ -387,7 +387,7 @@ The user can now follow the product in account detail,
 There is a navbar with the categories, where you can choose from
 
 
-![Category](istatic/images/Readme_img/category.png)
+![Category](static/images/Readme_img/category.png)
 
 
 You can also sort from diffrent choices
@@ -669,5 +669,5 @@ Other important resourses has been
 I have also found good help from GPTchat and Perplexity to get me understand my codes with good explanation and troubleshooting.
 
 
+[Go to Top](#sustainluxe---shop-luxurios-and-sustainable)
 
-# [Go to Top](#shop-luxurious-and-sustainable)
