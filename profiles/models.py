@@ -5,12 +5,13 @@ from django.utils import timezone
 from decimal import Decimal
 from simple_history.models import HistoricalRecords
 import json
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class UserProfile(models.Model):
     """
-    A user profile model for maintaining default
-    delivery information and order history, account and status
+    A user profile model for delivery information and order history, account and status
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     default_full_name = models.CharField(max_length=50, null=True, blank=True)
@@ -31,6 +32,15 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    """Create or update user profile"""
+    if created:
+        UserProfile.objects.create(user=instance)
+
+    instance.userprofile.save()
 
 
 class Sale(models.Model):

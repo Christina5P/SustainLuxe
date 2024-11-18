@@ -600,7 +600,7 @@ Read about setups in this document: [Deployment](deployment.md)
 
 - W3C Validator: was used to validate HTML5 code for the website.
 Result:
-[Validation HTML](validation_html.md)
+[Validation HTML](#alidation_html.md)
 
 - W3C CSS validator: was used to validate CSS code for the website.
 Result:
@@ -611,7 +611,7 @@ Result:
 
 - PEP8 was used to validate Python code anda validation in PY Linther:
 Result:
-[PY Linther](validation_pylinter.md)
+[PY Linther] (#vlidation_pylinter.md)
 
 #### [Responsiveness](#responsiveness)
 
@@ -632,8 +632,15 @@ You can read the report with this link: https://docs.google.com/document/d/1Q_Qk
 
 ### [Acknowledgements](#acknowledgements)
 
-- Tutoring, Q&A and criteria videos in slack channel project-potfolio-5-e-commerce
-- Inapiration from others PP5 projects
+Special thanks to CI Tutors for their help during my project
+And of course my mentor Gareth mcGirr which has spend his time with me.
+I also have tutot time and trouble shooting for ours with Ernst from Digitala Lyftet
+And I couldn´t make it better without my studyfellow Josephine YoshidaDahlqvist with all her tips and patient with my frustration :-) 
+
+Other important resourses has been 
+- Troubleshooting with research from Slack
+- Q&A and criteria videos in slack channel project-potfolio-5-e-commerce
+- Inspiration from others PP5 projects
 - walk through Boutique Ado
 - https://www.youtube.com/watch?v=hZYWtK2k1P8 -tutoring stripe payment
 - https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
@@ -653,5 +660,7 @@ You can read the report with this link: https://docs.google.com/document/d/1Q_Qk
 - https://medium.com/django-unleashed/mastering-the-art-of-django-simple-history-a-tutorial-for-medium-with-examples-c25196339130
 - https://learn.jquery.com/using-jquery-core/document-ready/ - jquery
 
+I have also found good help from GPTchat and Perplexity to get me understand my codes with good explanation and troubleshooting.
 
- `[Go to Top](#sustainluxe---e-commerce-site)`
+
+[Go to Top](#sustainluxe---shop-luxurious-and-sustainable)

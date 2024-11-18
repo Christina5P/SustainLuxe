@@ -70,6 +70,10 @@ class StripeWH_Handler:
                 profile = UserProfile.objects.get(user__username=username)
                 print('profile', profile.username)
                 if save_info:
+                    print("Saving info to profile")
+                else:
+                    print("save_info is False or None")
+
                     profile.default_phone_number = shipping_details.phone or None
                     profile.default_street_address1 = shipping_details.address.get('line1', None)
                     profile.default_postcode = shipping_details.address.get('postal_code', None)
@@ -84,6 +88,7 @@ class StripeWH_Handler:
                     print("Country:", shipping_details.address.get('country', None))
                     profile.save()
                     print("Profile updated successfully!")
+                    print("Intent Metadata:", intent.metadata)
 
             order_exists = False
             attempt = 1
