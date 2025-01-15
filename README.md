@@ -6,8 +6,10 @@ Live web site: https://sustainluxe-b6e840083c68.herokuapp.com/
 ![Sustainluxe](static/images/Readme_img/sustainluxe.png)
 
 
-## Table of Contents
+#### Note: Links Unavailable
+Please note that some links in this project are no longer functional because the student account that hosted these resources has been deactivated.
 
+## Table of Contents
 
 - [About](#about)
 - [Marketing research](#marketing-research) 
@@ -32,7 +34,6 @@ Live web site: https://sustainluxe-b6e840083c68.herokuapp.com/
   - [Manual Testing](#manual_testing)
 - [Bug Report](#bugreport)
 - [Acknowledgements](#acknowledgements)
-
 
 ### [About](#about)
 
