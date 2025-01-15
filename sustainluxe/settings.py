@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [
     '8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
     'sustainluxe-b6e840083c68.herokuapp.com',
     'localhost'
+    'sustainluxe.onrender.com/'
 ]
 
 AUTHENTICATION_BACKENDS = [
