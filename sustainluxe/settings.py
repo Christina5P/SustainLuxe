@@ -18,7 +18,7 @@ ALLOWED_HOSTS = [
     '8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
     'sustainluxe-b6e840083c68.herokuapp.com',
     'localhost'
-    'sustainluxe.onrender.com/'
+    'sustainluxe.onrender.com'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -29,6 +29,7 @@ AUTHENTICATION_BACKENDS = [
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-christina5p-sustainluxe-5tw6roijx8w.ws.codeinstitute-ide.net',
     'https://sustainluxe-b6e840083c68.herokuapp.com/',
+    'https://sustainluxe.onrender.com'
 ]
 
 INSTALLED_APPS = [
