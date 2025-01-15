@@ -108,6 +108,21 @@ git push
 ![buildpack](static/images/Readme_img/buildpack.png)
 
 
+## Render Setup
+
+1. Create a new web service on [Render](https://render.com).
+
+2. Connect your GitHub repository.
+
+3. Set the environment variables required by the application (see `.env` file).
+
+4. Use the following build and start commands:
+   - **Build command:** `pip install -r requirements.txt`
+   - **Start command:** `gunicorn sustainluxe.wsgi:application`
+
+5. Save the settings and deploy.
+
+
 ## Database Setup
 
 I choosed PostgreSQL from Code Institute.
